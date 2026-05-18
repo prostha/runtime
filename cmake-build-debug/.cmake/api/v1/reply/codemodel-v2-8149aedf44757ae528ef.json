@@ -1,0 +1,150 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Git::Git::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Git__Git-Debug-d51e9e5617997bee5d97.json",
+					"name" : "Git::Git",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "libenet::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libenet-Debug-1aa91f977127ec4752be.json",
+					"name" : "libenet",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "liblua::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-liblua-Debug-869a1ef64595b0c89eda.json",
+					"name" : "liblua",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "liblws::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-liblws-Debug-ab0f461a6d7d5ca873ab.json",
+					"name" : "liblws",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "libuv::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-libuv-Debug-ed443fed8eb140f66e3c.json",
+					"name" : "libuv",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					],
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-9ad1a58d4644cf6543fa.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "polyblox",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "enet::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-enet-Debug-fbc85532f57157e07927.json",
+					"name" : "enet",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "luajit::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-luajit-Debug-1183768ec3ff3b814d8e.json",
+					"name" : "luajit",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "lws::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-lws-Debug-20b04c8bd72a87a96e80.json",
+					"name" : "lws",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "polyblox::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-polyblox-Debug-63101bd45f8308017d73.json",
+					"name" : "polyblox",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uv::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uv-Debug-ec179649ec9bff7e5610.json",
+					"name" : "uv",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+		"source" : "/Users/82805/CLionProjects/polyblox"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	}
+}

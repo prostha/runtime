@@ -1,0 +1,104 @@
+[
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/ecs/archetype.cpp.o -c /Users/82805/CLionProjects/polyblox/src/ecs/archetype.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/ecs/archetype.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/ecs/archetype.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/ecs/query.cpp.o -c /Users/82805/CLionProjects/polyblox/src/ecs/query.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/ecs/query.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/ecs/query.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/ecs/world.cpp.o -c /Users/82805/CLionProjects/polyblox/src/ecs/world.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/ecs/world.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/ecs/world.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/main.cpp.o -c /Users/82805/CLionProjects/polyblox/src/main.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/main.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/main.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/color3.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/color3.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/color3.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/color3.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/color4.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/color4.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/color4.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/color4.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/matrix3.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/matrix3.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/matrix3.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/matrix3.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/matrix4.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/matrix4.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/matrix4.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/matrix4.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/quaternion.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/quaternion.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/quaternion.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/quaternion.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/scalar.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/scalar.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/scalar.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/scalar.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/transform.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/transform.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/transform.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/transform.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/vector2.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/vector2.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/vector2.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/vector2.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/vector3.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/vector3.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/vector3.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/vector3.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/math/vector4.cpp.o -c /Users/82805/CLionProjects/polyblox/src/math/vector4.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/math/vector4.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/math/vector4.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/vm/api/ecs.cpp.o -c /Users/82805/CLionProjects/polyblox/src/vm/api/ecs.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/vm/api/ecs.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/vm/api/ecs.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/vm/core/allocator.cpp.o -c /Users/82805/CLionProjects/polyblox/src/vm/core/allocator.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/vm/core/allocator.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/vm/core/allocator.cpp.o"
+},
+{
+  "directory": "/Users/82805/CLionProjects/polyblox/cmake-build-debug",
+  "command": "/usr/bin/c++ -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics -o CMakeFiles/polyblox.dir/src/vm/core/sandbox.cpp.o -c /Users/82805/CLionProjects/polyblox/src/vm/core/sandbox.cpp",
+  "file": "/Users/82805/CLionProjects/polyblox/src/vm/core/sandbox.cpp",
+  "output": "/Users/82805/CLionProjects/polyblox/cmake-build-debug/CMakeFiles/polyblox.dir/src/vm/core/sandbox.cpp.o"
+}
+]

@@ -1,0 +1,1 @@
+cmd='/Users/82805/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake;-DCMAKE_INSTALL_PREFIX=/Users/82805/CLionProjects/polyblox/vendor/enet;-DCMAKE_POSITION_INDEPENDENT_CODE=ON;-GNinja;-S;<SOURCE_DIR><SOURCE_SUBDIR>;-B;<BINARY_DIR>'

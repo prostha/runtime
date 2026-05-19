@@ -35,7 +35,7 @@
  * There are two ways secure streams interfaces to user code:
  *
  * 1) [Linux / RTOS] the natural, smallest interface is to call back to user
- *    code that only operates directly from the lws event loop thread context
+ *    code that only operates directly from the lws event loop thread context.hpp
  *    (direct callbacks from lws_ss_t)
  *
  *    lws_thread( [user code] ---- lws )
@@ -378,8 +378,8 @@ typedef struct lws_ss_info {
 
 #if defined(LWS_WITH_SYS_FAULT_INJECTION)
 	lws_fi_ctx_t				fic;
-	/**< Attach external Fault Injection context to the stream, hierarchy
-	 * is ss->context */
+	/**< Attach external Fault Injection context.hpp to the stream, hierarchy
+	 * is ss->context.hpp */
 #endif
 
 	lws_sscb_rx rx;
@@ -421,7 +421,7 @@ typedef struct lws_ss_info {
 /**
  * lws_ss_create() - Create secure stream
  *
- * \param context: the lws context to create this inside
+ * \param context.hpp: the lws context.hpp to create this inside
  * \param tsi: service thread index to create on (normally 0)
  * \param ssi: pointer to lws_ss_info_t filled in with info about desired stream
  * \param opaque_user_data: opaque data to set in the stream's user object
@@ -531,7 +531,7 @@ lws_ss_get_sequencer(struct lws_ss_handle *h);
 /**
  * lws_ss_proxy_create() - Start a unix domain socket proxy for Secure Streams
  *
- * \param context: lws_context
+ * \param context.hpp: lws_context
  * \param bind: if port is 0, unix domain path with leading @ for abstract.
  *		if port nonzero, NULL, or network interface to bind listen to
  * \param port: tcp port to listen on
@@ -558,11 +558,11 @@ LWS_VISIBLE LWS_EXTERN const char *
 lws_ss_state_name(int state);
 
 /**
- * lws_ss_get_context() - convenience helper to recover the lws context
+ * lws_ss_get_context() - convenience helper to recover the lws context.hpp
  *
  * \param h: secure streams handle
  *
- * Returns the lws context.  Dispenses with the need to pass a copy of it into
+ * Returns the lws context.hpp.  Dispenses with the need to pass a copy of it into
  * your secure streams handler.
  */
 LWS_VISIBLE LWS_EXTERN struct lws_context *
@@ -805,7 +805,7 @@ lws_ss_tag(struct lws_ss_handle *h);
 /**
  * lws_ss_sigv4_set_aws_key() - set aws credential into system blob
  *
- * \param context: lws_context
+ * \param context.hpp: lws_context
  * \param idx:     the system blob index specified in the policy, currently
  *                  up to 4 blobs.
  * \param keyid:   aws access keyid

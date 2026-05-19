@@ -247,7 +247,7 @@ LWS_AVOID_SIGPIPE_IGN:BOOL=OFF
 //Support external http proxies for client connections
 LWS_CLIENT_HTTP_PROXYING:BOOL=ON
 
-//CTest will performs tests that need the Internet
+//CTest will performs scripts that need the Internet
 LWS_CTEST_INTERNET_AVAILABLE:BOOL=ON
 
 //Path to an external pthreads include directory
@@ -610,7 +610,7 @@ LWS_WITH_SECURE_STREAMS_STATIC_POLICY_ONLY:BOOL=OFF
 //Auth support for api.amazon.com
 LWS_WITH_SECURE_STREAMS_SYS_AUTH_API_AMAZON_COM:BOOL=OFF
 
-//Selftests run at context creation
+//Selftests run at context.hpp creation
 LWS_WITH_SELFTESTS:BOOL=OFF
 
 //lws_seq_t support

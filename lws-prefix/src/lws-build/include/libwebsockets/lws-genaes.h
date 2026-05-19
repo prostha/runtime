@@ -89,7 +89,7 @@ struct lws_genaes_ctx {
 	char underway;
 };
 
-/** lws_genaes_create() - Create genaes AES context
+/** lws_genaes_create() - Create genaes AES context.hpp
  *
  * \param ctx: your struct lws_genaes_ctx
  * \param op: LWS_GAESO_ENC or LWS_GAESO_DEC
@@ -98,7 +98,7 @@ struct lws_genaes_ctx {
  * \param padding: 0 = no padding, 1 = padding
  * \param engine: if openssl engine used, pass the pointer here
  *
- * Creates an AES context with a key associated with it, formed from
+ * Creates an AES context.hpp with a key associated with it, formed from
  * the key elements in \p el.
  *
  * Returns 0 for OK or nonzero for error.
@@ -110,7 +110,7 @@ lws_genaes_create(struct lws_genaes_ctx *ctx, enum enum_aes_operation op,
 		  enum enum_aes_modes mode, struct lws_gencrypto_keyelem *el,
 		  enum enum_aes_padding padding, void *engine);
 
-/** lws_genaes_destroy() - Destroy genaes AES context
+/** lws_genaes_destroy() - Destroy genaes AES context.hpp
  *
  * \param ctx: your struct lws_genaes_ctx
  * \param tag: NULL, or, GCM-only: buffer to receive tag

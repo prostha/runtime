@@ -310,7 +310,7 @@ LWS_VISIBLE LWS_EXTERN int
 lws_hex_to_byte_array(const char *h, uint8_t *dest, int max);
 
 /**
- * lws_hex_from_byte_array(): render byte array as hex char string
+ * lws_hex_from_byte_array(): graphics byte array as hex char string
  *
  * \param src: incoming binary source array
  * \param slen: length of src in bytes
@@ -326,7 +326,7 @@ lws_hex_from_byte_array(const uint8_t *src, size_t slen, char *dest, size_t len)
 /**
  * lws_hex_random(): generate len - 1 or - 2 characters of random ascii hex
  *
- * \param context: the lws_context used to get the random
+ * \param context.hpp: the lws_context used to get the random
  * \param dest: destination for hex ascii chars
  * \param len: the number of bytes the buffer dest points to can hold
  *
@@ -358,7 +358,7 @@ lws_timingsafe_bcmp(const void *a, const void *b, uint32_t len);
 /**
  * lws_get_random(): fill a buffer with platform random data
  *
- * \param context: the lws context
+ * \param context.hpp: the lws context.hpp
  * \param buf: buffer to fill
  * \param len: how much to fill
  *
@@ -465,9 +465,9 @@ lws_cmdline_option(int argc, const char **argv, const char *val);
  *
  * \param argc:		count of argument strings
  * \param argv:		argument strings
- * \param info:		context creation info
+ * \param info:		context.hpp creation info
  *
- * Applies standard options to the context creation info to save them having
+ * Applies standard options to the context.hpp creation info to save them having
  * to be (unevenly) copied into the minimal examples.
  *
  * Applies default log levels that can be overriden by -d
@@ -492,8 +492,8 @@ lws_now_usecs(void);
  * lws_get_context - Allow getting lws_context from a Websocket connection
  * instance
  *
- * With this function, users can access context in the callback function.
- * Otherwise users may have to declare context as a global variable.
+ * With this function, users can access context.hpp in the callback function.
+ * Otherwise users may have to declare context.hpp as a global variable.
  *
  * \param wsi:	Websocket connection instance
  */
@@ -503,7 +503,7 @@ lws_get_context(const struct lws *wsi);
 /**
  * lws_get_vhost_listen_port - Find out the port number a vhost is listening on
  *
- * In the case you passed 0 for the port number at context creation time, you
+ * In the case you passed 0 for the port number at context.hpp creation time, you
  * can discover the port number that was actually chosen for the vhost using
  * this api.
  *
@@ -513,9 +513,9 @@ LWS_VISIBLE LWS_EXTERN int LWS_WARN_UNUSED_RESULT
 lws_get_vhost_listen_port(struct lws_vhost *vhost);
 
 /**
- * lws_get_count_threads(): how many service threads the context uses
+ * lws_get_count_threads(): how many service threads the context.hpp uses
  *
- * \param context: the lws context
+ * \param context.hpp: the lws context.hpp
  *
  * By default this is always 1, if you asked for more than lws can handle it
  * will clip the number of threads.  So you can use this to find out how many
@@ -546,7 +546,7 @@ lws_get_child(const struct lws *wsi);
 /**
  * lws_get_effective_uid_gid() - find out eventual uid and gid while still root
  *
- * \param context: lws context
+ * \param context.hpp: lws context.hpp
  * \param uid: pointer to uid result
  * \param gid: pointer to gid result
  *
@@ -661,7 +661,7 @@ lws_rx_flow_control(struct lws *wsi, int enable);
  * When the user server code realizes it can accept more input, it can
  * call this to have the RX flow restriction removed from all connections using
  * the given protocol.
- * \param context:	lws_context
+ * \param context.hpp:	lws_context
  * \param protocol:	all connections using this protocol will be allowed to receive
  */
 LWS_VISIBLE LWS_EXTERN void
@@ -861,10 +861,10 @@ struct lws_wifi_scan { /* generic wlan scan item */
 
 #if defined(LWS_WITH_TLS) && !defined(LWS_WITH_MBEDTLS)
 /**
- * lws_get_ssl() - Return wsi's SSL context structure
+ * lws_get_ssl() - Return wsi's SSL context.hpp structure
  * \param wsi:	websocket connection
  *
- * Returns pointer to the SSL library's context structure
+ * Returns pointer to the SSL library's context.hpp structure
  */
 LWS_VISIBLE LWS_EXTERN SSL*
 lws_get_ssl(struct lws *wsi);
@@ -892,7 +892,7 @@ LWS_VISIBLE extern const lws_humanize_unit_t humanize_schema_us[8];
  *
  * This produces a concise string representation of \p value, referencing the
  * schema \p schema of scaling factors and units to find the smallest way to
- * render it.
+ * graphics it.
  *
  * Three schema are exported from lws for general use, humanize_schema_si, which
  * represents as, eg, "  22.130Gi" or " 128      "; humanize_schema_si_bytes

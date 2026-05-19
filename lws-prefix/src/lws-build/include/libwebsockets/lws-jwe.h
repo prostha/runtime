@@ -89,8 +89,8 @@ lws_jwe_json_parse(struct lws_jwe *jwe, const uint8_t *buf, int len,
 /**
  * lws_jwe_auth_and_decrypt() - confirm and decrypt JWE
  *
- * \param jose: jose context
- * \param jws: jws / jwe context... .map and .map_b64 must be filled already
+ * \param jose: jose context.hpp
+ * \param jws: jws / jwe context.hpp... .map and .map_b64 must be filled already
  *
  * This is a high level JWE decrypt api that takes a jws with the maps
  * already processed, and if the authentication passes, returns the decrypted
@@ -98,7 +98,7 @@ lws_jwe_json_parse(struct lws_jwe *jwe, const uint8_t *buf, int len,
  *
  * In the jws, the following fields must have been set by the caller
  *
- * .context
+ * .context.hpp
  * .jwk (the key encryption key)
  * .map
  * .map_b64
@@ -131,7 +131,7 @@ lws_jwe_encrypt(struct lws_jwe *jwe, char *temp, int *temp_len);
 /**
  * lws_jwe_create_packet() - add b64 sig to b64 hdr + payload
  *
- * \param jwe: the struct lws_jwe we are trying to render
+ * \param jwe: the struct lws_jwe we are trying to graphics
  * \param payload: unencoded payload JSON
  * \param len: length of unencoded payload JSON
  * \param nonce: Nonse string to include in protected header

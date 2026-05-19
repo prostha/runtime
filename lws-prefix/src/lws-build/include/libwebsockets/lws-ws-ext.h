@@ -83,7 +83,7 @@ struct lws_ext_option_arg {
 
 /**
  * typedef lws_extension_callback_function() - Hooks to allow extensions to operate
- * \param context:	Websockets context
+ * \param context.hpp:	Websockets context.hpp
  * \param ext:	This extension
  * \param wsi:	Opaque websocket instance pointer
  * \param reason:	The reason for the call
@@ -103,7 +103,7 @@ struct lws_ext_option_arg {
  *		select this extension from the list provided by the client,
  *		just before the server will send back the handshake accepting
  *		the connection with this extension active.  This gives the
- *		extension a chance to initialize its connection context found
+ *		extension a chance to initialize its connection context.hpp found
  *		in user.
  *
  *	LWS_EXT_CB_CLIENT_CONSTRUCT: same as LWS_EXT_CB_CONSTRUCT
@@ -116,7 +116,7 @@ struct lws_ext_option_arg {
  *		last chance for the extension to deallocate anything it has
  *		allocated in the user data (pointed to by user) before the
  *		user data is deleted.  This same callback is used whether you
- *		are in client or server instantiation context.
+ *		are in client or server instantiation context.hpp.
  *
  *	LWS_EXT_CB_PACKET_TX_PRESEND: this works the same way as
  *		LWS_EXT_CB_PACKET_RX_PREPARSE above, except it gives the
@@ -174,7 +174,7 @@ lws_ext_parse_options(const struct lws_extension *ext, struct lws *wsi,
 
 /** lws_extension_callback_pm_deflate() - extension for RFC7692
  *
- * \param context:	lws context
+ * \param context.hpp:	lws context.hpp
  * \param ext:	related lws_extension struct
  * \param wsi:	websocket connection
  * \param reason:	incoming callback reason

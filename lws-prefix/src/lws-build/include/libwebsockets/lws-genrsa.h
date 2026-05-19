@@ -54,16 +54,16 @@ struct lws_genrsa_ctx {
 	enum enum_genrsa_mode mode;
 };
 
-/** lws_genrsa_public_decrypt_create() - Create RSA public decrypt context
+/** lws_genrsa_public_decrypt_create() - Create RSA public decrypt context.hpp
  *
  * \param ctx: your struct lws_genrsa_ctx
  * \param el: struct prepared with key element data
- * \param context: lws_context for RNG
+ * \param context.hpp: lws_context for RNG
  * \param mode: RSA mode, one of LGRSAM_ constants
  * \param oaep_hashid: the lws genhash id for the hash used in MFG1 hash
  *			used in OAEP mode - normally, SHA1
  *
- * Creates an RSA context with a public key associated with it, formed from
+ * Creates an RSA context.hpp with a public key associated with it, formed from
  * the key elements in \p el.
  *
  * Mode LGRSAM_PKCS1_1_5 is in widespread use but has weaknesses.  It's
@@ -95,13 +95,13 @@ lws_genrsa_destroy_elements(struct lws_gencrypto_keyelem *el);
 
 /** lws_genrsa_new_keypair() - Create new RSA keypair
  *
- * \param context: your struct lws_context (may be used for RNG)
+ * \param context.hpp: your struct lws_context (may be used for RNG)
  * \param ctx: your struct lws_genrsa_ctx
  * \param mode: RSA mode, one of LGRSAM_ constants
  * \param el: struct to get the new key element data allocated into it
  * \param bits: key size, eg, 4096
  *
- * Creates a new RSA context and generates a new keypair into it, with \p bits
+ * Creates a new RSA context.hpp and generates a new keypair into it, with \p bits
  * bits.
  *
  * Returns 0 for OK or nonzero for error.
@@ -229,7 +229,7 @@ lws_genrsa_hash_sign(struct lws_genrsa_ctx *ctx, const uint8_t *in,
 		     enum lws_genhash_types hash_type,
 		     uint8_t *sig, size_t sig_len);
 
-/** lws_genrsa_public_decrypt_destroy() - Destroy RSA public decrypt context
+/** lws_genrsa_public_decrypt_destroy() - Destroy RSA public decrypt context.hpp
  *
  * \param ctx: your struct lws_genrsa_ctx
  *

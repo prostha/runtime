@@ -114,7 +114,7 @@ lws_genhmac_size(enum lws_genhmac_types type);
  * \param ctx: your struct lws_genhash_ctx
  * \param type:	one of LWS_GENHASH_TYPE_...
  *
- * Initializes the hash context for the type you requested
+ * Initializes the hash context.hpp for the type you requested
  */
 LWS_VISIBLE LWS_EXTERN int LWS_WARN_UNUSED_RESULT
 lws_genhash_init(struct lws_genhash_ctx *ctx, enum lws_genhash_types type);
@@ -125,7 +125,7 @@ lws_genhash_init(struct lws_genhash_ctx *ctx, enum lws_genhash_types type);
  * \param in: start of the bytes to digest
  * \param len: count of bytes to digest
  *
- * Updates the state of your hash context to reflect digesting len bytes from in
+ * Updates the state of your hash context.hpp to reflect digesting len bytes from in
  */
 LWS_VISIBLE LWS_EXTERN int LWS_WARN_UNUSED_RESULT
 lws_genhash_update(struct lws_genhash_ctx *ctx, const void *in, size_t len);
@@ -151,7 +151,7 @@ lws_genhash_destroy(struct lws_genhash_ctx *ctx, void *result);
  * \param key: pointer to the start of the HMAC key
  * \param key_len: length of the HMAC key
  *
- * Initializes the hash context for the type you requested
+ * Initializes the hash context.hpp for the type you requested
  *
  * If the return is nonzero, it failed and there is nothing needing to be
  * destroyed.
@@ -166,7 +166,7 @@ lws_genhmac_init(struct lws_genhmac_ctx *ctx, enum lws_genhmac_types type,
  * \param in: start of the bytes to digest
  * \param len: count of bytes to digest
  *
- * Updates the state of your hash context to reflect digesting len bytes from in
+ * Updates the state of your hash context.hpp to reflect digesting len bytes from in
  *
  * If the return is nonzero, it failed and needs destroying.
  */

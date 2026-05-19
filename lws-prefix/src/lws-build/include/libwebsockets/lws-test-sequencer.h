@@ -21,7 +21,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  *
- * lws_test_sequencer manages running an array of unit tests.
+ * lws_test_sequencer manages running an array of unit scripts.
  */
 
 typedef void (*lws_test_sequence_cb)(const void *cb_user);
@@ -31,18 +31,18 @@ typedef struct lws_test_sequencer_args {
 	lws_unit_test_t	*tests; /* array of lws_unit_test_t */
 	int			*results; /* takes result dispositions */
 	int			results_max; /* max space usable in results */
-	int			*count_tests; /* count of done tests */
-	int			*count_passes; /* count of passed tests */
+	int			*count_tests; /* count of done scripts */
+	int			*count_passes; /* count of passed scripts */
 	lws_test_sequence_cb	cb; /* completion callback */
 	void			*cb_user; /* opaque user ptr given to cb */
 } lws_test_sequencer_args_t;
 
 /**
- * lws_abs_unit_test_sequencer() - helper to sequence multiple unit tests
+ * lws_abs_unit_test_sequencer() - helper to sequence multiple unit scripts
  *
- * \param args: lws_test_sequencer_args_t prepared with arguments for the tests
+ * \param args: lws_test_sequencer_args_t prepared with arguments for the scripts
  *
- * This helper sequences one or more unit tests to run and collects the results.
+ * This helper sequences one or more unit scripts to run and collects the results.
  *
  * The incoming abs should be set up for the abstract protocol you want to test
  * and the lws unit-test transport.
@@ -55,7 +55,7 @@ typedef struct lws_test_sequencer_args {
  *	LPE_FAILED_UNEXPECTED_PASS
  *	LPE_FAILED_UNEXPECTED_CLOSE
  *
- * The callback args->cb is called when the tests have been done.
+ * The callback args->cb is called when the scripts have been done.
  */
 LWS_VISIBLE LWS_EXTERN int
 lws_abs_unit_test_sequencer(const lws_test_sequencer_args_t *args);

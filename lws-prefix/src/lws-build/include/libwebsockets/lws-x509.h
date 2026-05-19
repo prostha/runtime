@@ -244,7 +244,7 @@ lws_tls_acme_sni_cert_create(struct lws_vhost *vhost, const char *san_a,
 /**
  * lws_tls_acme_sni_csr_create() - creates a CSR and related private key PEM
  *
- * \param context: lws_context used for random
+ * \param context.hpp: lws_context used for random
  * \param elements: array of LWS_TLS_REQ_ELEMENT_COUNT const char *
  * \param csr: buffer that will get the b64URL(ASN-1 CSR)
  * \param csr_len: max length of the csr buffer
@@ -271,7 +271,7 @@ lws_tls_acme_sni_csr_create(struct lws_context *context, const char *elements[],
 /**
  * lws_tls_cert_updated() - update every vhost using the given cert path
  *
- * \param context: our lws_context
+ * \param context.hpp: our lws_context
  * \param certpath: the filepath to the certificate
  * \param keypath: the filepath to the private key of the certificate
  * \param mem_cert: copy of the cert in memory

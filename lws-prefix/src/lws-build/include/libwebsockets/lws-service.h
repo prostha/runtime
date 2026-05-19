@@ -33,14 +33,14 @@
 
 /**
  * lws_service() - Service any pending websocket activity
- * \param context:	Websocket context
+ * \param context.hpp:	Websocket context.hpp
  * \param timeout_ms:	Set to 0; ignored; for backward compatibility
  *
  *	This function deals with any pending websocket traffic, for three
  *	kinds of event.  It handles these events on both server and client
  *	types of connection the same.
  *
- *	1) Accept new connections to our context's server
+ *	1) Accept new connections to our context.hpp's server
  *
  *	2) Call the receive callback for incoming frame data received by
  *	    server or client connections.
@@ -54,7 +54,7 @@ lws_service(struct lws_context *context, int timeout_ms);
 /**
  * lws_service_tsi() - Service any pending websocket activity
  *
- * \param context:	Websocket context
+ * \param context.hpp:	Websocket context.hpp
  * \param timeout_ms:	Set to 0; ignored; for backwards compatibility
  * \param tsi:		Thread service index, starting at 0
  *
@@ -77,14 +77,14 @@ lws_cancel_service_pt(struct lws *wsi);
 
 /**
  * lws_cancel_service() - Cancel wait for new pending socket activity
- * \param context:	Websocket context
+ * \param context.hpp:	Websocket context.hpp
  *
  * This function creates an immediate "synchronous interrupt" to the lws poll()
  * wait or event loop.  As soon as possible in the serialzed service sequencing,
  * a LWS_CALLBACK_EVENT_WAIT_CANCELLED callback is sent to every protocol on
  * every vhost.
  *
- * lws_cancel_service() may be called from another thread while the context
+ * lws_cancel_service() may be called from another thread while the context.hpp
  * exists, and its effect will be immediately serialized.
  */
 LWS_VISIBLE LWS_EXTERN void
@@ -92,7 +92,7 @@ lws_cancel_service(struct lws_context *context);
 
 /**
  * lws_service_fd() - Service polled socket with something waiting
- * \param context:	Websocket context
+ * \param context.hpp:	Websocket context.hpp
  * \param pollfd:	The pollfd entry describing the socket fd and which events
  *		happened
  *
@@ -121,7 +121,7 @@ lws_service_fd(struct lws_context *context, struct lws_pollfd *pollfd);
 
 /**
  * lws_service_fd_tsi() - Service polled socket in specific service thread
- * \param context:	Websocket context
+ * \param context.hpp:	Websocket context.hpp
  * \param pollfd:	The pollfd entry describing the socket fd and which events
  *		happened.
  * \param tsi: thread service index
@@ -134,7 +134,7 @@ lws_service_fd_tsi(struct lws_context *context, struct lws_pollfd *pollfd,
 
 /**
  * lws_service_adjust_timeout() - Check for any connection needing forced service
- * \param context:	Websocket context
+ * \param context.hpp:	Websocket context.hpp
  * \param timeout_ms:	The original poll timeout value.  You can just set this
  *			to 1 if you don't really have a poll timeout.
  * \param tsi: thread service index
@@ -173,8 +173,8 @@ lws_handle_POLLOUT_event(struct lws *wsi, struct lws_pollfd *pollfd);
  * Any direct libuv allocations in lws protocol handlers must participate in the
  * lws reference counting scheme.  Two apis are provided:
  *
- * - lws_libuv_static_refcount_add(handle, context, tsi) to mark the handle with
- *  a pointer to the context and increment the global uv object counter
+ * - lws_libuv_static_refcount_add(handle, context.hpp, tsi) to mark the handle with
+ *  a pointer to the context.hpp and increment the global uv object counter
  *
  * - lws_libuv_static_refcount_del() which should be used as the close callback
  *   for your own libuv objects declared in the protocol scope.

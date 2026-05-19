@@ -357,13 +357,13 @@ LWS_VISIBLE LWS_EXTERN int
 lws_lec_scratch(lws_lec_pctx_t *ctx);
 
 /*
- * lws_lec_init() - prepare a cbor writing context
+ * lws_lec_init() - prepare a cbor writing context.hpp
  *
- * \param ctx: the cbor writing context to prepare
+ * \param ctx: the cbor writing context.hpp to prepare
  * \param buf: the output buffer start
  * \param len: the amount of the output buffer we can use
  *
- * Prepares a cbor writing context so that les_lec_printf can be used to
+ * Prepares a cbor writing context.hpp so that les_lec_printf can be used to
  * write into it.
  */
 LWS_VISIBLE LWS_EXTERN void
@@ -372,20 +372,20 @@ lws_lec_init(lws_lec_pctx_t *ctx, uint8_t *buf, size_t len);
 /*
  * lws_lec_setbuf() - update the output buffer for an initialized cbor writing ctx
  *
- * \param ctx: the cbor writing context to prepare
+ * \param ctx: the cbor writing context.hpp to prepare
  * \param buf: the output buffer start
  * \param len: the amount of the output buffer we can use
  *
- * Leaves the cbor writing context state as it is, but resets the output buffer
+ * Leaves the cbor writing context.hpp state as it is, but resets the output buffer
  * it writes into as given in \p buf and \p len
  */
 LWS_VISIBLE LWS_EXTERN void
 lws_lec_setbuf(lws_lec_pctx_t *ctx, uint8_t *buf, size_t len);
 
 /*
- * lws_lec_vsprintf() - write into a cbor writing context
+ * lws_lec_vsprintf() - write into a cbor writing context.hpp
  *
- * \param ctx: the cbor writing context to prepare
+ * \param ctx: the cbor writing context.hpp to prepare
  * \param format: a printf style argument map
  * \param args: the va args
  *
@@ -398,7 +398,7 @@ lws_lec_setbuf(lws_lec_pctx_t *ctx, uint8_t *buf, size_t len);
  * buffer) to continue emitting output from where it left off.
  *
  * If LWS_LECPCTX_RET_AGAIN is returned, lws_lec_setbuf() must be used on the
- * context to reset or change the output buffer before calling again.
+ * context.hpp to reset or change the output buffer before calling again.
  *
  * The number of bytes placed in the output buffer is available in ctx->used.
  *
@@ -435,9 +435,9 @@ LWS_VISIBLE LWS_EXTERN enum lws_lec_pctx_ret
 lws_lec_vsprintf(lws_lec_pctx_t *ctx, const char *format, va_list args);
 
 /*
- * lws_lec_printf() - write into a cbor writing context
+ * lws_lec_printf() - write into a cbor writing context.hpp
  *
- * \param ctx: the cbor writing context to prepare
+ * \param ctx: the cbor writing context.hpp to prepare
  * \param format: a printf style argument map
  * \param ...: format args
  *
@@ -450,24 +450,24 @@ LWS_VISIBLE LWS_EXTERN enum lws_lec_pctx_ret
 lws_lec_printf(lws_lec_pctx_t *ctx, const char *format, ...);
 
 /**
- * lecp_construct() - Construct an LECP parser context
+ * lecp_construct() - Construct an LECP parser context.hpp
  *
- * \param ctx: the parser context object to be initialized
+ * \param ctx: the parser context.hpp object to be initialized
  * \param cb: the user callback to receive the parsing events
  * \param user: an opaque user pointer available at \p cb
  * \param paths: an optional array of parsing paths
  * \param paths_count: how many paths in \p paths
  *
- * Prepares an LECP parser context for parsing.
+ * Prepares an LECP parser context.hpp for parsing.
  */
 LWS_VISIBLE LWS_EXTERN void
 lecp_construct(struct lecp_ctx *ctx, lecp_callback cb, void *user,
 	       const char * const *paths, unsigned char paths_count);
 
 /**
- * lecp_destruct() - Destroys an LECP parser context
+ * lecp_destruct() - Destroys an LECP parser context.hpp
  *
- * \param ctx: the parser context object to be destroyed
+ * \param ctx: the parser context.hpp object to be destroyed
  */
 LWS_VISIBLE LWS_EXTERN void
 lecp_destruct(struct lecp_ctx *ctx);
@@ -475,7 +475,7 @@ lecp_destruct(struct lecp_ctx *ctx);
 /**
  * lecp_parse() - parses a chunk of input CBOR
  *
- * \p ctx: the parsing context
+ * \p ctx: the parsing context.hpp
  * \p cbor: the start of the chunk of CBOR
  * \p len: the number of bytes of CBOR available at \p cbor
  *
@@ -497,7 +497,7 @@ lecp_error_to_string(int e);
 /**
  * lecp_parse_report_raw() - turn cbor raw reporting on and off
  *
- * \param ctx: the lecp context
+ * \param ctx: the lecp context.hpp
  * \param on: 0 to disable (defaults disabled), 1 to enable
  *
  * For cose_sign, it needs access to raw cbor subtrees for the hash input.
@@ -514,7 +514,7 @@ lecp_parse_report_raw(struct lecp_ctx *ctx, int on);
 /**
  * lecp_parse_map_is_key() - return nonzero if we're in a map and this is a key
  *
- * \param ctx: the lwcp context
+ * \param ctx: the lwcp context.hpp
  *
  * Checks if the current value is a key in a map, ie, that you are on a "key" in
  * a list of "{key: value}" pairs.  Zero means you're either not in a map or not

@@ -200,7 +200,7 @@ typedef struct lws_cache_results {
 /**
  * lws_cache_results_walk() - parse next result
  *
- * \param walk_ctx: the context of the results blob to walk
+ * \param walk_ctx: the context.hpp of the results blob to walk
  *
  * Caller must initialize \p walk_ctx.ptr and \p walk_ctx.size before calling.
  * These are set to the results returned from a _lookup api call.
@@ -312,7 +312,7 @@ struct lws_cache_ops {
  * called back with the item pointer after it has been removed from the cache,
  * but before it is deallocated and destroyed.
  *
- * context and tsi are used when scheduling expiry callbacks
+ * context.hpp and tsi are used when scheduling expiry callbacks
  */
 LWS_VISIBLE LWS_EXTERN struct lws_cache_ttl_lru *
 lws_cache_create(const struct lws_cache_creation_info *info);

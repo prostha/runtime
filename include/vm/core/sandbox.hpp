@@ -1,34 +1,28 @@
 #pragma once
 
-#include "../include/vm/core/allocator.hpp"
+#include <cstddef>
+#include "allocator.hpp"
 
-extern "C" {
-#include <lua.h>
-}
+struct lua_State;
 
-namespace polyblox {
+namespace sandbox {
 
-    inline constexpr size_t SANDBOX_MEMORY = 64 * 1024 * 1024;
-    inline constexpr int SANDBOX_INSTRUCTIONS = 1000000;
-    inline constexpr int MAX_COROUTINES = 16;
-    inline constexpr size_t MAX_STRING = 1024 * 1024;
-
-    enum class Context {
-        SANDBOX_SERVER,
-        SANDBOX_CLIENT
-    };
+    constexpr size_t MEMORY = 32 * 1024 * 1024;
+    constexpr int INSTRUCTIONS = 100000;
 
     class Sandbox {
     public:
-        explicit Sandbox(Context context);
+        Sandbox();
         ~Sandbox();
+
+        Sandbox(const Sandbox&) = delete;
+        Sandbox& operator=(const Sandbox&) = delete;
 
         int run(const char* path) const;
 
     private:
-        Context context;
-        Allocator* allocator = nullptr;
         lua_State* state = nullptr;
+        allocator::Allocator* memory = nullptr;
     };
 
 }

@@ -1,20 +1,22 @@
-#include "../../../include/vm/core/sandbox.hpp"
+#include "../include/vm/core/sandbox.hpp"
 #include <cstdio>
 #include <cassert>
 #include <new>
+#include <stdexcept>
 
 extern "C" {
 #include <lualib.h>
 #include <lauxlib.h>
 int luaopen_ecs(lua_State* L);
+int luaopen_math(lua_State* L);
 }
 
 #if defined(_WIN32)
 #include <windows.h>
-static void vm_restrict_resources() {
-    static bool once = false;
-    if (once) return;
-    once = true;
+static void confine() {
+    static bool initialized = false;
+    if (initialized) return;
+    initialized = true;
     HANDLE job = CreateJobObject(nullptr, nullptr);
     if (!job) return;
     JOBOBJECT_BASIC_LIMIT_INFORMATION limits = {};
@@ -25,10 +27,10 @@ static void vm_restrict_resources() {
 }
 #else
 #include <sys/resource.h>
-static void vm_restrict_resources() {
-    static bool once = false;
-    if (once) return;
-    once = true;
+static void confine() {
+    static bool initialized = false;
+    if (initialized) return;
+    initialized = true;
     rlimit limit{};
     limit.rlim_cur = 8;
     limit.rlim_max = 8;
@@ -39,57 +41,111 @@ static void vm_restrict_resources() {
 }
 #endif
 
-static void vm_hook_governor(lua_State *L, const lua_Debug *debug) {
+static void govern(lua_State *state, const lua_Debug *debug) {
     (void)debug;
-    lua_sethook(L, reinterpret_cast<lua_Hook>(vm_hook_governor), LUA_MASKCOUNT, 1);
-    luaL_error(L, "sandbox: cpu budget exceeded");
+    lua_sethook(state, reinterpret_cast<lua_Hook>(govern), LUA_MASKCOUNT, 1);
+    luaL_error(state, "sandbox: cpu budget exceeded");
 }
 
-namespace polyblox {
+namespace sandbox {
 
-Sandbox::Sandbox(Context context)
-    : context(context) {
-    vm_restrict_resources();
+Sandbox::Sandbox() {
+    try {
+        confine();
 
-    allocator = new(std::nothrow) Allocator(SANDBOX_MEMORY);
-    assert(allocator != nullptr);
+        memory = new(std::nothrow) allocator::Allocator(MEMORY);
+        assert(memory != nullptr);
 
-    state = lua_newstate(Allocator::allocator_func, allocator);
-    if (state) {
+        state = lua_newstate(allocator::Allocator::manage, memory);
+        if (!state) {
+            throw std::runtime_error("Failed to initialize Lua state.");
+        }
+
         luaL_openlibs(state);
 
-        lua_pushcfunction(state, luaopen_ecs);
-        lua_pushstring(state, "ecs");
-        lua_call(state, 1, 1);
-        lua_setglobal(state, "ecs");
+        lua_getglobal(state, "package");
+        if (lua_istable(state, -1)) {
+            lua_getfield(state, -1, "preload");
+            if (lua_istable(state, -1)) {
+
+                lua_pushcfunction(state, luaopen_ecs);
+                lua_setfield(state, -2, "voxyl.ecs");
+
+                lua_pushcfunction(state, luaopen_math);
+                lua_setfield(state, -2, "voxyl.math");
+            }
+            lua_pop(state, 1);
+        }
+        lua_pop(state, 1);
+    }
+    catch (const std::exception& exception) {
+        std::fprintf(stderr, "sandbox initialization error: %s\n", exception.what());
+
+        if (state) {
+            lua_close(state);
+            state = nullptr;
+        }
+        delete memory;
+        memory = nullptr;
+    }
+    catch (...) {
+        std::fprintf(stderr, "sandbox initialization error: Unknown exception caught.\n");
+        if (state) {
+            lua_close(state);
+            state = nullptr;
+        }
+        delete memory;
+        memory = nullptr;
     }
 }
 
 Sandbox::~Sandbox() {
     if (state) lua_close(state);
-    delete allocator;
+    delete memory;
 }
 
 int Sandbox::run(const char *path) const {
-    lua_State *L = state;
-    lua_State *thread = lua_newthread(L);
+    try {
+        lua_State *context = state;
+        if (!context) {
+            std::fprintf(stderr, "sandbox error: Lua state is uninitialized\n");
+            return 0;
+        }
 
-    lua_sethook(thread, reinterpret_cast<lua_Hook>(vm_hook_governor), LUA_MASKCOUNT, SANDBOX_INSTRUCTIONS);
+        lua_State *thread = lua_newthread(context);
+        if (!thread) {
+            std::fprintf(stderr, "sandbox error: Failed to create Lua coroutine thread\n");
+            return 0;
+        }
 
-    if (luaL_loadfile(thread, path) != LUA_OK) {
-        std::fprintf(stderr, "sandbox error: %s\n", lua_tostring(thread, -1));
-        lua_pop(L, 1);
+        lua_sethook(thread, reinterpret_cast<lua_Hook>(govern), LUA_MASKCOUNT, INSTRUCTIONS);
+
+        if (luaL_loadfile(thread, path) != LUA_OK) {
+            std::fprintf(stderr, "sandbox error: %s\n", lua_tostring(thread, -1));
+            lua_pop(context, 1);
+            return 0;
+        }
+
+        if (lua_pcall(thread, 0, 0, 0) != LUA_OK) {
+            std::fprintf(stderr, "runtime error: %s\n", lua_tostring(thread, -1));
+            lua_pop(context, 1);
+            return 0;
+        }
+
+        lua_pop(context, 1);
+        return 1;
+    }
+    catch (const std::exception& exception) {
+        std::fprintf(stderr, "unexpected C++ exception in sandbox run: %s\n", exception.what());
         return 0;
     }
-
-    if (lua_pcall(thread, 0, 0, 0) != LUA_OK) {
-        std::fprintf(stderr, "runtime error: %s\n", lua_tostring(thread, -1));
-        lua_pop(L, 1);
+    catch (...) {
+        std::fprintf(stderr, "unexpected unknown exception in sandbox run\n");
+        if (state) {
+            lua_settop(state, 0);
+        }
         return 0;
     }
-
-    lua_pop(L, 1);
-    return 1;
 }
 
 }

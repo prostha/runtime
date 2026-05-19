@@ -36,7 +36,7 @@ typedef struct lws_retry_bo {
 /**
  * lws_retry_get_delay_ms() - get next delay from backoff table
  *
- * \param lws_context: the lws context (used for getting random)
+ * \param lws_context: the lws context.hpp (used for getting random)
  * \param retry: the retry backoff table we are using, or NULL for default
  * \param ctry: pointer to the try counter
  * \param conceal: pointer to flag set to nonzero if the try should be concealed
@@ -59,7 +59,7 @@ lws_retry_get_delay_ms(struct lws_context *context, const lws_retry_bo_t *retry,
 /**
  * lws_retry_sul_schedule() - schedule a sul according to the backoff table
  *
- * \param lws_context: the lws context (used for getting random)
+ * \param lws_context: the lws context.hpp (used for getting random)
  * \param sul: pointer to the sul to schedule
  * \param retry: the retry backoff table we are using, or NULL for default
  * \param cb: the callback for when the sul schedule time arrives
@@ -82,7 +82,7 @@ lws_retry_sul_schedule(struct lws_context *context, int tid,
  * \param cb: the callback for when the sul schedule time arrives
  * \param ctry: pointer to the try counter
  *
- * Helper that uses context, tid and retry policy from a wsi to call
+ * Helper that uses context.hpp, tid and retry policy from a wsi to call
  * lws_retry_sul_schedule.
  *
  * Since a udp connection can have many writes in flight, the retry count and

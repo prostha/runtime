@@ -243,7 +243,7 @@ typedef struct lws_ss_auth {
  * another kind of auth sequencing for the streams that are carried inside it,
  * this is the purpose of .nauth and .sauth.  Both are optional and may be NULL.
  *
- * An array of these is set at context creation time, ending with one with a
+ * An array of these is set at context.hpp creation time, ending with one with a
  * NULL streamtype.
  */
 typedef struct lws_ss_policy {

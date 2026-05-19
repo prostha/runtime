@@ -108,7 +108,7 @@ enum lws_write_protocol {
 
 	LWS_WRITE_CLIENT_IGNORE_XOR_MASK = 0x80
 	/**< client packet payload goes out on wire unmunged
-	 * only useful for security tests since normal servers cannot
+	 * only useful for security scripts since normal servers cannot
 	 * decode the content if used */
 };
 

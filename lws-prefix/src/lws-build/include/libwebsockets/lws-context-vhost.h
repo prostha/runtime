@@ -22,18 +22,18 @@
  * IN THE SOFTWARE.
  */
 
-/*! \defgroup context-and-vhost context and vhost related functions
+/*! \defgroup context.hpp-and-vhost context.hpp and vhost related functions
  * ##Context and Vhost releated functions
  * \ingroup lwsapi
  *
  *
- *  LWS requires that there is one context, in which you may define multiple
+ *  LWS requires that there is one context.hpp, in which you may define multiple
  *  vhosts.  Each vhost is a virtual host, with either its own listen port
- *  or sharing an existing one.  Each vhost has its own SSL context that can
+ *  or sharing an existing one.  Each vhost has its own SSL context.hpp that can
  *  be set up individually or left disabled.
  *
  *  If you don't care about multiple "site" support, you can ignore it and
- *  lws will create a single default vhost at context creation time.
+ *  lws will create a single default vhost at context.hpp creation time.
  */
 ///@{
 
@@ -88,7 +88,7 @@
 #define LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT			 (1ll << 12)
 	/**< (CTX) Initialize the SSL library at all */
 #define LWS_SERVER_OPTION_EXPLICIT_VHOSTS			 (1ll << 13)
-	/**< (CTX) Only create the context when calling context
+	/**< (CTX) Only create the context.hpp when calling context.hpp
 	 * create api, implies user code will create its own vhosts */
 #define LWS_SERVER_OPTION_UNIX_SOCK				 (1ll << 14)
 	/**< (VH) Use Unix socket */
@@ -109,7 +109,7 @@
 	/**< For backwards-compatibility reasons, by default
 	 * lws prepends "http://" to the origin you give in the client
 	 * connection info struct.  If you give this flag when you create
-	 * the context, only the string you give in the client connect
+	 * the context.hpp, only the string you give in the client connect
 	 * info for .origin (if any) will be used directly.
 	 */
 #define LWS_SERVER_OPTION_FALLBACK_TO_RAW /* use below name */	 (1ll << 20)
@@ -259,14 +259,14 @@ typedef int (*lws_peer_limits_notify_t)(struct lws_context *ctx,
 					lws_sockfd_type sockfd,
 					lws_sockaddr46 *sa46);
 
-/** struct lws_context_creation_info - parameters to create context and /or vhost with
+/** struct lws_context_creation_info - parameters to create context.hpp and /or vhost with
  *
  * This is also used to create vhosts.... if LWS_SERVER_OPTION_EXPLICIT_VHOSTS
  * is not given, then for backwards compatibility one vhost is created at
- * context-creation time using the info from this struct.
+ * context.hpp-creation time using the info from this struct.
  *
  * If LWS_SERVER_OPTION_EXPLICIT_VHOSTS is given, then no vhosts are created
- * at the same time as the context, they are expected to be created afterwards.
+ * at the same time as the context.hpp, they are expected to be created afterwards.
  */
 struct lws_context_creation_info {
 #if defined(LWS_WITH_NETWORK)
@@ -286,7 +286,7 @@ struct lws_context_creation_info {
 #if defined(LWS_ROLE_WS)
 	const struct lws_extension *extensions;
 	/**< VHOST: NULL or array of lws_extension structs listing the
-	 * extensions this context supports. */
+	 * extensions this context.hpp supports. */
 #endif
 #if defined(LWS_ROLE_H1) || defined(LWS_ROLE_H2)
 	const struct lws_token_limits *token_limits;
@@ -374,14 +374,14 @@ struct lws_context_creation_info {
 	const char *ssl_private_key_password;
 	/**< VHOST: NULL or the passphrase needed for the private key. (For
 	 * backwards compatibility, this can also be used to pass the client
-	 * cert passphrase when setting up a vhost client SSL context, but it is
+	 * cert passphrase when setting up a vhost client SSL context.hpp, but it is
 	 * preferred to use .client_ssl_private_key_password for that.) */
 	const char *ssl_cert_filepath;
 	/**< VHOST: If libwebsockets was compiled to use ssl, and you want
 	 * to listen using SSL, set to the filepath to fetch the
 	 * server cert from, otherwise NULL for unencrypted.  (For backwards
 	 * compatibility, this can also be used to pass the client certificate
-	 * when setting up a vhost client SSL context, but it is preferred to
+	 * when setting up a vhost client SSL context.hpp, but it is preferred to
 	 * use .client_ssl_cert_filepath for that.)
 	 *
 	 * Notice you can alternatively set a single DER or PEM from a memory
@@ -396,11 +396,11 @@ struct lws_context_creation_info {
 	 * the OPENSSL_LOAD_EXTRA_SERVER_VERIFY_CERTS callback directly via
 	 * openSSL library calls.  This requires that
 	 * LWS_SERVER_OPTION_CREATE_VHOST_SSL_CTX is set in the vhost info options
-	 * to force initializtion of the SSL_CTX context.
+	 * to force initializtion of the SSL_CTX context.hpp.
 	 *
 	 * (For backwards compatibility, this can also be used
 	 * to pass the client cert private key filepath when setting up a
-	 * vhost client SSL context, but it is preferred to use
+	 * vhost client SSL context.hpp, but it is preferred to use
 	 * .client_ssl_private_key_filepath for that.)
 	 *
 	 * Notice you can alternatively set a DER or PEM private key from a
@@ -410,7 +410,7 @@ struct lws_context_creation_info {
 	const char *ssl_ca_filepath;
 	/**< VHOST: CA certificate filepath or NULL.  (For backwards
 	 * compatibility, this can also be used to pass the client CA
-	 * filepath when setting up a vhost client SSL context,
+	 * filepath when setting up a vhost client SSL context.hpp,
 	 * but it is preferred to use .client_ssl_ca_filepath for that.)
 	 *
 	 * Notice you can alternatively set a DER or PEM CA cert from a memory
@@ -421,7 +421,7 @@ struct lws_context_creation_info {
 	 * "RC4-MD5:RC4-SHA:AES128-SHA:AES256-SHA:HIGH:!DSS:!aNULL"
 	 * or you can leave it as NULL to get "DEFAULT" (For backwards
 	 * compatibility, this can also be used to pass the client cipher
-	 * list when setting up a vhost client SSL context,
+	 * list when setting up a vhost client SSL context.hpp,
 	 * but it is preferred to use .client_ssl_cipher_list for that.)
 	 * SEE .tls1_3_plus_cipher_list and .client_tls_1_3_plus_cipher_list
 	 * for the equivalent for tls1.3.
@@ -467,7 +467,7 @@ struct lws_context_creation_info {
 	 * 0 means no info events will be reported.
 	 */
 	unsigned int server_ssl_cert_mem_len;
-	/**< VHOST: Server SSL context init: length of server_ssl_cert_mem in
+	/**< VHOST: Server SSL context.hpp init: length of server_ssl_cert_mem in
 	 * bytes */
 	unsigned int server_ssl_private_key_mem_len;
 	/**< VHOST: length of \p server_ssl_private_key_mem in memory */
@@ -485,34 +485,34 @@ struct lws_context_creation_info {
 
 #if defined(LWS_WITH_CLIENT)
 	const char *client_ssl_private_key_password;
-	/**< VHOST: Client SSL context init: NULL or the passphrase needed
+	/**< VHOST: Client SSL context.hpp init: NULL or the passphrase needed
 	 * for the private key */
 	const char *client_ssl_cert_filepath;
-	/**< VHOST: Client SSL context init: The certificate the client
+	/**< VHOST: Client SSL context.hpp init: The certificate the client
 	 * should present to the peer on connection */
 	const void *client_ssl_cert_mem;
-	/**< VHOST: Client SSL context init: client certificate memory buffer or
+	/**< VHOST: Client SSL context.hpp init: client certificate memory buffer or
 	 * NULL... use this to load client cert from memory instead of file */
 	unsigned int client_ssl_cert_mem_len;
-	/**< VHOST: Client SSL context init: length of client_ssl_cert_mem in
+	/**< VHOST: Client SSL context.hpp init: length of client_ssl_cert_mem in
 	 * bytes */
 	const char *client_ssl_private_key_filepath;
-	/**<  VHOST: Client SSL context init: filepath to client private key
+	/**<  VHOST: Client SSL context.hpp init: filepath to client private key
 	 * if this is set to NULL but client_ssl_cert_filepath is set, you
 	 * can handle the LWS_CALLBACK_OPENSSL_LOAD_EXTRA_CLIENT_VERIFY_CERTS
 	 * callback of protocols[0] to allow setting of the private key directly
 	 * via tls library calls */
 	const void *client_ssl_key_mem;
-	/**< VHOST: Client SSL context init: client key memory buffer or
+	/**< VHOST: Client SSL context.hpp init: client key memory buffer or
 	 * NULL... use this to load client key from memory instead of file */
 	const char *client_ssl_ca_filepath;
-	/**< VHOST: Client SSL context init: CA certificate filepath or NULL */
+	/**< VHOST: Client SSL context.hpp init: CA certificate filepath or NULL */
 	const void *client_ssl_ca_mem;
-	/**< VHOST: Client SSL context init: CA certificate memory buffer or
+	/**< VHOST: Client SSL context.hpp init: CA certificate memory buffer or
 	 * NULL... use this to load CA cert from memory instead of file */
 
 	const char *client_ssl_cipher_list;
-	/**< VHOST: Client SSL context init: List of valid ciphers to use (eg,
+	/**< VHOST: Client SSL context.hpp init: List of valid ciphers to use (eg,
 	* "RC4-MD5:RC4-SHA:AES128-SHA:AES256-SHA:HIGH:!DSS:!aNULL"
 	* or you can leave it as NULL to get "DEFAULT" */
 	const char *client_tls_1_3_plus_cipher_list;
@@ -529,10 +529,10 @@ struct lws_context_creation_info {
 
 
 	unsigned int client_ssl_ca_mem_len;
-	/**< VHOST: Client SSL context init: length of client_ssl_ca_mem in
+	/**< VHOST: Client SSL context.hpp init: length of client_ssl_ca_mem in
 	 * bytes */
 	unsigned int client_ssl_key_mem_len;
-	/**< VHOST: Client SSL context init: length of client_ssl_key_mem in
+	/**< VHOST: Client SSL context.hpp init: length of client_ssl_key_mem in
 	 * bytes */
 
 #endif
@@ -541,7 +541,7 @@ struct lws_context_creation_info {
 	SSL_CTX *provided_client_ssl_ctx;
 	/**< CONTEXT: If non-null, swap out libwebsockets ssl
 	  * implementation for the one provided by provided_ssl_ctx.
-	  * Libwebsockets no longer is responsible for freeing the context
+	  * Libwebsockets no longer is responsible for freeing the context.hpp
 	  * if this option is selected. */
 #else /* WITH_MBEDTLS */
 	const char *mbedtls_client_preload_filepath;
@@ -611,11 +611,11 @@ struct lws_context_creation_info {
 	/**< VHOST + CONTEXT: 0, or LWS_SERVER_OPTION_... bitfields */
 	void *user;
 	/**< VHOST + CONTEXT: optional user pointer that will be associated
-	 * with the context when creating the context (and can be retrieved by
-	 * lws_context_user(context), or with the vhost when creating the vhost
+	 * with the context.hpp when creating the context.hpp (and can be retrieved by
+	 * lws_context_user(context.hpp), or with the vhost when creating the vhost
 	 * (and can be retrieved by lws_vhost_user(vhost)).  You will need to
 	 * use LWS_SERVER_OPTION_EXPLICIT_VHOSTS and create the vhost separately
-	 * if you care about giving the context and vhost different user pointer
+	 * if you care about giving the context.hpp and vhost different user pointer
 	 * values.
 	 */
 	unsigned int count_threads;
@@ -629,7 +629,7 @@ struct lws_context_creation_info {
 	 * number of service threads is less than the process ulimit, then lws
 	 * restricts internal lookup table allocation to the smaller size, and
 	 * switches to a less efficient lookup scheme.  You should use this to
-	 * trade off speed against memory usage if you know the lws context
+	 * trade off speed against memory usage if you know the lws context.hpp
 	 * will only use a handful of fds.
 	 *
 	 * Bear in mind lws may use some fds internally, for example for the
@@ -640,19 +640,19 @@ struct lws_context_creation_info {
 	/**< VHOST: name of vhost, must match external DNS name used to
 	 * access the site, like "warmcat.com" as it's used to match
 	 * Host: header and / or SNI name for SSL.
-	 * CONTEXT: NULL, or the name to associate with the context for
-	 * context-specific logging
+	 * CONTEXT: NULL, or the name to associate with the context.hpp for
+	 * context.hpp-specific logging
 	 */
 #if defined(LWS_WITH_PLUGINS)
 	const char * const *plugin_dirs;
 	/**< CONTEXT: NULL, or NULL-terminated array of directories to
-	 * scan for lws protocol plugins at context creation time */
+	 * scan for lws protocol plugins at context.hpp creation time */
 #endif
 	void *external_baggage_free_on_destroy;
 	/**< CONTEXT: NULL, or pointer to something externally malloc'd, that
-	 * should be freed when the context is destroyed.  This allows you to
-	 * automatically sync the freeing action to the context destruction
-	 * action, so there is no need for an external free() if the context
+	 * should be freed when the context.hpp is destroyed.  This allows you to
+	 * automatically sync the freeing action to the context.hpp destruction
+	 * action, so there is no need for an external free() if the context.hpp
 	 * succeeded to create.
 	 */
 
@@ -697,13 +697,13 @@ struct lws_context_creation_info {
 	 * no capabilities will be inherited from root (the default) */
 #endif
 	void **foreign_loops;
-	/**< CONTEXT: This is ignored if the context is not being started with
+	/**< CONTEXT: This is ignored if the context.hpp is not being started with
 	 *		an event loop, ie, .options has a flag like
 	 *		LWS_SERVER_OPTION_LIBUV.
 	 *
 	 *		NULL indicates lws should start its own even loop for
 	 *		each service thread, and deal with closing the loops
-	 *		when the context is destroyed.
+	 *		when the context.hpp is destroyed.
 	 *
 	 *		Non-NULL means it points to an array of external
 	 *		("foreign") event loops that are to be used in turn for
@@ -717,9 +717,9 @@ struct lws_context_creation_info {
 	 *		for libuv.
 	 */
 	struct lws_context **pcontext;
-	/**< CONTEXT: if non-NULL, at the end of context destroy processing,
+	/**< CONTEXT: if non-NULL, at the end of context.hpp destroy processing,
 	 * the pointer pointed to by pcontext is written with NULL.  You can
-	 * use this to let foreign event loops know that lws context destruction
+	 * use this to let foreign event loops know that lws context.hpp destruction
 	 * is fully completed.
 	 */
 	void (*finalize)(struct lws_vhost *vh, void *arg);
@@ -747,7 +747,7 @@ struct lws_context_creation_info {
 	 *
 	 * This is preferred over .protocols, because it allows the protocol
 	 * struct to be opaquely defined elsewhere, with just a pointer to it
-	 * needed to create the context with it.  .protocols requires also
+	 * needed to create the context.hpp with it.  .protocols requires also
 	 * the type of the user data to be known so its size can be given.
 	 */
 
@@ -769,7 +769,7 @@ struct lws_context_creation_info {
 #if defined(LWS_WITH_SYS_STATE)
 	lws_state_notify_link_t * const *register_notifier_list;
 	/**< CONTEXT: NULL, or pointer to an array of notifiers that should
-	 * be registered during context creation, so they can see state change
+	 * be registered during context.hpp creation, so they can see state change
 	 * events from very early on.  The array should end with a NULL. */
 #endif
 #if defined(LWS_WITH_SECURE_STREAMS)
@@ -811,7 +811,7 @@ struct lws_context_creation_info {
 	/**< CONTEXT: NULL, or a callback to receive notifications each time a
 	 * connection is being dropped because of peer limits.
 	 *
-	 * The callback provides the context, and an lws_sockaddr46 with the
+	 * The callback provides the context.hpp, and an lws_sockaddr46 with the
 	 * peer address and port.
 	 */
 	unsigned short ip_limit_ah;
@@ -834,9 +834,9 @@ struct lws_context_creation_info {
 
 #if defined(LWS_WITH_SYS_FAULT_INJECTION)
 	lws_fi_ctx_t				fic;
-	/**< CONTEXT | VHOST: attach external Fault Injection context to the
-	 * lws_context or vhost.  If creating the context + default vhost in
-	 * one step, only the context binds to \p fi.  When creating a vhost
+	/**< CONTEXT | VHOST: attach external Fault Injection context.hpp to the
+	 * lws_context or vhost.  If creating the context.hpp + default vhost in
+	 * one step, only the context.hpp binds to \p fi.  When creating a vhost
 	 * otherwise this can bind to the vhost so the faults can be injected
 	 * from the start.
 	 */
@@ -845,7 +845,7 @@ struct lws_context_creation_info {
 #if defined(LWS_WITH_SYS_SMD)
 	lws_smd_notification_cb_t		early_smd_cb;
 	/**< CONTEXT: NULL, or an smd notification callback that will be registered
-	 * immediately after the smd in the context is initialized.  This ensures
+	 * immediately after the smd in the context.hpp is initialized.  This ensures
 	 * you can get all notifications without having to intercept the event loop
 	 * creation, eg, when using an event library.  Other callbacks can be
 	 * registered later manually without problems.
@@ -866,7 +866,7 @@ struct lws_context_creation_info {
 	const struct lws_metric_policy		*metrics_policies;
 	/**< CONTEXT: non-SS policy metrics policies */
 	const char				*metrics_prefix;
-	/**< CONTEXT: prefix for this context's metrics, used to distinguish
+	/**< CONTEXT: prefix for this context.hpp's metrics, used to distinguish
 	 * metrics pooled from different processes / applications, so, eg what
 	 * would be "cpu.svc" if this is NULL becomes "myapp.cpu.svc" is this is
 	 * set to "myapp".  Policies are applied using the name with the prefix,
@@ -883,7 +883,7 @@ struct lws_context_creation_info {
 	const struct lws_plugin_evlib		*event_lib_custom;
 	/**< CONTEXT: If non-NULL, override event library selection so it uses
 	 * this custom event library implementation, instead of default internal
-	 * loop.  Don't set any other event lib context creation flags in that
+	 * loop.  Don't set any other event lib context.hpp creation flags in that
 	 * case. it will be used automatically.  This is useful for integration
 	 * where an existing application is using its own handrolled event loop
 	 * instead of an event library, it provides a way to allow lws to use
@@ -900,8 +900,8 @@ struct lws_context_creation_info {
 #endif
 
 	lws_log_cx_t				*log_cx;
-	/**< CONTEXT: NULL to use the default, process-scope logging context,
-	 * else a specific logging context to associate with this context */
+	/**< CONTEXT: NULL to use the default, process-scope logging context.hpp,
+	 * else a specific logging context.hpp to associate with this context.hpp */
 
 #if defined(LWS_WITH_CACHE_NSCOOKIEJAR) && defined(LWS_WITH_CLIENT)
 	const char				*http_nsc_filepath;
@@ -943,9 +943,9 @@ struct lws_context_creation_info {
  *
  *	After initialization, it returns a struct lws_context * that
  *	represents this server.  After calling, user code needs to take care
- *	of calling lws_service() with the context pointer to get the
+ *	of calling lws_service() with the context.hpp pointer to get the
  *	server's sockets serviced.  This must be done in the same process
- *	context as the initialization call.
+ *	context.hpp as the initialization call.
  *
  *	The protocol callback functions are called for a handful of events
  *	including http requests coming in, websocket connections becoming
@@ -968,11 +968,11 @@ lws_create_context(const struct lws_context_creation_info *info);
 
 
 /**
- * lws_context_destroy() - Destroy the websocket context
- * \param context:	Websocket context
+ * lws_context_destroy() - Destroy the websocket context.hpp
+ * \param context.hpp:	Websocket context.hpp
  *
  *	This function closes any active connections and then frees the
- *	context.  After calling this, any further use of the context is
+ *	context.hpp.  After calling this, any further use of the context.hpp is
  *	undefined.
  */
 LWS_VISIBLE LWS_EXTERN void
@@ -981,24 +981,24 @@ lws_context_destroy(struct lws_context *context);
 typedef int (*lws_reload_func)(void);
 
 /**
- * lws_context_deprecate() - Deprecate the websocket context
+ * lws_context_deprecate() - Deprecate the websocket context.hpp
  *
- * \param context:	Websocket context
- * \param cb: Callback notified when old context listen sockets are closed
+ * \param context.hpp:	Websocket context.hpp
+ * \param cb: Callback notified when old context.hpp listen sockets are closed
  *
- *	This function is used on an existing context before superceding it
- *	with a new context.
+ *	This function is used on an existing context.hpp before superceding it
+ *	with a new context.hpp.
  *
- *	It closes any listen sockets in the context, so new connections are
+ *	It closes any listen sockets in the context.hpp, so new connections are
  *	not possible.
  *
- *	And it marks the context to be deleted when the number of active
+ *	And it marks the context.hpp to be deleted when the number of active
  *	connections into it falls to zero.
  *
  *	This is aimed at allowing seamless configuration reloads.
  *
  *	The callback cb will be called after the listen sockets are actually
- *	closed and may be reopened.  In the callback the new context should be
+ *	closed and may be reopened.  In the callback the new context.hpp should be
  *	configured and created.  (With libuv, socket close happens async after
  *	more loop events).
  */
@@ -1051,20 +1051,20 @@ lws_set_socks(struct lws_vhost *vhost, const char *socks);
 struct lws_vhost;
 
 /**
- * lws_create_vhost() - Create a vhost (virtual server context)
- * \param context:	pointer to result of lws_create_context()
+ * lws_create_vhost() - Create a vhost (virtual server context.hpp)
+ * \param context.hpp:	pointer to result of lws_create_context()
  * \param info:		pointer to struct with parameters
  *
  * This function creates a virtual server (vhost) using the vhost-related
- * members of the info struct.  You can create many vhosts inside one context
- * if you created the context with the option LWS_SERVER_OPTION_EXPLICIT_VHOSTS
+ * members of the info struct.  You can create many vhosts inside one context.hpp
+ * if you created the context.hpp with the option LWS_SERVER_OPTION_EXPLICIT_VHOSTS
  */
 LWS_VISIBLE LWS_EXTERN struct lws_vhost *
 lws_create_vhost(struct lws_context *context,
 		 const struct lws_context_creation_info *info);
 
 /**
- * lws_vhost_destroy() - Destroy a vhost (virtual server context)
+ * lws_vhost_destroy() - Destroy a vhost (virtual server context.hpp)
  *
  * \param vh:		pointer to result of lws_create_vhost()
  *
@@ -1104,7 +1104,7 @@ lwsws_get_config_globals(struct lws_context_creation_info *info, const char *d,
 
 /**
  * lwsws_get_config_vhosts() - Create vhosts from a JSON server config file
- * \param context:	pointer to result of lws_create_context()
+ * \param context.hpp:	pointer to result of lws_create_context()
  * \param info:		pointer to struct with parameters
  * \param d:		filepath of the config file
  * \param config_strings: storage for the config strings extracted from JSON,
@@ -1112,7 +1112,7 @@ lwsws_get_config_globals(struct lws_context_creation_info *info, const char *d,
  * \param len:		pointer to the remaining length left in config_strings
  *			  the value is decremented as strings are stored
  *
- * This function creates vhosts into a context according to the settings in
+ * This function creates vhosts into a context.hpp according to the settings in
  *JSON files found in directory d.
  *
  * Requires CMake option LWS_WITH_LEJP_CONF to have been enabled
@@ -1141,7 +1141,7 @@ lws_get_vhost_name(struct lws_vhost *vhost);
 /**
  * lws_get_vhost_by_name() - returns the vhost with the requested name, or NULL
  *
- * \param context: the lws_context to look in
+ * \param context.hpp: the lws_context to look in
  * \param name: vhost name we are looking for
  *
  * Returns NULL, or the vhost with the name \p name
@@ -1184,9 +1184,9 @@ LWS_VISIBLE LWS_EXTERN int
 lws_json_dump_vhost(const struct lws_vhost *vh, char *buf, int len);
 
 /**
- * lws_json_dump_context() - describe context state and stats in JSON
+ * lws_json_dump_context() - describe context.hpp state and stats in JSON
  *
- * \param context: the context
+ * \param context.hpp: the context.hpp
  * \param buf: buffer to fill with JSON
  * \param len: max length of buf
  * \param hide_vhosts: nonzero to not provide per-vhost mount etc information
@@ -1209,12 +1209,12 @@ LWS_VISIBLE LWS_EXTERN void *
 lws_vhost_user(struct lws_vhost *vhost);
 
 /**
- * lws_context_user() - get the user data associated with the context
- * \param context: Websocket context
+ * lws_context_user() - get the user data associated with the context.hpp
+ * \param context.hpp: Websocket context.hpp
  *
  * This returns the optional user allocation that can be attached to
- * the context the sockets live in at context_create time.  It's a way
- * to let all sockets serviced in the same context share data without
+ * the context.hpp the sockets live in at context_create time.  It's a way
+ * to let all sockets serviced in the same context.hpp share data without
  * using globals statics in the user code.
  */
 LWS_VISIBLE LWS_EXTERN void *
@@ -1224,17 +1224,17 @@ LWS_VISIBLE LWS_EXTERN const char *
 lws_vh_tag(struct lws_vhost *vh);
 
 /**
- * lws_context_is_being_destroyed() - find out if context is being destroyed
+ * lws_context_is_being_destroyed() - find out if context.hpp is being destroyed
  *
- * \param context: the struct lws_context pointer
+ * \param context.hpp: the struct lws_context pointer
  *
- * Returns nonzero if the context has had lws_context_destroy() called on it...
+ * Returns nonzero if the context.hpp has had lws_context_destroy() called on it...
  * when using event library loops the destroy process can be asynchronous.  In
- * the special case of libuv foreign loops, the failure to create the context
+ * the special case of libuv foreign loops, the failure to create the context.hpp
  * may have to do work on the foreign loop to reverse the partial creation,
- * meaning a failed context create cannot unpick what it did and return NULL.
+ * meaning a failed context.hpp create cannot unpick what it did and return NULL.
  *
- * In that condition, a valid context that is already started the destroy
+ * In that condition, a valid context.hpp that is already started the destroy
  * process is returned, and this test api will return nonzero as a way to
  * find out the create is in the middle of failing.
  */
@@ -1242,7 +1242,7 @@ LWS_VISIBLE LWS_EXTERN int
 lws_context_is_being_destroyed(struct lws_context *context);
 
 /*! \defgroup vhost-mounts Vhost mounts and options
- * \ingroup context-and-vhost-creation
+ * \ingroup context.hpp-and-vhost-creation
  *
  * ##Vhost mounts and options
  */

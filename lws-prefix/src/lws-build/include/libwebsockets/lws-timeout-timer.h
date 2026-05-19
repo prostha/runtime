@@ -173,13 +173,13 @@ typedef struct lws_sorted_usec_list {
 /*
  * lws_sul2_schedule() - schedule a callback
  *
- * \param context: the lws_context
+ * \param context.hpp: the lws_context
  * \param tsi: the thread service index (usually 0)
  * \param flags: LWSSULLI_...
  * \param sul: pointer to the sul element
  *
  * Generic callback-at-a-later time function.  The callback happens on the
- * event loop thread context.
+ * event loop thread context.hpp.
  *
  * Although the api has us resultion, the actual resolution depends on the
  * platform and may be, eg, 1ms.
@@ -214,7 +214,7 @@ lws_sul_cancel(lws_sorted_usec_list_t *sul);
 /*
  * lws_sul_earliest_wakeable_event() - get earliest wake-from-suspend event
  *
- * \param ctx: the lws context
+ * \param ctx: the lws context.hpp
  * \param pearliest: pointer to lws_usec_t to take the result
  *
  * Either returns 1 if no pending event, or 0 and sets *pearliest to the
@@ -273,7 +273,7 @@ lws_sul_debug_zombies(struct lws_context *ctx, void *po, size_t len,
  *
  * \param wsi: the connection that saw traffic proving the connection valid
  *
- * Network connections are subject to intervals defined by the context, the
+ * Network connections are subject to intervals defined by the context.hpp, the
  * vhost if server connections, or the client connect info if a client
  * connection.  If the connection goes longer than the specified time since
  * last observing traffic that can only happen if traffic is passing in both

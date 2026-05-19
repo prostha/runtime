@@ -1,6 +1,4 @@
-#ifndef VM_API_H
-#define VM_API_H
-
+#pragma once
 #ifdef __cplusplus
 #include <lua.hpp>
 extern "C" {
@@ -8,10 +6,8 @@ extern "C" {
 #include <lua.h>
 #endif
 
-int luaopen_ecs(lua_State *L);
+int luaopen_math(lua_State *L);
 
 #ifdef __cplusplus
 }
 #endif
-
-#endif // VM_API_H

@@ -57,7 +57,7 @@ typedef struct lws_netdev_ops {
 	int (*down)(struct lws_netdev_instance *nd);
 	int (*event)(struct lws_netdev_instance *nd, lws_usec_t timestamp,
 		     void *buf, size_t len);
-	/**< these are SMD events coming from lws event loop thread context */
+	/**< these are SMD events coming from lws event loop thread context.hpp */
 	void (*destroy)(struct lws_netdev_instance **pnd);
 	int (*connect)(struct lws_netdev_instance *wnd, const char *ssid,
 			    const char *passphrase, uint8_t *bssid);

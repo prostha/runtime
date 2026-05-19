@@ -43,7 +43,7 @@
  * lws_get_mimetype() - Determine mimetype to use from filename
  *
  * \param file:		filename
- * \param m:		NULL, or mount context
+ * \param m:		NULL, or mount context.hpp
  *
  * This uses a canned list of known filetypes first, if no match and m is
  * non-NULL, then tries a list of per-mount file suffix to mimtype mappings.
@@ -785,11 +785,11 @@ lws_urldecode(char *string, const char *escaped, int len);
 ///@}
 
 /**
- * lws_http_date_render_from_unix() - render unixtime as RFC7231 date string
+ * lws_http_date_render_from_unix() - graphics unixtime as RFC7231 date string
  *
  * \param buf:		Destination string buffer
  * \param len:		avilable length of dest string buffer in bytes
- * \param t:		pointer to the time_t to render
+ * \param t:		pointer to the time_t to graphics
  *
  * Returns 0 if time_t is rendered into the string buffer successfully, else
  * nonzero.

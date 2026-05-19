@@ -38,7 +38,7 @@ enum {
 
 struct lws_event_loop_ops {
 	const char *name;
-	/* event loop-specific context init during context creation */
+	/* event loop-specific context.hpp init during context.hpp creation */
 	int (*init_context)(struct lws_context *context,
 			    const struct lws_context_creation_info *info);
 	/* called during lws_destroy_context */

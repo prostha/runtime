@@ -1,36 +1,39 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <functional>
+#include <future>
 #include "archetype.hpp"
 
-class Query {
-    const std::vector<std::unique_ptr<Archetype>>& archetypes;
-    Mask require;
-    Mask reject;
+namespace voxyl {
+    struct Gpu;
+}
 
-public:
-    explicit Query(const std::vector<std::unique_ptr<Archetype>>& archetypes);
+namespace voxyl::ecs {
 
-    Query& with(uint32_t target);
-    Query& without(uint32_t target);
+    class Query {
+    public:
+        using Callback = std::function<void(std::size_t count, const Entity* entities, const std::vector<void*>& components)>;
+        
+        explicit Query(const std::vector<std::unique_ptr<Archetype>>& archetypes, Gpu* device = nullptr) noexcept;
 
-    // Template implementations must stay in the header file
-    template<typename Callback>
-    void run(Callback callback, const std::vector<uint32_t>& targets) {
-        for (const auto& archetype : archetypes) {
-            if ((archetype->mask & require) != require) continue;
-            if ((archetype->mask & reject).any()) continue;
+        Query& with(std::uint32_t target);
+        Query& without(std::uint32_t target);
+        Query& any(const std::vector<std::uint32_t>& targets);
 
-            std::shared_lock lock(archetype->mutex); // Safe reading
+        [[nodiscard]] bool has(std::uint32_t target) const noexcept;
 
-            std::vector<void*> arrays;
-            for (uint32_t target : targets) {
-                const size_t column = archetype->mapping[target];
-                arrays.push_back(archetype->storage[column].data());
-            }
+        void run(const Callback& callback, const std::vector<std::uint32_t>& targets) const;
 
-            // Passes the entity count, entity array, and raw component arrays directly to you
-            callback(archetype->entities.size(), archetype->entities.data(), arrays);
-        }
-    }
-};
+    private:
+        void cpu(const Callback& callback, const std::vector<std::uint32_t>& targets) const;
+        [[nodiscard]] bool gpu(const std::vector<std::uint32_t>& targets) const;
+
+        const std::vector<std::unique_ptr<Archetype>>& m_archetypes;
+        Gpu* m_device;
+        Mask m_require;
+        Mask m_reject;
+        Mask m_allow;
+    };
+
+}

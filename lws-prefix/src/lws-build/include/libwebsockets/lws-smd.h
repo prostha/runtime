@@ -169,7 +169,7 @@ lws_smd_ss_msg_printf(const char *tag, uint8_t *buf, size_t *len,
  * Proxied Secure Streams with the streamtype LWS_SMD_STREAMTYPENAME receive
  * serialized SMD messages from the proxy, this helper allows them to be
  * translated into deserialized SMD messages and forwarded to registered SMD
- * participants in the local context in one step.
+ * participants in the local context.hpp in one step.
  *
  * Just pass through what arrived in the LWS_SMD_STREAMTYPENAME rx() callback
  * to this api.

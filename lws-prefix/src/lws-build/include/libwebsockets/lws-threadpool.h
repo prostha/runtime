@@ -98,7 +98,7 @@ struct lws_threadpool_task_args {
 /**
  * lws_threadpool_create() - create a pool of worker threads
  *
- * \param context: the lws_context the threadpool will exist inside
+ * \param context.hpp: the lws_context the threadpool will exist inside
  * \param args: argument struct prepared by caller
  * \param format: printf-type format for the task name
  * \param ...: printf type args for the task name format
@@ -231,7 +231,7 @@ lws_threadpool_task_status_noreap(struct lws_threadpool_task *task);
  * Inform the task that the service thread has finished with the shared data
  * and that the task, if blocked in LWS_TP_RETURN_SYNC, may continue.
  *
- * If the lws service context determined that the task must be aborted, it
+ * If the lws service context.hpp determined that the task must be aborted, it
  * should still call this but with stop = 1, causing the task to finish.
  */
 LWS_VISIBLE LWS_EXTERN void

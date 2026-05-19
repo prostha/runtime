@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-project(polyblox C CXX)
+project(volyx C CXX)
 
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -13,6 +13,8 @@ set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(ExternalProject)
+
+find_package(Vulkan REQUIRED)
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv")
     execute_process(COMMAND git clone --branch v1.48.0 https://github.com/libuv/libuv.git "${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv")
@@ -34,8 +36,8 @@ if(WIN32)
             BUILD_IN_SOURCE TRUE
             CONFIGURE_COMMAND ""
             BUILD_COMMAND cmd /c src/msvcbuild.bat static
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy src/lua51.lib "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/libluajit-5.1.a"
-            BUILD_BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/libluajit-5.1.a"
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy src/lua51.lib "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/lua51.lib"
+            BUILD_BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/lua51.lib"
     )
 elseif(APPLE)
     ExternalProject_Add(luajit
@@ -85,10 +87,17 @@ ExternalProject_Add(lws
 )
 
 add_library(liblua STATIC IMPORTED GLOBAL)
-set_target_properties(liblua PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/libluajit-5.1.a"
-        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/include/luajit-2.1"
-)
+if(WIN32)
+    set_target_properties(liblua PROPERTIES
+            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/lua51.lib"
+            INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/include/luajit-2.1"
+    )
+else()
+    set_target_properties(liblua PROPERTIES
+            IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/libluajit-5.1.a"
+            INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/include/luajit-2.1"
+    )
+endif()
 add_dependencies(liblua luajit)
 
 add_library(libuv STATIC IMPORTED GLOBAL)
@@ -121,17 +130,22 @@ file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp"
 )
 
-add_executable(polyblox ${SOURCES} ${HEADERS})
+add_executable(volyx ${SOURCES} ${HEADERS})
 
-target_include_directories(polyblox PUBLIC
+set_target_properties(volyx PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
+)
+
+target_include_directories(volyx PUBLIC
         include
         src
         src/vm/api
         src/vm/core
+        ${Vulkan_INCLUDE_DIRS}
 )
 
 if(WIN32)
-    target_link_libraries(polyblox PUBLIC liblua libuv libenet liblws ws2_32 iphlpapi userenv winmm)
+    target_link_libraries(volyx PUBLIC liblua libuv libenet liblws Vulkan::Vulkan ws2_32 iphlpapi userenv winmm)
 else()
-    target_link_libraries(polyblox PUBLIC liblua libuv libenet liblws m dl pthread)
+    target_link_libraries(volyx PUBLIC liblua libuv libenet liblws Vulkan::Vulkan m dl pthread)
 endif()

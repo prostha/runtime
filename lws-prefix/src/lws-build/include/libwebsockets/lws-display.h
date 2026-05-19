@@ -102,7 +102,7 @@ typedef struct lws_display_state {
  * lws_display_state_init() - initialize display states
  *
  * \param lds: the display state object
- * \param ctx: the lws context
+ * \param ctx: the lws context.hpp
  * \param autodim_ms: ms since last active report to dim display (<0 = never)
  * \param off_ms: ms since dim to turn display off (<0 = never)
  * \param bl_lcs: the led controller instance that has the backlight

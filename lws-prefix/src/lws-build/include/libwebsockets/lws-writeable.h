@@ -62,7 +62,7 @@ lws_callback_on_writable(struct lws *wsi);
  *			becomes possible to write to each socket without
  *			blocking in turn.
  *
- * \param context:	lws_context
+ * \param context.hpp:	lws_context
  * \param protocol:	Protocol whose connections will get callbacks
  *
  * - Which:  connections using this protocol on ANY VHOST
@@ -94,7 +94,7 @@ lws_callback_on_writable_all_protocol_vhost(const struct lws_vhost *vhost,
  * lws_callback_all_protocol() - Callback all connections using
  *				the given protocol with the given reason
  *
- * \param context:	lws_context
+ * \param context.hpp:	lws_context
  * \param protocol:	Protocol whose connections will get callbacks
  * \param reason:	Callback reason index
  *

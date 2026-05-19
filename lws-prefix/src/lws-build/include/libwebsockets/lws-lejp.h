@@ -112,20 +112,20 @@ enum lejp_callbacks {
 
 /**
  * _lejp_callback() - User parser actions
- * \param ctx:	LEJP context
+ * \param ctx:	LEJP context.hpp
  * \param reason:	Callback reason
  *
- *	Your user callback is associated with the context at construction time,
+ *	Your user callback is associated with the context.hpp at construction time,
  *	and receives calls as the parsing progresses.
  *
  *	All of the callbacks may be ignored and just return 0.
  *
  *	The reasons it might get called, found in @reason, are:
  *
- *  LEJPCB_CONSTRUCTED:  The context was just constructed... you might want to
- *		perform one-time allocation for the life of the context.
+ *  LEJPCB_CONSTRUCTED:  The context.hpp was just constructed... you might want to
+ *		perform one-time allocation for the life of the context.hpp.
  *
- *  LEJPCB_DESTRUCTED:	The context is being destructed... if you made any
+ *  LEJPCB_DESTRUCTED:	The context.hpp is being destructed... if you made any
  *		allocations at construction-time, you can free them now
  *
  *  LEJPCB_START:	Parsing is beginning at the first byte of input

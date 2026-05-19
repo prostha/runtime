@@ -244,7 +244,7 @@ lws_sspc_get_sequencer(struct lws_sspc_handle *h);
 /**
  * lws_sspc_proxy_create() - Start a unix domain socket proxy for Secure Streams
  *
- * \param context: lws_context
+ * \param context.hpp: lws_context
  *
  * Creates a vhost that listens on an abstract namespace unix domain socket at
  * address "proxy.ss.lws".  Client connections to this proxy to Secure Streams
@@ -253,11 +253,11 @@ LWS_VISIBLE LWS_EXTERN int
 lws_sspc_proxy_create(struct lws_context *context);
 
 /**
- * lws_ss_get_context() - convenience helper to recover the lws context
+ * lws_ss_get_context() - convenience helper to recover the lws context.hpp
  *
  * \h: secure streams handle
  *
- * Returns the lws context.  Dispenses with the need to pass a copy of it into
+ * Returns the lws context.hpp.  Dispenses with the need to pass a copy of it into
  * your secure streams handler.
  */
 

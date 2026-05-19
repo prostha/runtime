@@ -67,7 +67,7 @@ struct lws_jws_map {
 
 struct lws_jws {
 	struct lws_jwk *jwk; /* the struct lws_jwk containing the signing key */
-	struct lws_context *context; /* the lws context (used to get random) */
+	struct lws_context *context; /* the lws context.hpp (used to get random) */
 	struct lws_jws_map map, map_b64;
 };
 
@@ -80,7 +80,7 @@ struct lws_jws {
  *
  * \param jws: pointer to the jws to initialize
  * \param jwk: the jwk to use with this jws
- * \param context: the lws_context to use
+ * \param context.hpp: the lws_context to use
  */
 LWS_VISIBLE LWS_EXTERN void
 lws_jws_init(struct lws_jws *jws, struct lws_jwk *jwk,
@@ -103,7 +103,7 @@ lws_jws_destroy(struct lws_jws *jws);
  *
  * \param map: pointers and lengths for each of the unencoded JWS elements
  * \param jwk: public key
- * \param context: lws_context
+ * \param context.hpp: lws_context
  * \param temp: scratchpad
  * \param temp_len: length of scratchpad
  *
@@ -131,7 +131,7 @@ lws_jws_sig_confirm_compact_b64_map(struct lws_jws_map *map_b64,
  * \param len: bytes available at \p in
  * \param map: map to take decoded non-b64 content
  * \param jwk: public key
- * \param context: lws_context
+ * \param context.hpp: lws_context
  * \param temp: scratchpad
  * \param temp_len: size of scratchpad
  *
@@ -154,7 +154,7 @@ lws_jws_sig_confirm_compact_b64(const char *in, size_t len,
  * \param map_b64: pointers and lengths for each of the b64-encoded JWS elements
  * \param map: pointers and lengths for each of the unencoded JWS elements
  * \param jwk: public key
- * \param context: lws_context
+ * \param context.hpp: lws_context
  *
  * Confirms the signature on a JWS.  Use if you have you already have both b64
  * compact layout (jose.payload.hdr.sig) and decoded JWS elements in maps.
@@ -285,7 +285,7 @@ lws_jws_dup_element(struct lws_jws_map *map, int idx,
 /**
  * lws_jws_randomize_element() - create an element and fill with random
  *
- * \param context: lws_context used for random
+ * \param context.hpp: lws_context used for random
  * \param map: map to create the element in
  * \param idx: index of element in the map to create
  * \param temp: space to allocate in
@@ -509,7 +509,7 @@ lws_jwt_sign_via_info(struct lws_context *ctx, struct lws_jwk *jwk,
  * \param sub_len: the max length of the sub buffer
  * \param secs_left: set to the number of seconds of valid auth left if valid
  *
- * This performs some generic sanity tests on validated JWT payload...
+ * This performs some generic sanity scripts on validated JWT payload...
  *
  *  - the issuer is as expected
  *  - the audience is us
@@ -518,7 +518,7 @@ lws_jwt_sign_via_info(struct lws_context *ctx, struct lws_jwk *jwk,
  *  - if csrf_in is not NULL, that the JWK has a csrf and it matches it
  *  - if sub is not NULL, that the JWK provides a subject (and copies it to sub)
  *
- * If the tests pass, *secs_left is set to the number of remaining seconds the
+ * If the scripts pass, *secs_left is set to the number of remaining seconds the
  * auth is valid.
  *
  * Returns 0 if no inconsistency, else nonzero.

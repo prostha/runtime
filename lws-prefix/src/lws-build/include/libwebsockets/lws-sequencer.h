@@ -99,7 +99,7 @@ typedef struct lws_seq_info {
  * This binds an abstract sequencer to a per-thread (by default, the single
  * event loop of an lws_context).  After the event loop starts, the sequencer
  * will receive an LWSSEQ_CREATED event on its callback from the event loop
- * context, where it can begin its sequence flow.
+ * context.hpp, where it can begin its sequence flow.
  *
  * Lws itself will only call the callback subsequently with LWSSEQ_DESTROYED
  * when the sequencer is being destroyed.
@@ -132,7 +132,7 @@ lws_seq_destroy(struct lws_sequencer **seq);
  *
  * This queues the event on a given sequencer.  Queued events are delivered one
  * per sequencer each subsequent time around the event loop, so the cb is called
- * from the event loop thread context.
+ * from the event loop thread context.hpp.
  *
  * Notice that because the events are delivered in order from the event loop,
  * the scope of objects pointed to by \p data or \p aux may exceed the lifetime

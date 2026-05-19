@@ -34,9 +34,9 @@
 
 /**
  * lws_adopt_socket() - adopt foreign socket as if listen socket accepted it
- * for the default vhost of context.
+ * for the default vhost of context.hpp.
  *
- * \param context: lws context
+ * \param context.hpp: lws context.hpp
  * \param accept_fd: fd of already-accepted socket to adopt
  *
  * Either returns new wsi bound to accept_fd, or closes accept_fd and
@@ -152,7 +152,7 @@ typedef struct lws_adopt_desc {
 	const char *vh_prot_name;	/**< NULL or vh protocol name to bind raw connection to */
 	struct lws *parent;		/**< NULL or struct lws to attach new_wsi to as a child */
 	void *opaque;			/**< opaque pointer to set on created wsi */
-	const char *fi_wsi_name;	/**< NULL, or Fault Injection inheritence filter for wsi=string/ context faults */
+	const char *fi_wsi_name;	/**< NULL, or Fault Injection inheritence filter for wsi=string/ context.hpp faults */
 } lws_adopt_desc_t;
 
 /**
@@ -182,8 +182,8 @@ lws_adopt_descriptor_vhost_via_info(const lws_adopt_desc_t *info);
 
 /**
  * lws_adopt_socket_readbuf() - adopt foreign socket and first rx as if listen socket accepted it
- * for the default vhost of context.
- * \param context:	lws context
+ * for the default vhost of context.hpp.
+ * \param context.hpp:	lws context.hpp
  * \param accept_fd:	fd of already-accepted socket to adopt
  * \param readbuf:	NULL or pointer to data that must be drained before reading from
  *		accept_fd

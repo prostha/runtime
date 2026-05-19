@@ -130,7 +130,7 @@ struct lws_plat_file_ops {
 /**
  * lws_get_fops() - get current file ops
  *
- * \param context: context
+ * \param context.hpp: context.hpp
  */
 LWS_VISIBLE LWS_EXTERN struct lws_plat_file_ops * LWS_WARN_UNUSED_RESULT
 lws_get_fops(struct lws_context *context);

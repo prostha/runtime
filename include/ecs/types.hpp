@@ -1,11 +1,19 @@
 #pragma once
-#include <memory>
+#include <cstddef>
 
-using Entity = uint32_t;
-inline constexpr Entity NONE = 0xFFFFFFFF;
+namespace voxyl::ecs {
 
-// Represents where an entity lives in memory right now
-struct Record {
-    class Archetype* archetype = nullptr;
-    size_t index = 0;
-};
+    // Forward declare Archetype so Record can store a pointer to it
+    class Archetype;
+
+    // Define the core Entity type and a NONE sentinel value
+    using Entity = std::uint32_t;
+    constexpr Entity NONE = 0xFFFFFFFF;
+
+    // Defines where an entity's components are stored
+    struct Record {
+        Archetype* archetype = nullptr;
+        std::size_t index = 0;
+    };
+
+}

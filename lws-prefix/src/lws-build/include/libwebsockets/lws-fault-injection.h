@@ -93,14 +93,14 @@ typedef struct lws_fi_ctx {
 /**
  * lws_fi() - find out if we should perform the named fault injection this time
  *
- * \param fic: fault injection tracking context
+ * \param fic: fault injection tracking context.hpp
  * \param fi_name: name of fault injection
  *
- * This checks if the named fault is configured in the fi tracking context
+ * This checks if the named fault is configured in the fi tracking context.hpp
  * provided, if it is, then it will make a decision if the named fault should
  * be applied this time, using the tracking in the named lws_fi_t.
  *
- * If the provided context has a parent, that is also checked for the named fi
+ * If the provided context.hpp has a parent, that is also checked for the named fi
  * item recursively, with the first found being used to determine if to inject
  * or not.
  *
@@ -112,7 +112,7 @@ lws_fi(const lws_fi_ctx_t *fic, const char *fi_name);
 /**
  * lws_fi_range() - get a random number from a range
  *
- * \param fic: fault injection tracking context
+ * \param fic: fault injection tracking context.hpp
  * \param fi_name: name of fault injection
  * \param result: points to uint64_t to be set to the result
  *
@@ -131,34 +131,34 @@ LWS_VISIBLE LWS_EXTERN int
 lws_fi_range(const lws_fi_ctx_t *fic, const char *name, uint64_t *result);
 
 /**
- * lws_fi_add() - add an allocated copy of fault injection to a context
+ * lws_fi_add() - add an allocated copy of fault injection to a context.hpp
  *
- * \param fic: fault injection tracking context
+ * \param fic: fault injection tracking context.hpp
  * \param fi: the fault injection details
  *
- * This allocates a copy of \p fi and attaches it to the fault injection context
+ * This allocates a copy of \p fi and attaches it to the fault injection context.hpp
  * \p fic.  \p fi can go out of scope after this safely.
  */
 LWS_VISIBLE LWS_EXTERN int
 lws_fi_add(lws_fi_ctx_t *fic, const lws_fi_t *fi);
 
 /**
- * lws_fi_remove() - remove an allocated copy of fault injection from a context
+ * lws_fi_remove() - remove an allocated copy of fault injection from a context.hpp
  *
- * \param fic: fault injection tracking context
+ * \param fic: fault injection tracking context.hpp
  * \param name: the fault injection name to remove
  *
  * This looks for the named fault injection and removes and destroys it from
- * the specified fault injection context
+ * the specified fault injection context.hpp
  */
 LWS_VISIBLE LWS_EXTERN void
 lws_fi_remove(lws_fi_ctx_t *fic, const char *name);
 
 /**
- * lws_fi_import() - transfers all the faults from one context to another
+ * lws_fi_import() - transfers all the faults from one context.hpp to another
  *
- * \param fic_dest: the fault context to receive the faults
- * \param fic_src: the fault context that will be emptied out into \p fic_dest
+ * \param fic_dest: the fault context.hpp to receive the faults
+ * \param fic_src: the fault context.hpp that will be emptied out into \p fic_dest
  *
  * This is used to initialize created object fault injection contexts from
  * the caller.
@@ -169,15 +169,15 @@ lws_fi_import(lws_fi_ctx_t *fic_dest, const lws_fi_ctx_t *fic_src);
 /**
  * lws_fi_inherit_copy() - attach copies of matching fault injection objects to dest
  *
- * \param fic_dest: destination Fault Injection context
- * \param fic_src: parent fault context that may contain matching rules
+ * \param fic_dest: destination Fault Injection context.hpp
+ * \param fic_src: parent fault context.hpp that may contain matching rules
  * \param scope: the name of the path match required, eg, "vh"
  * \param value: the dynamic name of our match, eg, "myvhost"
  *
  * If called with scope "vh" and value "myvhost", then matches faults starting
  * "vh=myvhost/", strips that part of the name if it matches and makes a copy
  * of the rule with the modified name attached to the destination Fault Injection
- * context.
+ * context.hpp.
  */
 LWS_VISIBLE LWS_EXTERN void
 lws_fi_inherit_copy(lws_fi_ctx_t *fic_dest, const lws_fi_ctx_t *fic_src,
@@ -186,7 +186,7 @@ lws_fi_inherit_copy(lws_fi_ctx_t *fic_dest, const lws_fi_ctx_t *fic_src,
 /**
  * lws_fi_destroy() - removes all allocated fault injection entries
  *
- * \param fic: fault injection tracking context
+ * \param fic: fault injection tracking context.hpp
  *
  * This walks any allocated fault injection entries in \p fic and detaches and
  * destroys them.  It doesn't try to destroc \p fic itself, since this is
@@ -198,14 +198,14 @@ lws_fi_destroy(const lws_fi_ctx_t *fic);
 /**
  * lws_fi_deserialize() - adds fault in string form to Fault Injection Context
  *
- * \p fic: the fault injection context
+ * \p fic: the fault injection context.hpp
  * \p sers: the string serializing the desired fault details
  *
  * This turns a string like "ss=captive_portal_detect/wsi/dnsfail(10%)" into
- * a fault injection struct added to the fault injection context \p fic
+ * a fault injection struct added to the fault injection context.hpp \p fic
  *
- * You can prepare the context creation info .fic with these before creating
- * the context, and use namespace paths on those to target other objects.
+ * You can prepare the context.hpp creation info .fic with these before creating
+ * the context.hpp, and use namespace paths on those to target other objects.
  */
 
 LWS_VISIBLE LWS_EXTERN void

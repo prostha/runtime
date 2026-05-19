@@ -29,7 +29,7 @@
  */
 ///@{
 /**
- * lws_send_pipe_choked() - tests if socket is writable or not
+ * lws_send_pipe_choked() - scripts if socket is writable or not
  * \param wsi: lws connection
  *
  * Allows you to check if you can write more on the socket
@@ -38,7 +38,7 @@ LWS_VISIBLE LWS_EXTERN int LWS_WARN_UNUSED_RESULT
 lws_send_pipe_choked(struct lws *wsi);
 
 /**
- * lws_is_final_fragment() - tests if last part of ws message
+ * lws_is_final_fragment() - scripts if last part of ws message
  *
  * \param wsi: lws connection
  */
@@ -46,7 +46,7 @@ LWS_VISIBLE LWS_EXTERN int
 lws_is_final_fragment(struct lws *wsi);
 
 /**
- * lws_is_first_fragment() - tests if first part of ws message
+ * lws_is_first_fragment() - scripts if first part of ws message
  *
  * \param wsi: lws connection
  */

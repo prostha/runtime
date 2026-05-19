@@ -3,19 +3,19 @@
 #include <cstdio>
 #include <cassert>
 
-namespace polyblox {
+namespace allocator {
 
-    Allocator::Allocator(size_t capacity)
+    Allocator::Allocator(const size_t capacity)
         : capacity(capacity) {}
 
-    void *Allocator::allocator_func(void *context, void *pointer, size_t previous, size_t next) {
+    void *Allocator::manage(void *context, void *pointer, size_t previous, size_t next) {
         assert(context != nullptr);
 
-        auto *allocator = static_cast<Allocator*>(context);
+        auto *instance = static_cast<Allocator*>(context);
 
         if (pointer != nullptr && previous > 0) {
-            const size_t sub = previous <= allocator->consumed ? previous : allocator->consumed;
-            allocator->consumed -= sub;
+            const size_t decrement = previous <= instance->consumed ? previous : instance->consumed;
+            instance->consumed -= decrement;
         }
 
         if (next == 0) {
@@ -23,8 +23,8 @@ namespace polyblox {
             return nullptr;
         }
 
-        if (next > allocator->capacity - allocator->consumed) {
-            std::fprintf(stderr, "allocator: out of memory next=%zu consumed=%zu capacity=%zu\n", next, allocator->consumed, allocator->capacity);
+        if (next > instance->capacity - instance->consumed) {
+            std::fprintf(stderr, "allocator: out of memory next=%zu consumed=%zu capacity=%zu\n", next, instance->consumed, instance->capacity);
             return nullptr;
         }
 
@@ -34,7 +34,7 @@ namespace polyblox {
             return nullptr;
         }
 
-        allocator->consumed += next;
+        instance->consumed += next;
         return block;
     }
 

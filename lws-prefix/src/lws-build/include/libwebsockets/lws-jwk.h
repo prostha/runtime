@@ -205,7 +205,7 @@ lws_jwk_dump(struct lws_jwk *jwk);
 
 /** lws_jwk_generate() - create a new key of given type and characteristics
  *
- * \param context: the struct lws_context used for RNG
+ * \param context.hpp: the struct lws_context used for RNG
  * \param jwk: the JWK object to fingerprint
  * \param kty: One of the LWS_GENCRYPTO_KTY_ key types
  * \param bits: for OCT and RSA keys, the number of bits

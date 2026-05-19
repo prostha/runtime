@@ -147,7 +147,7 @@ enum lws_callback_reasons {
 	 * callback is generated during OpenSSL verification of the cert
 	 * sent from the client.  It is sent to protocol[0] callback as
 	 * no protocol has been negotiated on the connection yet.
-	 * Notice that the libwebsockets context and wsi are both NULL
+	 * Notice that the libwebsockets context.hpp and wsi are both NULL
 	 * during this callback.  See
 	 *  http://www.openssl.org/docs/ssl/SSL_CTX_set_verify.html
 	 * to understand more detail about the OpenSSL callback that
@@ -656,7 +656,7 @@ enum lws_callback_reasons {
 	 * Locking and unlocking external synchronization objects when
 	 * len == 1 allows external threads to be synchronized against
 	 * wsi lifecycle changes if it acquires the same lock for the
-	 * duration of wsi dereference from the other thread context. */
+	 * duration of wsi dereference from the other thread context.hpp. */
 
 	LWS_CALLBACK_UNLOCK_POLL				= 36,
 	/**< See LWS_CALLBACK_LOCK_POLL, ignore if using lws internal poll */

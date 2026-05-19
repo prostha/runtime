@@ -102,16 +102,16 @@ lws_system_get_blob(struct lws_context *context, lws_system_blob_item_t type,
  * dependent operations before state transitions can complete.
  */
 
-typedef enum { /* keep system_state_names[] in sync in context.c */
+typedef enum { /* keep system_state_names[] in sync in context.hpp.c */
 	LWS_SYSTATE_UNKNOWN,
 
-	LWS_SYSTATE_CONTEXT_CREATED,	 /* context was just created */
+	LWS_SYSTATE_CONTEXT_CREATED,	 /* context.hpp was just created */
 	LWS_SYSTATE_INITIALIZED,	 /* protocols initialized.  Lws itself
 					  * can operate normally */
 	LWS_SYSTATE_IFACE_COLDPLUG,	 /* existing net ifaces iterated */
 	LWS_SYSTATE_DHCP,		 /* at least one net iface configured */
 	LWS_SYSTATE_CPD_PRE_TIME,	 /* Captive portal detect without valid
-					  * time, good for non-https tests... if
+					  * time, good for non-https scripts... if
 					  * you care about it, implement and
 					  * call lws_system_ops_t
 					  * .captive_portal_detect_request()
@@ -121,7 +121,7 @@ typedef enum { /* keep system_state_names[] in sync in context.c */
 					  * tls cannot work until we reach here
 					  */
 	LWS_SYSTATE_CPD_POST_TIME,	 /* Captive portal detect after time was
-					  * time, good for https tests... if
+					  * time, good for https scripts... if
 					  * you care about it, implement and
 					  * call lws_system_ops_t
 					  * .captive_portal_detect_request()
@@ -211,7 +211,7 @@ typedef struct lws_system_ops {
 /**
  * lws_system_get_state_manager() - return the state mgr object for system state
  *
- * \param context: the lws_context
+ * \param context.hpp: the lws_context
  *
  * The returned pointer can be used with the lws_state_ apis
  */
@@ -226,9 +226,9 @@ lws_system_get_state_manager(struct lws_context *context);
 #define LWSSYSGAUTH_HEX (1 << 0)
 
 /**
- * lws_system_get_ops() - get ahold of the system ops struct from the context
+ * lws_system_get_ops() - get ahold of the system ops struct from the context.hpp
  *
- * \param context: the lws_context
+ * \param context.hpp: the lws_context
  *
  * Returns the system ops struct.  It may return NULL and if not, anything in
  * there may be NULL.
@@ -239,11 +239,11 @@ lws_system_get_ops(struct lws_context *context);
 #if defined(LWS_WITH_SYS_STATE)
 
 /**
- * lws_system_context_from_system_mgr() - return context from system state mgr
+ * lws_system_context_from_system_mgr() - return context.hpp from system state mgr
  *
  * \param mgr: pointer to specifically the system state mgr
  *
- * Returns the context from the system state mgr.  Helper since the lws_context
+ * Returns the context.hpp from the system state mgr.  Helper since the lws_context
  * is opaque.
  */
 LWS_EXTERN LWS_VISIBLE struct lws_context *
@@ -252,17 +252,17 @@ lws_system_context_from_system_mgr(lws_state_manager_t *mgr);
 #endif
 
 /**
- * __lws_system_attach() - get and set items on context attach list
+ * __lws_system_attach() - get and set items on context.hpp attach list
  *
- * \param context: context to get or set attach items to
+ * \param context.hpp: context.hpp to get or set attach items to
  * \param tsi: thread service index (normally 0)
- * \param cb: callback to call from context event loop thread
+ * \param cb: callback to call from context.hpp event loop thread
  * \param state: the lws_system state we have to be in or have passed through
  * \param opaque: optional pointer to user specific info given to callback
  * \param get: NULL, or pointer to pointer to take detached tail item on exit
  *
  * This allows other threads to enqueue callback requests to happen from a pt's
- * event loop thread safely.  The callback gets the context pointer and a user
+ * event loop thread safely.  The callback gets the context.hpp pointer and a user
  * opaque pointer that can be optionally given when the item is added to the
  * attach list.
  *
@@ -338,7 +338,7 @@ lws_dhcpc_request(struct lws_context *c, const char *i, int af, dhcpc_cb_t cb,
 /**
  * lws_dhcpc_remove() - remove a network interface to dhcpc management
  *
- * \param context: the lws_context
+ * \param context.hpp: the lws_context
  * \param iface: the interface name, like "eth0"
  *
  * Remove handling of the network interface from dhcp.
@@ -349,7 +349,7 @@ lws_dhcpc_remove(struct lws_context *context, const char *iface);
 /**
  * lws_dhcpc_status() - has any interface reached BOUND state
  *
- * \param context: the lws_context
+ * \param context.hpp: the lws_context
  * \param sa46: set to a DNS server from a bound interface, or NULL
  *
  * Returns 1 if any network interface managed by dhcpc has reached the BOUND
@@ -361,9 +361,9 @@ lws_dhcpc_status(struct lws_context *context, lws_sockaddr46 *sa46);
 /**
  * lws_system_cpd_start() - helper to initiate captive portal detection
  *
- * \param context: the lws_context
+ * \param context.hpp: the lws_context
  *
- * Resets the context's captive portal state to LWS_CPD_UNKNOWN and calls the
+ * Resets the context.hpp's captive portal state to LWS_CPD_UNKNOWN and calls the
  * lws_system_ops_t captive_portal_detect_request() implementation to begin
  * testing the captive portal state.
  */
@@ -377,10 +377,10 @@ lws_system_cpd_start_defer(struct lws_context *cx, lws_usec_t defer_us);
 /**
  * lws_system_cpd_set() - report the result of the captive portal detection
  *
- * \param context: the lws_context
+ * \param context.hpp: the lws_context
  * \param result: one of the LWS_CPD_ constants representing captive portal state
  *
- * Sets the context's captive portal detection state to result.  User captive
+ * Sets the context.hpp's captive portal detection state to result.  User captive
  * portal detection code would call this once it had a result from its test.
  */
 LWS_EXTERN LWS_VISIBLE void
@@ -390,7 +390,7 @@ lws_system_cpd_set(struct lws_context *context, lws_cpd_result_t result);
 /**
  * lws_system_cpd_state_get() - returns the last tested captive portal state
  *
- * \param context: the lws_context
+ * \param context.hpp: the lws_context
  *
  * Returns one of the LWS_CPD_ constants indicating the system's understanding
  * of the current captive portal situation.

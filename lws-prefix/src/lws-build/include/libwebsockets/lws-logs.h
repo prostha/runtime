@@ -32,8 +32,8 @@
  * Log categories may be individually filtered bitwise, and directed to built-in
  * sinks for syslog-compatible logging, or a user-defined function.
  *
- * Traditional logs use a single, processwide logging context.  New style log
- * apis (lws_xxx_cx()) can pass the logging context to use in.
+ * Traditional logs use a single, processwide logging context.hpp.  New style log
+ * apis (lws_xxx_cx()) can pass the logging context.hpp to use in.
  */
 ///@{
 
@@ -61,7 +61,7 @@
 	/**< set to prepend logs with timestamp */
 
 #define	LLLF_LOG_CONTEXT_AWARE	(1 << 30)
-/**< set if the context uses an emit function that takes the logctx, auto-
+/**< set if the context.hpp uses an emit function that takes the logctx, auto-
  * applied when setting emit using lws_set_log_level_cx() api */
 
 struct lws_log_cx;
@@ -74,7 +74,7 @@ typedef void (*lws_log_prepend_cx_t)(struct lws_log_cx *cx, void *obj,
 typedef void (*lws_log_use_cx_t)(struct lws_log_cx *cx, int _new);
 
 /*
- * This is the logging context
+ * This is the logging context.hpp
  */
 
 typedef struct lws_log_cx {
@@ -101,9 +101,9 @@ typedef struct lws_log_cx {
 	void				*stg;
 	/**< ignored by lws, may be used a storage by refcount_cb / emit_cx */
 	uint32_t			lll_flags;
-	/**< mask of log levels we want to emit in this context */
+	/**< mask of log levels we want to emit in this context.hpp */
 	int32_t				refcount;
-	/**< refcount of objects bound to this log context */
+	/**< refcount of objects bound to this log context.hpp */
 #if LWS_MAX_SMP > 1
 	char				inited;
 #endif

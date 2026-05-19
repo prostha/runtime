@@ -306,7 +306,7 @@ lws_cose_key_import(lws_dll2_owner_t *pkey_set, lws_cose_key_import_callback cb,
 /** lws_cose_key_export() - Create cose_key CBOR from an lws_cose_key_t
  *
  * \param ck: the lws_cose_key_t to export to CBOR
- * \param ctx: the CBOR writing context (same as for lws_lec_printf())
+ * \param ctx: the CBOR writing context.hpp (same as for lws_lec_printf())
  * \param flags: 0 to export only public elements, or LWSJWKF_EXPORT_PRIVATE
  *
  * Creates an lws_jwk struct filled with data from the COSE representation.
@@ -317,7 +317,7 @@ lws_cose_key_export(lws_cose_key_t *ck, lws_lec_pctx_t *ctx, int flags);
 /**
  * lws_cose_key_generate() - generate a fresh key
  *
- * \param context: the lws_context used to get random
+ * \param context.hpp: the lws_context used to get random
  * \param cose_kty: one of LWSCOSE_WKKTV_ indicating the well-known key type
  * \param use_mask: 0, or a bitfield where (1 << LWSCOSE_WKKO_...) set means valid for use
  * \param bits: key bits for RSA
@@ -392,7 +392,7 @@ typedef int (*lws_cose_validate_pay_cb_t)(struct lws_cose_validate_context *cps,
 
 typedef struct lws_cose_validate_create_info {
 	struct lws_context		*cx;
-	/**< REQUIRED: the lws context */
+	/**< REQUIRED: the lws context.hpp */
 	lws_dll2_owner_t		*keyset;
 	/**< REQUIRED: one or more cose_keys */
 
@@ -414,11 +414,11 @@ typedef struct lws_cose_validate_create_info {
 } lws_cose_validate_create_info_t;
 
 /**
- * lws_cose_validate_create() - create a signature validation context
+ * lws_cose_validate_create() - create a signature validation context.hpp
  *
- * \param info: struct describing the validation context to create
+ * \param info: struct describing the validation context.hpp to create
  *
- * Creates a signature validation context set up as described in \p info.
+ * Creates a signature validation context.hpp set up as described in \p info.
  *
  * You can then pass the signature cbor chunks to it using
  * lws_cose_validate_chunk(), finialize and get the results list using
@@ -430,7 +430,7 @@ lws_cose_validate_create(const lws_cose_validate_create_info_t *info);
 /**
  * lws_cose_validate_chunk() - passes chunks of CBOR into the signature validator
  *
- * \param cps: the validation context
+ * \param cps: the validation context.hpp
  * \param in: the chunk of CBOR (does not have to be logically complete)
  * \param in_len: number of bytes available at \p in
  *
@@ -455,12 +455,12 @@ struct lws_cose_sign_context;
 
 typedef struct lws_cose_sign_create_info {
 	struct lws_context		*cx;
-	/**< REQUIRED: the lws context */
+	/**< REQUIRED: the lws context.hpp */
 	lws_dll2_owner_t		*keyset;
 	/**< REQUIRED: one or more cose_keys */
 
 	lws_lec_pctx_t			*lec;
-	/**< REQUIRED: the cbor output context to emit to, user must
+	/**< REQUIRED: the cbor output context.hpp to emit to, user must
 	 * initialize with lws_lec_init() beforehand */
 
 	lws_cose_sign_ext_pay_cb_t	ext_cb;
@@ -480,17 +480,17 @@ typedef struct lws_cose_sign_create_info {
 } lws_cose_sign_create_info_t;
 
 /**
- * lws_cose_sign_create() - Create a signing context
+ * lws_cose_sign_create() - Create a signing context.hpp
  *
- * \param info: a structure describing the signing context you want to create
+ * \param info: a structure describing the signing context.hpp you want to create
  *
- * This allocates and returns a signing context created according to what is in
+ * This allocates and returns a signing context.hpp created according to what is in
  * the \p info parameter.
  *
  * \p info must be prepared with the lws_context, a keyset to use, a CBOR
- * output context, and the inline payload length.
+ * output context.hpp, and the inline payload length.
  *
- * Returns NULL on failure or the created signing context ready to add alg(s)
+ * Returns NULL on failure or the created signing context.hpp ready to add alg(s)
  * to.
  */
 

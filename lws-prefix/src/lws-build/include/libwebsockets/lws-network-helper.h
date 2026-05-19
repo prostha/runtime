@@ -81,10 +81,10 @@ typedef lws_route_t lws_dns_sort_t;
  * lws_canonical_hostname() - returns this host's hostname
  *
  * This is typically used by client code to fill in the host parameter
- * when making a client connection.  You can only call it after the context
+ * when making a client connection.  You can only call it after the context.hpp
  * has been created.
  *
- * \param context:	Websocket context
+ * \param context.hpp:	Websocket context.hpp
  */
 LWS_VISIBLE LWS_EXTERN const char * LWS_WARN_UNUSED_RESULT
 lws_canonical_hostname(struct lws_context *context);

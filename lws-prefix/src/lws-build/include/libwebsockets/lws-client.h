@@ -106,7 +106,7 @@ enum lws_client_connect_ssl_connection_flags {
 
 struct lws_client_connect_info {
 	struct lws_context *context;
-	/**< lws context to create connection in */
+	/**< lws context.hpp to create connection in */
 	const char *address;
 	/**< remote address to connect to */
 	int port;
@@ -127,7 +127,7 @@ struct lws_client_connect_info {
 	void *userdata;
 	/**< if non-NULL, use this as wsi user_data instead of malloc it */
 	const void *client_exts;
-	/**< UNUSED... provide in info.extensions at context creation time */
+	/**< UNUSED... provide in info.extensions at context.hpp creation time */
 	const char *method;
 	/**< if non-NULL, do this http method instead of ws[s] upgrade.
 	 * use "GET" to be a simple http client connection.  "RAW" gets
@@ -214,8 +214,8 @@ struct lws_client_connect_info {
 
 #if defined(LWS_WITH_SYS_FAULT_INJECTION)
 	lws_fi_ctx_t				fic;
-	/**< Attach external Fault Injection context to the client wsi,
-	 * hierarchy is wsi -> vhost -> context */
+	/**< Attach external Fault Injection context.hpp to the client wsi,
+	 * hierarchy is wsi -> vhost -> context.hpp */
 #endif
 	/* for convenience, available when FI disabled in build */
 	const char				*fi_wsi_name;
@@ -230,8 +230,8 @@ struct lws_client_connect_info {
 	 */
 
 	lws_log_cx_t				*log_cx;
-	/**< NULL to use lws_context log context, else a pointer to a log
-	 * context template to take a copy of for this wsi.  Used to isolate
+	/**< NULL to use lws_context log context.hpp, else a pointer to a log
+	 * context.hpp template to take a copy of for this wsi.  Used to isolate
 	 * wsi-specific logs into their own stream or file.
 	 */
 
@@ -270,14 +270,14 @@ lws_client_connect_via_info(const struct lws_client_connect_info *ccinfo);
  *	 - options must have LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT set,
  *	     otherwise the call does nothing
  *	 - provided_client_ssl_ctx must be NULL to get a generated client
- *	     ssl context, otherwise you can pass a prepared one in by setting it
+ *	     ssl context.hpp, otherwise you can pass a prepared one in by setting it
  *	 - ssl_cipher_list may be NULL or set to the client valid cipher list
  *	 - ssl_ca_filepath may be NULL or client cert filepath
  *	 - ssl_cert_filepath may be NULL or client cert filepath
  *	 - ssl_private_key_filepath may be NULL or client cert private key
  *
  * You must create your vhost explicitly if you want to use this, so you have
- * a pointer to the vhost.  Create the context first with the option flag
+ * a pointer to the vhost.  Create the context.hpp first with the option flag
  * LWS_SERVER_OPTION_EXPLICIT_VHOSTS and then call lws_create_vhost() with
  * the same info struct.
  */
@@ -330,7 +330,7 @@ lws_http_client_http_response(struct lws *wsi);
  * \param der_len: size in bytes of der
  *
  * After the vhost is created with one cert for client verification, you
- * can add additional, eg, intermediate, certs to the client tls context
+ * can add additional, eg, intermediate, certs to the client tls context.hpp
  * of the vhost, for use with validating the incoming server cert(s).
  */
 LWS_VISIBLE LWS_EXTERN int

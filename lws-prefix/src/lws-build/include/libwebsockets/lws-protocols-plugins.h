@@ -30,7 +30,7 @@
  * Protocols bind ws protocol names to a custom callback specific to that
  * protocol implementaion.
  *
- * A list of protocols can be passed in at context creation time, but it is
+ * A list of protocols can be passed in at context.hpp creation time, but it is
  * also legal to leave that NULL and add the protocols and their callback code
  * using plugins.
  *
@@ -197,7 +197,7 @@ lws_adjust_protocol_psds(struct lws *wsi, size_t new_size);
 /**
  * lws_finalize_startup() - drop initial process privileges
  *
- * \param context:	lws context
+ * \param context.hpp:	lws context.hpp
  *
  * This is called after the end of the vhost protocol initializations, but
  * you may choose to call it earlier
@@ -271,7 +271,7 @@ typedef struct lws_plugin_protocol {
 
 /*
  * This is the dynamic, runtime created part of the plugin instantiation.
- * These are kept in a linked-list and destroyed with the context.
+ * These are kept in a linked-list and destroyed with the context.hpp.
  */
 
 struct lws_plugin {

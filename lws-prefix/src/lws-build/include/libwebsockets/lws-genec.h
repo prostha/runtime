@@ -68,8 +68,8 @@ struct lws_ec_curves {
 
 /** lws_genecdh_create() - Create a genecdh
  *
- * \param ctx: your genec context
- * \param context: your lws_context (for RNG access)
+ * \param ctx: your genec context.hpp
+ * \param context.hpp: your lws_context (for RNG access)
  * \param curve_table: NULL, enabling P-256, P-384 and P-521, or a replacement
  *		       struct lws_ec_curves array, terminated by an entry with
  *		       .name = NULL, of curves you want to allow
@@ -82,7 +82,7 @@ lws_genecdh_create(struct lws_genec_ctx *ctx, struct lws_context *context,
 
 /** lws_genecdh_set_key() - Apply an EC key to our or theirs side
  *
- * \param ctx: your genecdh context
+ * \param ctx: your genecdh context.hpp
  * \param el: your key elements
  * \param side: LDHS_OURS or LDHS_THEIRS
  *
@@ -94,7 +94,7 @@ lws_genecdh_set_key(struct lws_genec_ctx *ctx, struct lws_gencrypto_keyelem *el,
 
 /** lws_genecdh_new_keypair() - Create a genec with a new public / private key
  *
- * \param ctx: your genec context
+ * \param ctx: your genec context.hpp
  * \param side: LDHS_OURS or LDHS_THEIRS
  * \param curve_name: an EC curve name, like "P-256"
  * \param el: array pf LWS_GENCRYPTO_EC_KEYEL_COUNT key elems to take the new key
@@ -114,8 +114,8 @@ lws_genecdh_compute_shared_secret(struct lws_genec_ctx *ctx, uint8_t *ss,
 
 /** lws_genecdsa_create() - Create a genecdsa and
  *
- * \param ctx: your genec context
- * \param context: your lws_context (for RNG access)
+ * \param ctx: your genec context.hpp
+ * \param context.hpp: your lws_context (for RNG access)
  * \param curve_table: NULL, enabling P-256, P-384 and P-521, or a replacement
  *		       struct lws_ec_curves array, terminated by an entry with
  *		       .name = NULL, of curves you want to allow
@@ -128,7 +128,7 @@ lws_genecdsa_create(struct lws_genec_ctx *ctx, struct lws_context *context,
 
 /** lws_genecdsa_new_keypair() - Create a genecdsa with a new public / private key
  *
- * \param ctx: your genec context
+ * \param ctx: your genec context.hpp
  * \param curve_name: an EC curve name, like "P-256"
  * \param el: array pf LWS_GENCRYPTO_EC_KEYEL_COUNT key elements to take the new key
  *
@@ -138,12 +138,12 @@ LWS_VISIBLE LWS_EXTERN int
 lws_genecdsa_new_keypair(struct lws_genec_ctx *ctx, const char *curve_name,
 			 struct lws_gencrypto_keyelem *el);
 
-/** lws_genecdsa_set_key() - Apply an EC key to an ecdsa context
+/** lws_genecdsa_set_key() - Apply an EC key to an ecdsa context.hpp
  *
- * \param ctx: your genecdsa context
+ * \param ctx: your genecdsa context.hpp
  * \param el: your key elements
  *
- * Applies an EC key to an ecdsa context
+ * Applies an EC key to an ecdsa context.hpp
  */
 LWS_VISIBLE LWS_EXTERN int
 lws_genecdsa_set_key(struct lws_genec_ctx *ctx,

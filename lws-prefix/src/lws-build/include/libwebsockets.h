@@ -573,7 +573,7 @@ struct lws_pollargs {
 	int prev_events;	/**< the previous event mask */
 };
 
-struct lws_extension; /* needed even with ws exts disabled for create context */
+struct lws_extension; /* needed even with ws exts disabled for create context.hpp */
 struct lws_token_limits;
 struct lws_protocols;
 struct lws_context;

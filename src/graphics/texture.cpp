@@ -5,25 +5,24 @@
 namespace voxyl::graphics {
 
     Texture::Texture(const Context& context, const std::string& path)
-        : core(context.device()), silicon(context.hardware()), width(0), height(0), mips(1),
-          image(VK_NULL_HANDLE), memory(VK_NULL_HANDLE), lens(VK_NULL_HANDLE), probe(VK_NULL_HANDLE) {
-        (void)path;
-        generate(256, 256, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        : core(context.device()), silicon(context.hardware()), pool(VK_NULL_HANDLE), queue(VK_NULL_HANDLE),
+          width(0), height(0), mips(1), image(VK_NULL_HANDLE), memory(VK_NULL_HANDLE), lens(VK_NULL_HANDLE), probe(VK_NULL_HANDLE) {
+        generate(256, 256, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
         expose(VK_FORMAT_R8G8B8A8_SRGB);
         sample();
     }
 
     Texture::~Texture() {
-        if (probe != VK_NULL_HANDLE) vkDestroySampler(core, probe, nullptr);
-        if (lens != VK_NULL_HANDLE) vkDestroyImageView(core, lens, nullptr);
-        if (image != VK_NULL_HANDLE) vkDestroyImage(core, image, nullptr);
-        if (memory != VK_NULL_HANDLE) vkFreeMemory(core, memory, nullptr);
+        vkDestroySampler(core, probe, nullptr);
+        vkDestroyImageView(core, lens, nullptr);
+        vkDestroyImage(core, image, nullptr);
+        vkFreeMemory(core, memory, nullptr);
     }
 
     Texture::Texture(Texture&& other) noexcept
         : core(other.core), silicon(other.silicon), pool(other.pool), queue(other.queue),
-          width(other.width), height(other.height), mips(other.mips),
-          image(other.image), memory(other.memory), lens(other.lens), probe(other.probe) {
+          width(other.width), height(other.height), mips(other.mips), image(other.image),
+          memory(other.memory), lens(other.lens), probe(other.probe) {
         other.image = VK_NULL_HANDLE;
         other.memory = VK_NULL_HANDLE;
         other.lens = VK_NULL_HANDLE;
@@ -32,10 +31,11 @@ namespace voxyl::graphics {
 
     Texture& Texture::operator=(Texture&& other) noexcept {
         if (this != &other) {
-            if (probe != VK_NULL_HANDLE) vkDestroySampler(core, probe, nullptr);
-            if (lens != VK_NULL_HANDLE) vkDestroyImageView(core, lens, nullptr);
-            if (image != VK_NULL_HANDLE) vkDestroyImage(core, image, nullptr);
-            if (memory != VK_NULL_HANDLE) vkFreeMemory(core, memory, nullptr);
+            vkDestroySampler(core, probe, nullptr);
+            vkDestroyImageView(core, lens, nullptr);
+            vkDestroyImage(core, image, nullptr);
+            vkFreeMemory(core, memory, nullptr);
+
             core = other.core;
             silicon = other.silicon;
             pool = other.pool;
@@ -47,6 +47,7 @@ namespace voxyl::graphics {
             memory = other.memory;
             lens = other.lens;
             probe = other.probe;
+
             other.image = VK_NULL_HANDLE;
             other.memory = VK_NULL_HANDLE;
             other.lens = VK_NULL_HANDLE;
@@ -58,11 +59,12 @@ namespace voxyl::graphics {
     void Texture::generate(uint32_t x, uint32_t y, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags flags) {
         width = x;
         height = y;
+
         VkImageCreateInfo info{};
         info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         info.imageType = VK_IMAGE_TYPE_2D;
-        info.extent.width = x;
-        info.extent.height = y;
+        info.extent.width = width;
+        info.extent.height = height;
         info.extent.depth = 1;
         info.mipLevels = mips;
         info.arrayLayers = 1;
@@ -74,7 +76,7 @@ namespace voxyl::graphics {
         info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
         if (vkCreateImage(core, &info, nullptr, &image) != VK_SUCCESS) {
-            throw std::runtime_error("error");
+            throw std::runtime_error("Texture resource creation failed");
         }
 
         VkMemoryRequirements requirements;
@@ -83,21 +85,27 @@ namespace voxyl::graphics {
         VkPhysicalDeviceMemoryProperties properties;
         vkGetPhysicalDeviceMemoryProperties(silicon, &properties);
 
-        uint32_t type = UINT32_MAX;
-        for (uint32_t index = 0; index < properties.memoryTypeCount; ++index) {
+        uint32_t type = 0;
+        bool matching = false;
+        for (uint32_t index = 0; index < properties.memoryTypeCount; index++) {
             if ((requirements.memoryTypeBits & (1 << index)) && (properties.memoryTypes[index].propertyFlags & flags) == flags) {
                 type = index;
+                matching = true;
                 break;
             }
         }
 
-        VkMemoryAllocateInfo allocate{};
-        allocate.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        allocate.allocationSize = requirements.size;
-        allocate.memoryTypeIndex = type;
+        if (!matching) {
+            throw std::runtime_error("Texture memory layout selection failed");
+        }
 
-        if (vkAllocateMemory(core, &allocate, nullptr, &memory) != VK_SUCCESS) {
-            throw std::runtime_error("error");
+        VkMemoryAllocateInfo allocation{};
+        allocation.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocation.allocationSize = requirements.size;
+        allocation.memoryTypeIndex = type;
+
+        if (vkAllocateMemory(core, &allocation, nullptr, &memory) != VK_SUCCESS) {
+            throw std::runtime_error("Texture memory allocation failed");
         }
 
         vkBindImageMemory(core, image, memory, 0);
@@ -116,7 +124,7 @@ namespace voxyl::graphics {
         info.subresourceRange.layerCount = 1;
 
         if (vkCreateImageView(core, &info, nullptr, &lens) != VK_SUCCESS) {
-            throw std::runtime_error("error");
+            throw std::runtime_error("Texture target view allocation failed");
         }
     }
 
@@ -136,16 +144,14 @@ namespace voxyl::graphics {
         info.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 
         if (vkCreateSampler(core, &info, nullptr, &probe) != VK_SUCCESS) {
-            throw std::runtime_error("error");
+            throw std::runtime_error("Texture graphics sampler assignment failed");
         }
     }
 
     void Texture::transition(VkFormat format, VkImageLayout past, VkImageLayout future) {
-        (void)format; (void)past; (void)future;
     }
 
     void Texture::copy(VkBuffer source, uint32_t x, uint32_t y) {
-        (void)source; (void)x; (void)y;
     }
 
 }

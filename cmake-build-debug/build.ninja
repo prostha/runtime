@@ -100,6 +100,69 @@ build CMakeFiles/volyx.dir/src/ecs/world.cpp.o: CXX_COMPILER__volyx_unscanned_De
   OBJECT_FILE_DIR = CMakeFiles/volyx.dir/src/ecs
   TARGET_SUPPORT_DIR = CMakeFiles/volyx.dir
 
+build CMakeFiles/volyx.dir/src/graphics/buffer.cpp.o: CXX_COMPILER__volyx_unscanned_Debug /Users/82805/CLionProjects/polyblox/src/graphics/buffer.cpp || cmake_object_order_depends_target_volyx
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/volyx.dir/src/graphics/buffer.cpp.o.d
+  FLAGS = -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics
+  INCLUDES = -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /usr/local/include -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include
+  OBJECT_DIR = CMakeFiles/volyx.dir
+  OBJECT_FILE_DIR = CMakeFiles/volyx.dir/src/graphics
+  TARGET_SUPPORT_DIR = CMakeFiles/volyx.dir
+
+build CMakeFiles/volyx.dir/src/graphics/context.cpp.o: CXX_COMPILER__volyx_unscanned_Debug /Users/82805/CLionProjects/polyblox/src/graphics/context.cpp || cmake_object_order_depends_target_volyx
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/volyx.dir/src/graphics/context.cpp.o.d
+  FLAGS = -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics
+  INCLUDES = -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /usr/local/include -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include
+  OBJECT_DIR = CMakeFiles/volyx.dir
+  OBJECT_FILE_DIR = CMakeFiles/volyx.dir/src/graphics
+  TARGET_SUPPORT_DIR = CMakeFiles/volyx.dir
+
+build CMakeFiles/volyx.dir/src/graphics/descriptor.cpp.o: CXX_COMPILER__volyx_unscanned_Debug /Users/82805/CLionProjects/polyblox/src/graphics/descriptor.cpp || cmake_object_order_depends_target_volyx
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/volyx.dir/src/graphics/descriptor.cpp.o.d
+  FLAGS = -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics
+  INCLUDES = -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /usr/local/include -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include
+  OBJECT_DIR = CMakeFiles/volyx.dir
+  OBJECT_FILE_DIR = CMakeFiles/volyx.dir/src/graphics
+  TARGET_SUPPORT_DIR = CMakeFiles/volyx.dir
+
+build CMakeFiles/volyx.dir/src/graphics/mesh.cpp.o: CXX_COMPILER__volyx_unscanned_Debug /Users/82805/CLionProjects/polyblox/src/graphics/mesh.cpp || cmake_object_order_depends_target_volyx
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/volyx.dir/src/graphics/mesh.cpp.o.d
+  FLAGS = -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics
+  INCLUDES = -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /usr/local/include -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include
+  OBJECT_DIR = CMakeFiles/volyx.dir
+  OBJECT_FILE_DIR = CMakeFiles/volyx.dir/src/graphics
+  TARGET_SUPPORT_DIR = CMakeFiles/volyx.dir
+
+build CMakeFiles/volyx.dir/src/graphics/pipeline.cpp.o: CXX_COMPILER__volyx_unscanned_Debug /Users/82805/CLionProjects/polyblox/src/graphics/pipeline.cpp || cmake_object_order_depends_target_volyx
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/volyx.dir/src/graphics/pipeline.cpp.o.d
+  FLAGS = -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics
+  INCLUDES = -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /usr/local/include -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include
+  OBJECT_DIR = CMakeFiles/volyx.dir
+  OBJECT_FILE_DIR = CMakeFiles/volyx.dir/src/graphics
+  TARGET_SUPPORT_DIR = CMakeFiles/volyx.dir
+
+build CMakeFiles/volyx.dir/src/graphics/texture.cpp.o: CXX_COMPILER__volyx_unscanned_Debug /Users/82805/CLionProjects/polyblox/src/graphics/texture.cpp || cmake_object_order_depends_target_volyx
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/volyx.dir/src/graphics/texture.cpp.o.d
+  FLAGS = -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics
+  INCLUDES = -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /usr/local/include -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include
+  OBJECT_DIR = CMakeFiles/volyx.dir
+  OBJECT_FILE_DIR = CMakeFiles/volyx.dir/src/graphics
+  TARGET_SUPPORT_DIR = CMakeFiles/volyx.dir
+
+build CMakeFiles/volyx.dir/src/graphics/vertex.cpp.o: CXX_COMPILER__volyx_unscanned_Debug /Users/82805/CLionProjects/polyblox/src/graphics/vertex.cpp || cmake_object_order_depends_target_volyx
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles/volyx.dir/src/graphics/vertex.cpp.o.d
+  FLAGS = -g -std=gnu++2b -arch arm64 -fPIE -fcolor-diagnostics
+  INCLUDES = -I/Users/82805/CLionProjects/polyblox/include -I/Users/82805/CLionProjects/polyblox/src -I/Users/82805/CLionProjects/polyblox/src/vm/api -I/Users/82805/CLionProjects/polyblox/src/vm/core -isystem /usr/local/include -isystem /Users/82805/CLionProjects/polyblox/vendor/luajit/include/luajit-2.1 -isystem /Users/82805/CLionProjects/polyblox/vendor/uv/include -isystem /Users/82805/CLionProjects/polyblox/vendor/enet/include -isystem /Users/82805/CLionProjects/polyblox/vendor/lws/include
+  OBJECT_DIR = CMakeFiles/volyx.dir
+  OBJECT_FILE_DIR = CMakeFiles/volyx.dir/src/graphics
+  TARGET_SUPPORT_DIR = CMakeFiles/volyx.dir
+
 build CMakeFiles/volyx.dir/src/main.cpp.o: CXX_COMPILER__volyx_unscanned_Debug /Users/82805/CLionProjects/polyblox/src/main.cpp || cmake_object_order_depends_target_volyx
   CONFIG = Debug
   DEP_FILE = CMakeFiles/volyx.dir/src/main.cpp.o.d
@@ -225,7 +288,7 @@ build CMakeFiles/volyx.dir/src/vm/core/sandbox.cpp.o: CXX_COMPILER__volyx_unscan
 #############################################
 # Link the executable /Users/82805/CLionProjects/polyblox/bin/volyx
 
-build /Users/82805/CLionProjects/polyblox/bin/volyx: CXX_EXECUTABLE_LINKER__volyx_Debug CMakeFiles/volyx.dir/src/ecs/archetype.cpp.o CMakeFiles/volyx.dir/src/ecs/query.cpp.o CMakeFiles/volyx.dir/src/ecs/world.cpp.o CMakeFiles/volyx.dir/src/main.cpp.o CMakeFiles/volyx.dir/src/math/matrix3.cpp.o CMakeFiles/volyx.dir/src/math/matrix4.cpp.o CMakeFiles/volyx.dir/src/math/quaternion.cpp.o CMakeFiles/volyx.dir/src/math/scalar.cpp.o CMakeFiles/volyx.dir/src/math/transform.cpp.o CMakeFiles/volyx.dir/src/math/vector2.cpp.o CMakeFiles/volyx.dir/src/math/vector3.cpp.o CMakeFiles/volyx.dir/src/math/vector4.cpp.o CMakeFiles/volyx.dir/src/vm/api/ecs.cpp.o CMakeFiles/volyx.dir/src/vm/api/math.cpp.o CMakeFiles/volyx.dir/src/vm/core/allocator.cpp.o CMakeFiles/volyx.dir/src/vm/core/sandbox.cpp.o | /Users/82805/CLionProjects/polyblox/vendor/luajit/lib/libluajit-5.1.a /Users/82805/CLionProjects/polyblox/vendor/uv/lib/libuv.a /Users/82805/CLionProjects/polyblox/vendor/enet/lib/libenet.a /Users/82805/CLionProjects/polyblox/vendor/lws/lib/libwebsockets.a /usr/local/lib/libvulkan.dylib || enet luajit lws uv
+build /Users/82805/CLionProjects/polyblox/bin/volyx: CXX_EXECUTABLE_LINKER__volyx_Debug CMakeFiles/volyx.dir/src/ecs/archetype.cpp.o CMakeFiles/volyx.dir/src/ecs/query.cpp.o CMakeFiles/volyx.dir/src/ecs/world.cpp.o CMakeFiles/volyx.dir/src/graphics/buffer.cpp.o CMakeFiles/volyx.dir/src/graphics/context.cpp.o CMakeFiles/volyx.dir/src/graphics/descriptor.cpp.o CMakeFiles/volyx.dir/src/graphics/mesh.cpp.o CMakeFiles/volyx.dir/src/graphics/pipeline.cpp.o CMakeFiles/volyx.dir/src/graphics/texture.cpp.o CMakeFiles/volyx.dir/src/graphics/vertex.cpp.o CMakeFiles/volyx.dir/src/main.cpp.o CMakeFiles/volyx.dir/src/math/matrix3.cpp.o CMakeFiles/volyx.dir/src/math/matrix4.cpp.o CMakeFiles/volyx.dir/src/math/quaternion.cpp.o CMakeFiles/volyx.dir/src/math/scalar.cpp.o CMakeFiles/volyx.dir/src/math/transform.cpp.o CMakeFiles/volyx.dir/src/math/vector2.cpp.o CMakeFiles/volyx.dir/src/math/vector3.cpp.o CMakeFiles/volyx.dir/src/math/vector4.cpp.o CMakeFiles/volyx.dir/src/vm/api/ecs.cpp.o CMakeFiles/volyx.dir/src/vm/api/math.cpp.o CMakeFiles/volyx.dir/src/vm/core/allocator.cpp.o CMakeFiles/volyx.dir/src/vm/core/sandbox.cpp.o | /Users/82805/CLionProjects/polyblox/vendor/luajit/lib/libluajit-5.1.a /Users/82805/CLionProjects/polyblox/vendor/uv/lib/libuv.a /Users/82805/CLionProjects/polyblox/vendor/enet/lib/libenet.a /Users/82805/CLionProjects/polyblox/vendor/lws/lib/libwebsockets.a /usr/local/lib/libvulkan.dylib || enet luajit lws uv
   CONFIG = Debug
   FLAGS = -g -arch arm64
   LINK_FLAGS = -Wl,-search_paths_first -Wl,-headerpad_max_install_names

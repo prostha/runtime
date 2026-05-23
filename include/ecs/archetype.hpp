@@ -19,9 +19,9 @@ namespace voxyl::ecs {
         std::atomic<std::uint32_t> version{0};
         mutable std::shared_mutex mutex;
 
-        void add(const Entity entity);
+        void add(Entity entity);
 
-        [[nodiscard]] std::uint32_t remove(const std::size_t index);
+        [[nodiscard]] std::uint32_t remove(std::size_t index);
     };
 
 }

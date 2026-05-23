@@ -6,7 +6,8 @@
 namespace voxyl::graphics {
 
     Buffer::Buffer(const Context& context, VkDeviceSize bytes, VkBufferUsageFlags usage, VkMemoryPropertyFlags flags)
-        : core(context.device()), silicon(context.hardware()), bytes(bytes), region(nullptr) {
+        : core(context.device()), silicon(context.hardware()), buffer(VK_NULL_HANDLE), memory(VK_NULL_HANDLE), bytes(bytes), region(nullptr) {
+
         VkBufferCreateInfo info{};
         info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         info.size = bytes;
@@ -14,28 +15,30 @@ namespace voxyl::graphics {
         info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
         if (vkCreateBuffer(core, &info, nullptr, &buffer) != VK_SUCCESS) {
-            throw std::runtime_error("error");
+            throw std::runtime_error("Buffer layout allocation failed");
         }
 
         VkMemoryRequirements requirements;
         vkGetBufferMemoryRequirements(core, buffer, &requirements);
 
-        VkMemoryAllocateInfo allocate{};
-        allocate.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-        allocate.allocationSize = requirements.size;
-        allocate.memoryTypeIndex = find(requirements.memoryTypeBits, flags);
+        VkMemoryAllocateInfo allocation{};
+        allocation.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+        allocation.allocationSize = requirements.size;
+        allocation.memoryTypeIndex = find(requirements.memoryTypeBits, flags);
 
-        if (vkAllocateMemory(core, &allocate, nullptr, &memory) != VK_SUCCESS) {
-            throw std::runtime_error("error");
+        if (vkAllocateMemory(core, &allocation, nullptr, &memory) != VK_SUCCESS) {
+            throw std::runtime_error("Buffer memory allocation failed");
         }
 
         vkBindBufferMemory(core, buffer, memory, 0);
     }
 
     Buffer::~Buffer() {
-        unmap();
-        if (buffer != VK_NULL_HANDLE) vkDestroyBuffer(core, buffer, nullptr);
-        if (memory != VK_NULL_HANDLE) vkFreeMemory(core, memory, nullptr);
+        if (region) {
+            unmap();
+        }
+        vkDestroyBuffer(core, buffer, nullptr);
+        vkFreeMemory(core, memory, nullptr);
     }
 
     Buffer::Buffer(Buffer&& other) noexcept
@@ -48,15 +51,17 @@ namespace voxyl::graphics {
 
     Buffer& Buffer::operator=(Buffer&& other) noexcept {
         if (this != &other) {
-            unmap();
-            if (buffer != VK_NULL_HANDLE) vkDestroyBuffer(core, buffer, nullptr);
-            if (memory != VK_NULL_HANDLE) vkFreeMemory(core, memory, nullptr);
+            if (region) unmap();
+            vkDestroyBuffer(core, buffer, nullptr);
+            vkFreeMemory(core, memory, nullptr);
+
             core = other.core;
             silicon = other.silicon;
             buffer = other.buffer;
             memory = other.memory;
             bytes = other.bytes;
             region = other.region;
+
             other.buffer = VK_NULL_HANDLE;
             other.memory = VK_NULL_HANDLE;
             other.region = nullptr;
@@ -66,36 +71,30 @@ namespace voxyl::graphics {
     }
 
     void Buffer::map(VkDeviceSize shift, VkDeviceSize span) {
-        if (!region) {
-            if (vkMapMemory(core, memory, shift, span, 0, &region) != VK_SUCCESS) {
-                throw std::runtime_error("error");
-            }
-        }
+        vkMapMemory(core, memory, shift, span, 0, &region);
     }
 
     void Buffer::unmap() {
-        if (region) {
-            vkUnmapMemory(core, memory);
-            region = nullptr;
-        }
+        vkUnmapMemory(core, memory);
+        region = nullptr;
     }
 
     void Buffer::write(const void* data, VkDeviceSize span, VkDeviceSize shift) {
-        bool temp = !region;
-        if (temp) map(shift, span);
-        std::memcpy(static_cast<char*>(region) + (temp ? 0 : shift), data, static_cast<std::size_t>(span));
-        if (temp) unmap();
+        map(shift, span);
+        std::memcpy(region, data, static_cast<size_t>(span));
+        unmap();
     }
 
     uint32_t Buffer::find(uint32_t filter, VkMemoryPropertyFlags flags) const {
         VkPhysicalDeviceMemoryProperties properties;
         vkGetPhysicalDeviceMemoryProperties(silicon, &properties);
-        for (uint32_t index = 0; index < properties.memoryTypeCount; ++index) {
+
+        for (uint32_t index = 0; index < properties.memoryTypeCount; index++) {
             if ((filter & (1 << index)) && (properties.memoryTypes[index].propertyFlags & flags) == flags) {
                 return index;
             }
         }
-        throw std::runtime_error("error");
+        throw std::runtime_error("Buffer memory footprint matching failed");
     }
 
 }

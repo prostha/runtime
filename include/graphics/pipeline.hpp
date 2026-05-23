@@ -8,7 +8,7 @@ namespace voxyl::graphics {
 
     class Context;
 
-    struct Configuration {
+    struct State {
         VkPipelineViewportStateCreateInfo viewport;
         VkPipelineInputAssemblyStateCreateInfo assembly;
         VkPipelineRasterizationStateCreateInfo raster;
@@ -24,7 +24,7 @@ namespace voxyl::graphics {
 
     class Pipeline {
     public:
-        Pipeline(const Context& context, const std::string& vertex, const std::string& fragment, const Configuration& configuration);
+        Pipeline(const Context& context, const std::string& vertex, const std::string& fragment, const State& state);
         ~Pipeline();
 
         Pipeline(const Pipeline&) = delete;
@@ -35,12 +35,12 @@ namespace voxyl::graphics {
         [[nodiscard]] VkPipeline handle() const { return pipeline; }
         [[nodiscard]] VkPipelineLayout layout() const { return shape; }
 
-        static void solid(Configuration& configuration);
-        static void flat(Configuration& configuration);
+        static void solid(State& state);
+        static void flat(State& state);
 
     private:
         [[nodiscard]] std::vector<char> read(const std::string& path);
-        void build(const std::string& vertex, const std::string& fragment, const Configuration& configuration);
+        void build(const std::string& vertex, const std::string& fragment, const State& state);
         void compile(const std::vector<char>& code, VkShaderModule* module);
 
         VkDevice core;

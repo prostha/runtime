@@ -3,32 +3,29 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 
-namespace voxyl::math {
-    class Vector3;
-    class Vector4;
-    class Matrix4;
-    class Quaternion;
-}
+struct Vector2;
+struct Vector3;
+struct Vector4;
+struct Matrix4;
+struct Transform;
 
 namespace voxyl::graphics {
+
     class Pipeline;
     class Buffer;
     class Texture;
-}
 
-namespace voxyl::graphics {
-
-    struct Lens {
+    struct Camera {
         bool flat;
         float angle;
     };
 
     struct Model {
-        const Texture* skin;
+        const Texture* texture;
     };
 
     struct Sprite {
-        const Texture* skin;
+        const Texture* texture;
         float x;
         float y;
         float width;
@@ -49,7 +46,7 @@ namespace voxyl::graphics {
         void begin();
         void end();
 
-        void view(const Lens& lens);
+        void view(const Camera& camera);
         void draw(const Model& model);
         void draw(const Sprite& sprite);
 

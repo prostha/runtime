@@ -1,1 +1,0 @@
-cmd='/Users/82805/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake;-DCMAKE_INSTALL_PREFIX=/Users/82805/CLionProjects/polyblox/vendor/lws;-DLWS_WITH_SHARED=OFF;-DLWS_WITH_SSL=OFF;-DLWS_WITHOUT_TESTAPPS=ON;-DCMAKE_POLICY_VERSION_MINIMUM=3.5;-GNinja;-S;<SOURCE_DIR><SOURCE_SUBDIR>;-B;<BINARY_DIR>'

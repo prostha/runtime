@@ -8,7 +8,6 @@ Makefile
 build/
 *.o
 *.a
-libvm.a
-core/server.lua
-luajit_install/
-luajit-prefix/
+bin/
+toolchain/
+vendor/

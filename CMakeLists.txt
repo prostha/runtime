@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-project(polyvec CXX)
+project(runtime CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -154,17 +154,18 @@ file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS
 set(ENTRY "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 list(REMOVE_ITEM SOURCES ${ENTRY})
 
-add_library(lib SHARED ${SOURCES} ${HEADERS})
-add_dependencies(lib liblua libuv libenet liblws)
+add_library(runtime SHARED ${SOURCES} ${HEADERS})
+add_dependencies(runtime liblua libuv libenet liblws)
 
-set_target_properties(lib PROPERTIES
+set_target_properties(runtime PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
         LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
         ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
-        OUTPUT_NAME "polyvec"
+        PREFIX ""
+        OUTPUT_NAME "runtime"
 )
 
-target_include_directories(lib PUBLIC
+target_include_directories(runtime PUBLIC
         include
         src
         src/vm/api
@@ -173,24 +174,24 @@ target_include_directories(lib PUBLIC
 )
 
 if(WIN32)
-    target_link_libraries(lib PRIVATE sol3 liblua libuv libenet liblws Vulkan::Vulkan ws2_32 iphlpapi userenv winmm)
-    target_link_options(lib PRIVATE
+    target_link_libraries(runtime PRIVATE sol3 liblua libuv libenet liblws Vulkan::Vulkan ws2_32 iphlpapi userenv winmm)
+    target_link_options(runtime PRIVATE
             /WHOLEARCHIVE:$<TARGET_FILE:liblua>
             /WHOLEARCHIVE:$<TARGET_FILE:libuv>
             /WHOLEARCHIVE:$<TARGET_FILE:libenet>
             /WHOLEARCHIVE:$<TARGET_FILE:liblws>
     )
 elseif(APPLE)
-    target_link_libraries(lib PRIVATE sol3 liblua libuv libenet liblws Vulkan::Vulkan m dl pthread)
-    target_link_options(lib PRIVATE
+    target_link_libraries(runtime PRIVATE sol3 liblua libuv libenet liblws Vulkan::Vulkan m dl pthread)
+    target_link_options(runtime PRIVATE
             -Wl,-force_load,$<TARGET_FILE:liblua>
             -Wl,-force_load,$<TARGET_FILE:libuv>
             -Wl,-force_load,$<TARGET_FILE:libenet>
             -Wl,-force_load,$<TARGET_FILE:liblws>
     )
 else()
-    target_link_libraries(lib PRIVATE sol3 liblua libuv libenet liblws Vulkan::Vulkan m dl pthread)
-    target_link_options(lib PRIVATE
+    target_link_libraries(runtime PRIVATE sol3 liblua libuv libenet liblws Vulkan::Vulkan m dl pthread)
+    target_link_options(runtime PRIVATE
             -Wl,--whole-archive
             $<TARGET_FILE:liblua>
             $<TARGET_FILE:libuv>

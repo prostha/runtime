@@ -1,8 +1,9 @@
-#include "../include/core/types/matrix3.hpp"
+#include "../../../../include/core/types/primitives/matrix3.hpp"
 #include <cassert>
 #include <numbers>
+#include <cmath>
 
-namespace core::math {
+namespace core::primitives {
 
     const Matrix3 Matrix3::IDENTITY = Matrix3(1.0f);
 

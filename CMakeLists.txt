@@ -21,7 +21,7 @@ endif()
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/include/luajit-2.1")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/src")
 
-if(WIN32)
+if(MSVC)
     ExternalProject_Add(luajit
             PREFIX "${CMAKE_BINARY_DIR}/vendor/luajit"
             GIT_REPOSITORY https://github.com/LuaJIT/LuaJIT.git
@@ -29,9 +29,42 @@ if(WIN32)
             SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit"
             BUILD_IN_SOURCE TRUE
             CONFIGURE_COMMAND ""
-            BUILD_COMMAND cmd /c src/msvcbuild.bat static
+            UPDATE_COMMAND ""
+            BUILD_COMMAND cmd /c src\\msvcbuild.bat static
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy src/lua51.lib "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/lua51.lib"
             BUILD_BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/lua51.lib"
+    )
+elseif(WIN32)
+    find_package(Git QUIET)
+    set(LUAJIT_BUILD_CMD mingw32-make HOST_CC=gcc CROSS= PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit BUILDMODE=static CFLAGS=-fPIC)
+    set(LUAJIT_INSTALL_CMD mingw32-make install PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit)
+
+    if(GIT_FOUND)
+        get_filename_component(GIT_DIR "${GIT_EXECUTABLE}" DIRECTORY)
+        if(EXISTS "${GIT_DIR}/../usr/bin/sh.exe")
+            get_filename_component(SH_DIR "${GIT_DIR}/../usr/bin" REALPATH)
+        elseif(EXISTS "${GIT_DIR}/../bin/sh.exe")
+            get_filename_component(SH_DIR "${GIT_DIR}/../bin" REALPATH)
+        endif()
+        if(SH_DIR)
+            file(TO_NATIVE_PATH "${SH_DIR}" SH_DIR_NATIVE)
+            string(REPLACE ";" "$<SEMICOLON>" EXPANDED_PATH "$ENV{PATH}")
+            set(LUAJIT_BUILD_CMD ${CMAKE_COMMAND} -E env "PATH=${SH_DIR_NATIVE}$<SEMICOLON>${EXPANDED_PATH}" ${LUAJIT_BUILD_CMD})
+            set(LUAJIT_INSTALL_CMD ${CMAKE_COMMAND} -E env "PATH=${SH_DIR_NATIVE}$<SEMICOLON>${EXPANDED_PATH}" ${LUAJIT_INSTALL_CMD})
+        endif()
+    endif()
+
+    ExternalProject_Add(luajit
+            PREFIX "${CMAKE_BINARY_DIR}/vendor/luajit"
+            GIT_REPOSITORY https://github.com/LuaJIT/LuaJIT.git
+            GIT_TAG v2.1
+            SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit"
+            BUILD_IN_SOURCE TRUE
+            CONFIGURE_COMMAND ""
+            UPDATE_COMMAND ""
+            BUILD_COMMAND ${LUAJIT_BUILD_CMD}
+            INSTALL_COMMAND ${LUAJIT_INSTALL_CMD}
+            BUILD_BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/libluajit-5.1.a"
     )
 elseif(APPLE)
     ExternalProject_Add(luajit
@@ -41,6 +74,7 @@ elseif(APPLE)
             SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit"
             BUILD_IN_SOURCE TRUE
             CONFIGURE_COMMAND ""
+            UPDATE_COMMAND ""
             BUILD_COMMAND env MACOSX_DEPLOYMENT_TARGET=11.0 make -j4 PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit BUILDMODE=static CFLAGS=-fPIC
             INSTALL_COMMAND env MACOSX_DEPLOYMENT_TARGET=11.0 make install PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit
             BUILD_BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/libluajit-5.1.a"
@@ -53,6 +87,7 @@ else()
             SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit"
             BUILD_IN_SOURCE TRUE
             CONFIGURE_COMMAND ""
+            UPDATE_COMMAND ""
             BUILD_COMMAND make -j4 PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit BUILDMODE=static CFLAGS=-fPIC
             INSTALL_COMMAND make install PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit
             BUILD_BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/libluajit-5.1.a"
@@ -60,7 +95,7 @@ else()
 endif()
 
 add_library(liblua STATIC IMPORTED GLOBAL)
-if(WIN32)
+if(MSVC)
     set_target_properties(liblua PROPERTIES
             IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/lua51.lib"
             INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/src"
@@ -85,6 +120,13 @@ file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp"
 )
 
+if(APPLE)
+    file(GLOB_RECURSE METAL_SOURCES CONFIGURE_DEPENDS
+            "${CMAKE_CURRENT_SOURCE_DIR}/src/*.mm"
+    )
+    list(APPEND SOURCES ${METAL_SOURCES})
+endif()
+
 set(ENTRY "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 list(REMOVE_ITEM SOURCES ${ENTRY})
 
@@ -107,13 +149,22 @@ target_include_directories(runtime PUBLIC
         ${Vulkan_INCLUDE_DIRS}
 )
 
-if(WIN32)
-    target_link_libraries(runtime PRIVATE sol3 liblua Vulkan::Vulkan userenv winmm)
+if(MSVC)
+    target_link_libraries(runtime PRIVATE sol3 liblua Vulkan::Vulkan d3d12 dxgi)
     target_link_options(runtime PRIVATE
             /WHOLEARCHIVE:$<TARGET_FILE:liblua>
     )
+elseif(WIN32)
+    target_link_libraries(runtime PRIVATE sol3 liblua Vulkan::Vulkan d3d12 dxgi m pthread)
+    target_link_options(runtime PRIVATE
+            -Wl,--whole-archive
+            $<TARGET_FILE:liblua>
+            -Wl,--no-whole-archive
+    )
 elseif(APPLE)
-    target_link_libraries(runtime PRIVATE sol3 liblua Vulkan::Vulkan m dl pthread)
+    find_library(METAL_FRAMEWORK Metal REQUIRED)
+    find_library(QUARTZ_FRAMEWORK QuartzCore REQUIRED)
+    target_link_libraries(runtime PRIVATE sol3 liblua Vulkan::Vulkan ${METAL_FRAMEWORK} ${QUARTZ_FRAMEWORK} m dl pthread)
     target_link_options(runtime PRIVATE
             -Wl,-force_load,$<TARGET_FILE:liblua>
     )

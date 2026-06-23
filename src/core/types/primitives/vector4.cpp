@@ -1,7 +1,8 @@
-#include "../include/core/types/vector4.hpp"
+#include "../../../../include/core/types/primitives/vector4.hpp"
 #include <cassert>
+#include <cmath>
 
-namespace core::math {
+namespace core::primitives {
 
     const Vector4 Vector4::ZERO = {0.0f, 0.0f, 0.0f, 0.0f};
     const Vector4 Vector4::ONE = {1.0f, 1.0f, 1.0f, 1.0f};

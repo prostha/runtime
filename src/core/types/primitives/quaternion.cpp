@@ -1,8 +1,9 @@
-#include "../include/core/types/quaternion.hpp"
+#include "../../../../include/core/types/primitives/quaternion.hpp"
 #include <cassert>
 #include <numbers>
+#include <cmath>
 
-namespace core::math {
+namespace core::primitives {
 
     const Quaternion Quaternion::IDENTITY = {0.0f, 0.0f, 0.0f, 1.0f};
 

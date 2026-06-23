@@ -1,14 +1,15 @@
-#include "../include/core/types/matrix4.hpp"
+#include "../../../../include/core/types/primitives/matrix4.hpp"
 #include <cassert>
+#include <cmath>
 
-namespace core::math {
+namespace core::primitives {
 
     const Matrix4 Matrix4::IDENTITY = Matrix4(1.0f);
 
     Matrix4::Matrix4() {
-        for (int row = 0; row < 4; row++) {
-            for (int column = 0; column < 4; column++) {
-                matrix[row][column] = 0.0f;
+        for (auto & row : matrix) {
+            for (float & column : row) {
+                column = 0.0f;
             }
         }
     }

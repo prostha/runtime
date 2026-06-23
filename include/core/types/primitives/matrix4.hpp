@@ -4,7 +4,7 @@
 #include "vector4.hpp"
 #include "quaternion.hpp"
 
-namespace core::math {
+namespace core::primitives {
 
     class alignas(16) Matrix4 {
         public:

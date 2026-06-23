@@ -14,15 +14,15 @@ namespace core {
         explicit Find(const std::vector<std::unique_ptr<Kind>>& pool) noexcept;
 
         Find& with(std::uint32_t tag);
-        Find& skip(std::uint32_t tag);
-        Find& some(const std::vector<std::uint32_t>& tags);
+        Find& without(std::uint32_t tag);
+        Find& any(const std::vector<std::uint32_t>& tags);
         Find& sort(std::uint32_t tag);
 
-        [[nodiscard]] bool test(std::uint32_t tag) const noexcept;
+        [[nodiscard]] bool has(std::uint32_t tag) const noexcept;
 
-        void exec(const Call& call, const std::vector<std::uint32_t>& tags) const;
+        void process(const Call& call, const std::vector<std::uint32_t>& tags) const;
 
-        void send(VkCommandBuffer stream, VkPipelineLayout layout, VkPipeline pipe, const std::vector<std::uint32_t>& tags) const;
+        void dispatch(VkCommandBuffer stream, VkPipelineLayout layout, VkPipeline pipe, const std::vector<std::uint32_t>& tags) const;
 
         [[nodiscard]] const std::vector<std::uint32_t>& plan() const noexcept { return path; }
 

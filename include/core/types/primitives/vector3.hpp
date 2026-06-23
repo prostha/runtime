@@ -3,7 +3,7 @@
 #include "vector2.hpp"
 #include <ostream>
 
-namespace core::math {
+namespace core::primitives {
 
     class Vector3 {
     public:

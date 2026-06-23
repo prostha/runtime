@@ -6,7 +6,7 @@
 #include <limits>
 #include <ostream>
 
-namespace core::math {
+namespace core::primitives {
 
     struct Transform {
         Vector3 translation;

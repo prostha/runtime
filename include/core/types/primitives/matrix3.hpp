@@ -5,7 +5,7 @@
 #include <limits>
 #include <ostream>
 
-namespace core::math {
+namespace core::primitives {
 
     struct Matrix3 {
         float matrix[3][3]{};

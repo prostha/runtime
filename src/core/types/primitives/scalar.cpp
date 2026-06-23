@@ -1,6 +1,6 @@
-#include "../include/core/types/scalar.hpp"
+#include "../../../../include/core/types/primitives/scalar.hpp"
 
-namespace core::math {
+namespace core::primitives {
 
     std::ostream &operator<<(std::ostream &os, const Scalar &scalar) {
         return os << scalar.value;

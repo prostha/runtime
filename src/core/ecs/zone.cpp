@@ -1,5 +1,7 @@
 #include "../include/core/ecs/zone.hpp"
 #include <cstring>
+#include <mutex>
+#include <shared_mutex>
 
 namespace core {
 
@@ -72,8 +74,7 @@ namespace core {
         if (!record.type) return;
 
         if (twig != 0xFFFFFFFF && test(id, twig)) {
-            auto* list = static_cast<std::vector<Id>*>(peek(id, twig));
-            if (list) {
+            if (auto* list = static_cast<std::vector<Id>*>(peek(id, twig))) {
                 for (Id nested : *list) {
                     kill(nested);
                 }
@@ -121,7 +122,7 @@ namespace core {
     }
 
     const std::vector<Id>& Zone::crew(Id id) const {
-        static const std::vector<Id> empty;
+        static constexpr std::vector<Id> empty;
         if (twig == 0xFFFFFFFF || !test(id, twig)) return empty;
         return *static_cast<const std::vector<Id>*>(const_cast<Zone*>(this)->peek(id, twig));
     }
@@ -149,7 +150,7 @@ namespace core {
         return pointer;
     }
 
-    void* Zone::peek(Id id, std::uint32_t tag) {
+    void* Zone::peek(Id id, std::uint32_t tag) const {
         Slot record = tabs[id];
         Kind* arch = record.type;
         if (!arch) return nullptr;
@@ -213,7 +214,7 @@ namespace core {
     }
 
     void Zone::loop(const Find& find, const Find::Call& call) const {
-        find.exec(call, find.plan());
+        find.process(call, find.plan());
     }
 
     Kind* Zone::view(const Mask& mask) {

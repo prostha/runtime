@@ -31,7 +31,7 @@ namespace core {
         [[nodiscard]] const std::vector<Id>& crew(Id id) const;
 
         void* fill(Id id, std::uint32_t tag, const void* raw = nullptr);
-        void* peek(Id id, std::uint32_t tag);
+        void* peek(Id id, std::uint32_t tag) const;
         [[nodiscard]] bool test(Id id, std::uint32_t tag) const;
         void drop(Id id, std::uint32_t tag);
 

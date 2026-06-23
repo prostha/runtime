@@ -1,10 +1,11 @@
 #include "../include/core/ecs/kind.hpp"
 #include <algorithm>
+#include <mutex>
 
 namespace core {
 
     void Kind::push(Id id) {
-        std::unique_lock lock(this->lock);
+        std::unique_lock guard(this->lock);
         rows.push_back(id);
         for (std::size_t index = 0; index < page.size(); ++index) {
             page[index].resize(rows.size() * bits[index]);
@@ -13,7 +14,7 @@ namespace core {
     }
 
     std::uint32_t Kind::pull(std::size_t row) {
-        std::unique_lock lock(this->lock);
+        std::unique_lock guard(this->lock);
         Id last = rows.back();
 
         for (std::size_t track = 0; track < page.size(); ++track) {

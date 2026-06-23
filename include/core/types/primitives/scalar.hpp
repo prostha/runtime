@@ -3,8 +3,9 @@
 #include <cassert>
 #include <numbers>
 #include <ostream>
+#include <cmath>
 
-namespace core::math {
+namespace core::primitives {
 
     struct Scalar {
         float value;

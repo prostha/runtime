@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-namespace core::math {
+namespace core::primitives {
 
     class Vector2 {
     public:

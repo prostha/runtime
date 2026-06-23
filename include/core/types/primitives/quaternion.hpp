@@ -5,7 +5,7 @@
 #include <limits>
 #include <ostream>
 
-namespace core::math {
+namespace core::primitives {
 
     struct Quaternion {
         float x, y, z, w;

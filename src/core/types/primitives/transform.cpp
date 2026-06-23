@@ -1,7 +1,8 @@
-#include "../include/core/types/transform.hpp"
+#include "../../../../include/core/types/primitives/transform.hpp"
 #include <cassert>
+#include <cmath>
 
-namespace core::math {
+namespace core::primitives {
 
     const Transform Transform::IDENTITY = {
         {0.0f, 0.0f, 0.0f},

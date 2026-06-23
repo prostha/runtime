@@ -1,5 +1,6 @@
 #include "../include/core/ecs/find.hpp"
 #include <shared_mutex>
+#include <mutex>
 #include <algorithm>
 #include <numeric>
 #include <cstring>
@@ -15,12 +16,12 @@ namespace core {
         return *this;
     }
 
-    Find& Find::skip(std::uint32_t tag) {
+    Find& Find::without(std::uint32_t tag) {
         lacks.set(tag);
         return *this;
     }
 
-    Find& Find::some(const std::vector<std::uint32_t>& tags) {
+    Find& Find::any(const std::vector<std::uint32_t>& tags) {
         for (std::uint32_t tag : tags) {
             wish.set(tag);
         }
@@ -67,11 +68,11 @@ namespace core {
         return *this;
     }
 
-    bool Find::test(std::uint32_t tag) const noexcept {
+    bool Find::has(std::uint32_t tag) const noexcept {
         return have.test(tag);
     }
 
-    void Find::exec(const Call& call, const std::vector<std::uint32_t>& tags) const {
+    void Find::process(const Call& call, const std::vector<std::uint32_t>& tags) const {
         std::vector<void*> pointers;
         for (const auto& arch : pool) {
             std::shared_lock lock(arch->lock);
@@ -96,13 +97,15 @@ namespace core {
         }
     }
 
-    void Find::send(VkCommandBuffer stream, VkPipelineLayout layout, VkPipeline pipe, const std::vector<std::uint32_t>& tags) const {
+    void Find::dispatch(VkCommandBuffer stream, VkPipelineLayout layout, VkPipeline pipe, const std::vector<std::uint32_t>& tags) const {
         (void)layout;
         (void)tags;
         vkCmdBindPipeline(stream, VK_PIPELINE_BIND_POINT_COMPUTE, pipe);
         for (const auto& arch : pool) {
             Mask check = arch->mask;
             if ((check & have) == have && (check & lacks).none()) {
+                if (wish.any() && (check & wish).none()) continue;
+
                 std::shared_lock lock(arch->lock);
                 auto count = static_cast<std::uint32_t>(arch->rows.size());
                 if (count == 0) continue;

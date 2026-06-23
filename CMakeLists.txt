@@ -13,32 +13,13 @@ include(ExternalProject)
 
 find_package(Vulkan REQUIRED)
 
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv/CMakeLists.txt")
-    file(REMOVE_RECURSE "${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv")
-    execute_process(COMMAND git clone --branch v1.48.0 https://github.com/libuv/libuv.git "${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv")
-endif()
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/enet/CMakeLists.txt")
-    file(REMOVE_RECURSE "${CMAKE_CURRENT_SOURCE_DIR}/vendor/enet")
-    execute_process(COMMAND git clone --depth 1 https://github.com/lsalzman/enet.git "${CMAKE_CURRENT_SOURCE_DIR}/vendor/enet")
-endif()
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lws/CMakeLists.txt")
-    file(REMOVE_RECURSE "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lws")
-    execute_process(COMMAND git clone --branch v4.3-stable https://github.com/warmcat/libwebsockets.git "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lws")
-endif()
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/sol3/CMakeLists.txt")
     file(REMOVE_RECURSE "${CMAKE_CURRENT_SOURCE_DIR}/vendor/sol3")
     execute_process(COMMAND git clone --branch v3.3.0 https://github.com/ThePhD/sol2.git "${CMAKE_CURRENT_SOURCE_DIR}/vendor/sol3")
 endif()
 
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/include/luajit-2.1")
-
-if(WIN32)
-    set(EXT "lib")
-    set(UVPATH "${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv/lib/uv_a.lib")
-else()
-    set(EXT "a")
-    set(UVPATH "${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv/lib/libuv.a")
-endif()
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/src")
 
 if(WIN32)
     ExternalProject_Add(luajit
@@ -78,32 +59,6 @@ else()
     )
 endif()
 
-ExternalProject_Add(uv
-        PREFIX "${CMAKE_BINARY_DIR}/vendor/uv"
-        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv"
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_TESTING=OFF -DLIBUV_BUILD_SHARED=OFF
-        BUILD_BYPRODUCTS "${UVPATH}"
-)
-
-ExternalProject_Add(enet
-        PREFIX "${CMAKE_BINARY_DIR}/vendor/enet"
-        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/enet"
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/vendor/enet -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-        BUILD_BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/enet/lib/libenet.${EXT}"
-)
-
-ExternalProject_Add(lws
-        PREFIX "${CMAKE_BINARY_DIR}/vendor/lws"
-        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lws"
-        CMAKE_ARGS
-        -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_SOURCE_DIR}/vendor/lws
-        -DLWS_WITH_SHARED=OFF
-        -DLWS_WITH_SSL=OFF
-        -DLWS_WITHOUT_TESTAPPS=ON
-        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-        BUILD_BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lws/lib/libwebsockets.${EXT}"
-)
-
 add_library(liblua STATIC IMPORTED GLOBAL)
 if(WIN32)
     set_target_properties(liblua PROPERTIES
@@ -117,27 +72,6 @@ else()
     )
 endif()
 add_dependencies(liblua luajit)
-
-add_library(libuv STATIC IMPORTED GLOBAL)
-set_target_properties(libuv PROPERTIES
-        IMPORTED_LOCATION "${UVPATH}"
-        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/vendor/uv/include"
-)
-add_dependencies(libuv uv)
-
-add_library(libenet STATIC IMPORTED GLOBAL)
-set_target_properties(libenet PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/vendor/enet/lib/libenet.${EXT}"
-        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/vendor/enet/include"
-)
-add_dependencies(libenet enet)
-
-add_library(liblws STATIC IMPORTED GLOBAL)
-set_target_properties(liblws PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lws/lib/libwebsockets.${EXT}"
-        INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/vendor/lws/include"
-)
-add_dependencies(liblws lws)
 
 add_library(sol3 INTERFACE)
 target_include_directories(sol3 INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/vendor/sol3/include")
@@ -155,7 +89,7 @@ set(ENTRY "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 list(REMOVE_ITEM SOURCES ${ENTRY})
 
 add_library(runtime SHARED ${SOURCES} ${HEADERS})
-add_dependencies(runtime liblua libuv libenet liblws)
+add_dependencies(runtime liblua)
 
 set_target_properties(runtime PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
@@ -174,29 +108,20 @@ target_include_directories(runtime PUBLIC
 )
 
 if(WIN32)
-    target_link_libraries(runtime PRIVATE sol3 liblua libuv libenet liblws Vulkan::Vulkan ws2_32 iphlpapi userenv winmm)
+    target_link_libraries(runtime PRIVATE sol3 liblua Vulkan::Vulkan userenv winmm)
     target_link_options(runtime PRIVATE
             /WHOLEARCHIVE:$<TARGET_FILE:liblua>
-            /WHOLEARCHIVE:$<TARGET_FILE:libuv>
-            /WHOLEARCHIVE:$<TARGET_FILE:libenet>
-            /WHOLEARCHIVE:$<TARGET_FILE:liblws>
     )
 elseif(APPLE)
-    target_link_libraries(runtime PRIVATE sol3 liblua libuv libenet liblws Vulkan::Vulkan m dl pthread)
+    target_link_libraries(runtime PRIVATE sol3 liblua Vulkan::Vulkan m dl pthread)
     target_link_options(runtime PRIVATE
             -Wl,-force_load,$<TARGET_FILE:liblua>
-            -Wl,-force_load,$<TARGET_FILE:libuv>
-            -Wl,-force_load,$<TARGET_FILE:libenet>
-            -Wl,-force_load,$<TARGET_FILE:liblws>
     )
 else()
-    target_link_libraries(runtime PRIVATE sol3 liblua libuv libenet liblws Vulkan::Vulkan m dl pthread)
+    target_link_libraries(runtime PRIVATE sol3 liblua Vulkan::Vulkan m dl pthread)
     target_link_options(runtime PRIVATE
             -Wl,--whole-archive
             $<TARGET_FILE:liblua>
-            $<TARGET_FILE:libuv>
-            $<TARGET_FILE:libenet>
-            $<TARGET_FILE:liblws>
             -Wl,--no-whole-archive
     )
 endif()

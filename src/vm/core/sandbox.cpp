@@ -116,19 +116,18 @@ int Sandbox::run(const char* path) const {
 
         sol::state_view view(thread);
 
-        sol::load_result load = view.load_file(path);
+        const sol::load_result load = view.load_file(path);
         if (!load.valid()) {
-            sol::error error = load;
+            const sol::error error = load;
             std::fprintf(stderr, "sandbox error: %s\n", error.what());
             lua_pop(master, 1);
             return 0;
         }
 
-        sol::protected_function function = load;
-        sol::protected_function_result call = function();
+        const sol::protected_function function = load;
 
-        if (!call.valid()) {
-            sol::error error = call;
+        if (const sol::protected_function_result call = function(); !call.valid()) {
+            const sol::error error = call;
             std::fprintf(stderr, "runtime error: %s\n", error.what());
             lua_pop(master, 1);
             return 0;

@@ -1,65 +1,54 @@
-#include "../include/core/types/components/rect.hpp"
-#include "../include/core/types/components/bounds.hpp"
-#include "../include/core/types/components/flow.hpp"
-#include "../include/core/types/components/visibility.hpp"
-#include "../include/core/ecs/zone.hpp"
-#include "../include/core/ecs/find.hpp"
-#include <vector>
-
-using namespace core;
-using namespace core::components;
+#include "../include/ui/layout.hpp"
+#include <yoga/Yoga.h>
 
 namespace core::ui {
 
-    void compute(const Id entity, Zone& zone, const uint32_t rect, const uint32_t bounds, const uint32_t flow, const uint32_t view) {
-        if (const auto* visibility = static_cast<Visibility*>(zone.peek(entity, view)); visibility && !visibility->active) return;
+    void Layout::compute(YGNodeRef node) const {
+        if (!node) return;
 
-        const auto* area = static_cast<Rect*>(zone.peek(entity, rect));
-        const auto* size = static_cast<Bounds*>(zone.peek(entity, bounds));
-        const auto* gait = static_cast<Flow*>(zone.peek(entity, flow));
+        YGNodeStyleSetDisplay(node, static_cast<YGDisplay>(display));
 
-        if (!area || !size) return;
+        YGNodeStyleSetFlexDirection(node, static_cast<YGFlexDirection>(flex.direction));
+        YGNodeStyleSetFlexWrap(node, static_cast<YGWrap>(flex.wrap));
+        YGNodeStyleSetJustifyContent(node, static_cast<YGJustify>(flex.justify));
+        YGNodeStyleSetAlignItems(node, static_cast<YGAlign>(flex.items));
+        YGNodeStyleSetAlignSelf(node, static_cast<YGAlign>(flex.self));
+        YGNodeStyleSetAlignContent(node, static_cast<YGAlign>(flex.content));
+        YGNodeStyleSetFlexGrow(node, flex.grow);
+        YGNodeStyleSetFlexShrink(node, flex.shrink);
 
-        const std::vector<Id>& children = zone.crew(entity);
+        if (flex.basis >= 0.0f) YGNodeStyleSetFlexBasis(node, flex.basis);
+        else YGNodeStyleSetFlexBasisAuto(node);
 
-        for (const Id child : children) {
-            compute(child, zone, rect, bounds, flow, view);
-        }
+        YGNodeStyleSetGap(node, YGGutterRow, flex.gap[0]);
+        YGNodeStyleSetGap(node, YGGutterColumn, flex.gap[1]);
 
-        if (!gait || gait->axis == 0) return;
+        if (size.width >= 0.0f) YGNodeStyleSetWidth(node, size.width);
+        else YGNodeStyleSetWidthAuto(node);
 
-        float offset = 0.0f;
-        for (const Id child : children) {
-            if (const auto* sight = static_cast<Visibility*>(zone.peek(child, view)); sight && !sight->active) continue;
+        if (size.height >= 0.0f) YGNodeStyleSetHeight(node, size.height);
+        else YGNodeStyleSetHeightAuto(node);
 
-            auto* item = static_cast<Rect*>(zone.peek(child, rect));
-            const auto* mold = static_cast<Bounds*>(zone.peek(child, bounds));
+        if (size.minimum[0] >= 0.0f) YGNodeStyleSetMinWidth(node, size.minimum[0]);
+        if (size.minimum[1] >= 0.0f) YGNodeStyleSetMinHeight(node, size.minimum[1]);
+        if (size.maximum[0] >= 0.0f) YGNodeStyleSetMaxWidth(node, size.maximum[0]);
+        if (size.maximum[1] >= 0.0f) YGNodeStyleSetMaxHeight(node, size.maximum[1]);
 
-            if (!item || !mold) continue;
+        YGNodeStyleSetPadding(node, YGEdgeTop,    inbound.padding[0]);
+        YGNodeStyleSetPadding(node, YGEdgeRight,  inbound.padding[1]);
+        YGNodeStyleSetPadding(node, YGEdgeBottom, inbound.padding[2]);
+        YGNodeStyleSetPadding(node, YGEdgeLeft,   inbound.padding[3]);
 
-            if (gait->axis == 1) {
-                item->position.x = area->position.x + size->padding.x + offset + mold->margin.x;
-                item->position.y = area->position.y + size->padding.y + mold->margin.y;
-                offset += mold->size.x + mold->margin.x + gait->gap;
-            } else if (gait->axis == 2) {
-                item->position.x = area->position.x + size->padding.x + mold->margin.x;
-                item->position.y = area->position.y + size->padding.y + offset + mold->margin.y;
-                offset += mold->size.y + mold->margin.y + gait->gap;
-            }
-        }
-    }
+        YGNodeStyleSetMargin(node, YGEdgeTop,    outbound.margin[0]);
+        YGNodeStyleSetMargin(node, YGEdgeRight,  outbound.margin[1]);
+        YGNodeStyleSetMargin(node, YGEdgeBottom, outbound.margin[2]);
+        YGNodeStyleSetMargin(node, YGEdgeLeft,   outbound.margin[3]);
 
-    void layout(Zone& zone, const uint32_t rect, const uint32_t bounds, const uint32_t flow, const uint32_t view) {
-        const Find query = zone.seek().with(rect).with(bounds);
-
-        query.process([&](const std::size_t count, const Id* entities, const std::vector<void*>& blocks) {
-            (void)blocks;
-            for (std::size_t index = 0; index < count; ++index) {
-                if (const Id entity = entities[index]; zone.boss(entity) == Null) {
-                    compute(entity, zone, rect, bounds, flow, view);
-                }
-            }
-        }, query.plan());
+        YGNodeStyleSetPositionType(node, static_cast<YGPositionType>(edge.mode));
+        if (edge.inset[0] >= 0.0f) YGNodeStyleSetPosition(node, YGEdgeTop, edge.inset[0]);
+        if (edge.inset[1] >= 0.0f) YGNodeStyleSetPosition(node, YGEdgeRight, edge.inset[1]);
+        if (edge.inset[2] >= 0.0f) YGNodeStyleSetPosition(node, YGEdgeBottom, edge.inset[2]);
+        if (edge.inset[3] >= 0.0f) YGNodeStyleSetPosition(node, YGEdgeLeft, edge.inset[3]);
     }
 
 }

@@ -18,20 +18,26 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/sol3/CMakeLists.txt")
     execute_process(COMMAND git clone --branch v3.3.0 https://github.com/ThePhD/sol2.git "${CMAKE_CURRENT_SOURCE_DIR}/vendor/sol3")
 endif()
 
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/yoga/CMakeLists.txt")
+    file(REMOVE_RECURSE "${CMAKE_CURRENT_SOURCE_DIR}/vendor/yoga")
+    execute_process(COMMAND git clone --branch v3.1.0 https://github.com/facebook/yoga.git "${CMAKE_CURRENT_SOURCE_DIR}/vendor/yoga")
+endif()
+
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/include/luajit-2.1")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/src")
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib")
 
 if(MSVC)
     ExternalProject_Add(luajit
             PREFIX "${CMAKE_BINARY_DIR}/vendor/luajit"
             GIT_REPOSITORY https://github.com/LuaJIT/LuaJIT.git
             GIT_TAG v2.1
-            SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit"
+            SOURCE_DIR "${CMAKE_BINARY_DIR}/luajit-src"
             BUILD_IN_SOURCE TRUE
             CONFIGURE_COMMAND ""
             UPDATE_COMMAND ""
             BUILD_COMMAND cmd /c src\\msvcbuild.bat static
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy src/lua51.lib "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/lua51.lib"
+            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy src/lua51.lib "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/lua51.lib" && ${CMAKE_COMMAND} -E copy src/lua.h src/lualib.h src/lauxlib.h src/luaconf.h src/lua.hpp src/luajit.h "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/src/"
             BUILD_BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib/lua51.lib"
     )
 elseif(WIN32)
@@ -58,7 +64,7 @@ elseif(WIN32)
             PREFIX "${CMAKE_BINARY_DIR}/vendor/luajit"
             GIT_REPOSITORY https://github.com/LuaJIT/LuaJIT.git
             GIT_TAG v2.1
-            SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit"
+            SOURCE_DIR "${CMAKE_BINARY_DIR}/luajit-src"
             BUILD_IN_SOURCE TRUE
             CONFIGURE_COMMAND ""
             UPDATE_COMMAND ""
@@ -71,7 +77,7 @@ elseif(APPLE)
             PREFIX "${CMAKE_BINARY_DIR}/vendor/luajit"
             GIT_REPOSITORY https://github.com/LuaJIT/LuaJIT.git
             GIT_TAG v2.1
-            SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit"
+            SOURCE_DIR "${CMAKE_BINARY_DIR}/luajit-src"
             BUILD_IN_SOURCE TRUE
             CONFIGURE_COMMAND ""
             UPDATE_COMMAND ""
@@ -84,7 +90,7 @@ else()
             PREFIX "${CMAKE_BINARY_DIR}/vendor/luajit"
             GIT_REPOSITORY https://github.com/LuaJIT/LuaJIT.git
             GIT_TAG v2.1
-            SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit"
+            SOURCE_DIR "${CMAKE_BINARY_DIR}/luajit-src"
             BUILD_IN_SOURCE TRUE
             CONFIGURE_COMMAND ""
             UPDATE_COMMAND ""
@@ -111,6 +117,10 @@ add_dependencies(liblua luajit)
 add_library(sol3 INTERFACE)
 target_include_directories(sol3 INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/vendor/sol3/include")
 
+file(GLOB_RECURSE YOGA_SOURCES
+        "${CMAKE_CURRENT_SOURCE_DIR}/vendor/yoga/yoga/*.cpp"
+)
+
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
@@ -130,8 +140,17 @@ endif()
 set(ENTRY "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 list(REMOVE_ITEM SOURCES ${ENTRY})
 
-add_library(runtime SHARED ${SOURCES} ${HEADERS})
+add_library(runtime SHARED ${SOURCES} ${HEADERS} ${YOGA_SOURCES})
 add_dependencies(runtime liblua)
+
+target_compile_definitions(runtime PRIVATE
+        SOL_NO_CHECK_NUMBER_TYPE=1
+        SOL_ALL_SAFETIES_ON=0
+)
+
+if(WIN32 AND NOT MSVC)
+    target_compile_options(runtime PRIVATE -Wa,-mbig-obj)
+endif()
 
 set_target_properties(runtime PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin"
@@ -146,6 +165,8 @@ target_include_directories(runtime PUBLIC
         src
         src/vm/api
         src/vm/core
+        vendor/yoga
+        vendor/yoga/yoga
         ${Vulkan_INCLUDE_DIRS}
 )
 

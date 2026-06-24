@@ -4,7 +4,7 @@
 
 namespace core {
 
-    void Kind::push(Id id) {
+    void Kind::push(const Id id) {
         std::unique_lock guard(this->lock);
         rows.push_back(id);
         for (std::size_t index = 0; index < page.size(); ++index) {
@@ -13,13 +13,12 @@ namespace core {
         sync.fetch_add(1, std::memory_order_relaxed);
     }
 
-    std::uint32_t Kind::pull(std::size_t row) {
+    std::uint32_t Kind::pull(const std::size_t row) {
         std::unique_lock guard(this->lock);
-        Id last = rows.back();
+        const Id last = rows.back();
 
         for (std::size_t track = 0; track < page.size(); ++track) {
-            std::size_t size = bits[track];
-            if (size > 0) {
+            if (const std::size_t size = bits[track]; size > 0) {
                 std::uint8_t* source = page[track].data();
                 std::copy(source + (rows.size() - 1) * size,
                           source + rows.size() * size,

@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "tailwind",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Path to the JSON schema file"
+    },
+    "colors": {
+      "type": "object",
+      "description": "Your global theme colors",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "oklch": {
+            "type": "array",
+            "description": "Normalized float values [Lightness (0-1), Chroma (0-0.4), Hue (0-360)]",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": { "type": "number" }
+          },
+          "rgb": {
+            "type": "array",
+            "description": "Integer byte values [Red (0-255), Green (0-255), Blue (0-255)]",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": { "type": "integer", "minimum": 0, "maximum": 255 }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "breakpoints": {
+      "type": "object",
+      "description": "Responsive layout width thresholds",
+      "additionalProperties": { "type": "number" }
+    }
+  },
+  "required": ["colors"],
+  "additionalProperties": false
+}

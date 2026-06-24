@@ -21,46 +21,46 @@ namespace core {
 
         std::uint32_t type(const std::string& name, std::size_t size = 0);
 
-        Id make();
-        Id twin(Id id);
+        Id spawn();
+        Id clone(Id id);
         void kill(Id id);
         void wipe();
 
-        void weld(Id item, Id boss);
-        [[nodiscard]] Id boss(Id id) const;
-        [[nodiscard]] const std::vector<Id>& crew(Id id) const;
+        void attach(Id entity, Id parent);
+        [[nodiscard]] Id parent(Id id) const;
+        [[nodiscard]] const std::vector<Id>& children(Id id) const;
 
-        void* fill(Id id, std::uint32_t tag, const void* raw = nullptr);
-        void* peek(Id id, std::uint32_t tag) const;
-        [[nodiscard]] bool test(Id id, std::uint32_t tag) const;
-        void drop(Id id, std::uint32_t tag);
+        void* set(Id id, std::uint32_t type, const void* data = nullptr);
+        [[nodiscard]] void* get(Id id, std::uint32_t type) const;
+        [[nodiscard]] bool has(Id id, std::uint32_t type) const;
+        void remove(Id id, std::uint32_t type);
 
-        void meta(std::uint32_t tag, const void* raw, std::size_t size);
-        void* read(std::uint32_t tag);
+        void global(std::uint32_t type, const void* data, std::size_t size);
+        [[nodiscard]] void* global(std::uint32_t type);
 
         using Task = std::function<void(Id id)>;
-        void wire(std::uint32_t tag, const Task& call);
+        void watch(std::uint32_t type, const Task& action);
 
-        void bulk(const std::function<void()>& flow);
-        [[nodiscard]] Find seek() const;
-        void loop(const Find& find, const Find::Call& call) const;
+        void batch(const std::function<void()>& flow);
+        [[nodiscard]] Find query() const;
+        void loop(const Find& query, const Find::Call& action) const;
 
     private:
         Kind* view(const Mask& mask);
         void move(Id id, const Mask& mask);
 
-        std::uint32_t stem = 0xFFFFFFFF;
-        std::uint32_t twig = 0xFFFFFFFF;
+        std::uint32_t head = 0xFFFFFFFF;
+        std::uint32_t tail = 0xFFFFFFFF;
 
-        std::vector<std::unique_ptr<Kind>> pool;
-        std::vector<Slot> tabs;
-        std::vector<Id> dead;
-        std::vector<std::size_t> bits;
-        std::unordered_map<std::string, std::uint32_t> keys;
-        std::unordered_map<std::uint32_t, std::vector<std::uint8_t>> vats;
-        std::unordered_map<std::uint32_t, Task> acts;
-        std::vector<std::function<void()>> jobs;
-        bool hold = false;
+        std::vector<std::unique_ptr<Kind>> kinds;
+        std::vector<Slot> slots;
+        std::vector<Id> free;
+        std::vector<std::size_t> sizes;
+        std::unordered_map<std::string, std::uint32_t> names;
+        std::unordered_map<std::uint32_t, std::vector<std::uint8_t>> cache;
+        std::unordered_map<std::uint32_t, Task> events;
+        std::vector<std::function<void()>> steps;
+        bool lock = false;
         Id next = 0;
     };
 

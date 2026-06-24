@@ -51,7 +51,7 @@ void DirectX::begin(const std::uint32_t width, const std::uint32_t height) const
 }
 
 void DirectX::draw(const void* source, const std::size_t count, const std::uint32_t* keys, std::size_t items) const noexcept {
-    auto* state = static_cast<Context*>(handle);
+    const auto* state = static_cast<Context*>(handle);
     if (!state || !source || !keys) return;
 
     (void)source;

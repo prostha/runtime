@@ -10,30 +10,29 @@ namespace core {
     Find::Find(const std::vector<std::unique_ptr<Kind>>& pool) noexcept
         : pool(pool) {}
 
-    Find& Find::with(std::uint32_t tag) {
+    Find& Find::with(const std::uint32_t tag) {
         have.set(tag);
         path.push_back(tag);
         return *this;
     }
 
-    Find& Find::without(std::uint32_t tag) {
+    Find& Find::without(const std::uint32_t tag) {
         lacks.set(tag);
         return *this;
     }
 
     Find& Find::any(const std::vector<std::uint32_t>& tags) {
-        for (std::uint32_t tag : tags) {
+        for (const std::uint32_t tag : tags) {
             wish.set(tag);
         }
         return *this;
     }
 
-    Find& Find::sort(std::uint32_t tag) {
+    Find& Find::sort(const std::uint32_t tag) {
         for (const auto& arch : pool) {
             std::unique_lock lock(arch->lock);
-            Mask check = arch->mask;
-            if ((check & have) == have && check.test(tag)) {
-                std::size_t offset = arch->maps[tag];
+            if (Mask check = arch->mask; (check & have) == have && check.test(tag)) {
+                const std::size_t offset = arch->maps[tag];
                 std::size_t size = arch->bits[offset];
                 if (size == 0) continue;
 
@@ -52,7 +51,7 @@ namespace core {
                 arch->rows = std::move(arranged);
 
                 for (std::size_t track = 0; track < arch->page.size(); ++track) {
-                    std::size_t byte = arch->bits[track];
+                    const std::size_t byte = arch->bits[track];
                     if (byte == 0) continue;
                     std::vector<std::uint8_t> linear(arch->page[track].size());
                     for (std::size_t index = 0; index < indices.size(); ++index) {
@@ -68,7 +67,7 @@ namespace core {
         return *this;
     }
 
-    bool Find::has(std::uint32_t tag) const noexcept {
+    bool Find::has(const std::uint32_t tag) const noexcept {
         return have.test(tag);
     }
 
@@ -76,17 +75,15 @@ namespace core {
         std::vector<void*> pointers;
         for (const auto& arch : pool) {
             std::shared_lock lock(arch->lock);
-            Mask check = arch->mask;
-            if ((check & have) == have && (check & lacks).none()) {
+            if (Mask check = arch->mask; (check & have) == have && (check & lacks).none()) {
                 if (wish.any() && (check & wish).none()) continue;
 
-                std::size_t total = arch->rows.size();
+                const std::size_t total = arch->rows.size();
                 if (total == 0) continue;
 
                 pointers.clear();
                 for (std::uint32_t tag : tags) {
-                    auto find = arch->maps.find(tag);
-                    if (find != arch->maps.end()) {
+                    if (auto find = arch->maps.find(tag); find != arch->maps.end()) {
                         pointers.push_back(arch->page[find->second].data());
                     } else {
                         pointers.push_back(nullptr);
@@ -102,12 +99,11 @@ namespace core {
         (void)tags;
         vkCmdBindPipeline(stream, VK_PIPELINE_BIND_POINT_COMPUTE, pipe);
         for (const auto& arch : pool) {
-            Mask check = arch->mask;
-            if ((check & have) == have && (check & lacks).none()) {
+            if (Mask check = arch->mask; (check & have) == have && (check & lacks).none()) {
                 if (wish.any() && (check & wish).none()) continue;
 
                 std::shared_lock lock(arch->lock);
-                auto count = static_cast<std::uint32_t>(arch->rows.size());
+                const auto count = static_cast<std::uint32_t>(arch->rows.size());
                 if (count == 0) continue;
 
                 vkCmdDispatch(stream, (count + 63) / 64, 1, 1);

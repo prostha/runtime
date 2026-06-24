@@ -38,26 +38,26 @@ namespace {
             return reader(pointer, context);
         }
 
-        void set(std::size_t position, sol::object value) const {
+        void set(const std::size_t position, sol::object value) const {
             void* pointer = static_cast<char*>(block) + (position - 1) * size;
             writer(pointer, std::move(value));
         }
     };
 
-    struct find {
+    struct query {
         Find base;
 
-        find& with(const uint32_t type) {
+        query& with(const uint32_t type) {
             base.with(type);
             return *this;
         }
 
-        find& without(const uint32_t type) {
+        query& without(const uint32_t type) {
             base.without(type);
             return *this;
         }
 
-        find& any(const sol::table& table) {
+        query& any(const sol::table& table) {
             std::vector<uint32_t> types;
             table.for_each([&](const sol::object &key, const sol::object &value) {
                 (void)key;
@@ -75,7 +75,7 @@ namespace {
 
 void ecs(lua_State* state) {
     sol::state_view lua(state);
-    sol::table world = lua.create_named_table("world");
+    sol::table zone = lua.create_named_table("zone");
     sol::table hidden = lua.create_table();
 
     auto store = std::make_shared<std::unordered_map<uint32_t, detail>>();
@@ -86,17 +86,17 @@ void ecs(lua_State* state) {
         "set", &column::set
     );
 
-    hidden.new_usertype<find>("query",
+    hidden.new_usertype<query>("query",
         sol::no_constructor,
-        "with", &find::with,
-        "without", &find::without,
-        "any", &find::any,
-        "has", &find::has
+        "with", &query::with,
+        "without", &query::without,
+        "any", &query::any,
+        "has", &query::has
     );
 
     hidden.new_usertype<Zone>("World",
         sol::no_constructor,
-        "component", [store](sol::this_state state, Zone& instance, const std::string& name, const sol::object& value) {
+        "type", [store](sol::this_state state, Zone& instance, const std::string& name, const sol::object& value) {
             (void)state;
             detail item;
             item.object = false;
@@ -155,34 +155,34 @@ void ecs(lua_State* state) {
             (*store)[type] = item;
             return type;
         },
-        "spawn", &Zone::make,
+        "spawn", &Zone::spawn,
         "kill", &Zone::kill,
-        "has", &Zone::test,
-        "detach", &Zone::drop,
-        "query", [](const Zone& instance) { return find{ instance.seek() }; },
+        "has", &Zone::has,
+        "remove", &Zone::remove,
+        "query", [](const Zone& instance) { return query{ instance.query() }; },
         "batch", [](Zone& instance, const sol::function& action) {
-            instance.bulk([action]() { (void)action(); });
+            instance.batch([action]() { (void)action(); });
         },
-        "attach", [store](Zone& instance, const Id entity, const uint32_t type, const sol::object& value) {
+        "set", [store](Zone& instance, const Id entity, const uint32_t type, const sol::object& value) {
             const auto match = store->find(type);
             if (match == store->end()) return;
             const auto& item = match->second;
             if (item.size == 0) {
-                instance.fill(entity, type, nullptr);
+                instance.set(entity, type, nullptr);
                 return;
             }
             std::vector<char> memory(item.size, 0);
             item.writer(memory.data(), value);
-            instance.fill(entity, type, memory.data());
+            instance.set(entity, type, memory.data());
         },
         "get", [store](const sol::this_state state, const Zone& instance, const Id entity, const uint32_t type) -> sol::object {
-            void* pointer = instance.peek(entity, type);
+            void* pointer = instance.get(entity, type);
             if (!pointer) return sol::lua_nil;
             const auto match = store->find(type);
             if (match == store->end()) return sol::lua_nil;
             return match->second.reader(pointer, state);
         },
-        "execute", [store](sol::this_state state, const Zone& instance, const find& search, const sol::function& callback) {
+        "loop", [store](sol::this_state state, const Zone& instance, const query& search, const sol::function& callback) {
             if (!callback.valid()) return;
             instance.loop(search.base, [state, callback, store, order = search.base.plan()](std::size_t count, const Id* entities, const std::vector<void*>& blocks) {
                 (void)entities;
@@ -205,7 +205,7 @@ void ecs(lua_State* state) {
         }
     );
 
-    world["new"] = []() {
+    zone["new"] = []() {
         return std::make_unique<Zone>();
     };
 }

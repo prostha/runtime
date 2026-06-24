@@ -1,4 +1,4 @@
-#include "../include/ui/layout.hpp"
+#include "ui/layout.hpp"
 #include <yoga/Yoga.h>
 
 namespace core::ui {

@@ -1,4 +1,4 @@
-#include "../include/ui/node.hpp"
+#include "ui/node.hpp"
 #include <yoga/Yoga.h>
 #include <algorithm>
 

@@ -1,4 +1,4 @@
-#include "../include/vm/core/sandbox.hpp"
+#include "vm/sandbox.hpp"
 #include <cstdio>
 #include <cassert>
 #include <new>

@@ -1,4 +1,4 @@
-#include "../include/vm/core/allocator.hpp"
+#include "vm/allocator.hpp"
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>

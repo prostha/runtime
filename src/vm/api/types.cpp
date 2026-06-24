@@ -1,11 +1,11 @@
-#include "../../../include/vm/api/types.hpp"
-#include "../include/core/types/primitives/vector2.hpp"
-#include "../../../include/core/types/primitives/vector3.hpp"
-#include "../include/core/types/primitives/vector4.hpp"
-#include "../../../include/core/types/primitives/quaternion.hpp"
-#include "../../../include/core/types/primitives/matrix3.hpp"
-#include "../include/core/types/primitives/matrix4.hpp"
-#include "../include/core/types/primitives/transform.hpp"
+#include "vm/api/types.hpp"
+#include "core/primitives/vector2.hpp"
+#include "core/primitives/vector3.hpp"
+#include "core/primitives/vector4.hpp"
+#include "core/primitives/quaternion.hpp"
+#include "core/primitives/matrix3.hpp"
+#include "core/primitives/matrix4.hpp"
+#include "core/primitives/transform.hpp"
 #include <sol/sol.hpp>
 #include <string>
 

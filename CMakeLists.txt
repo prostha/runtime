@@ -137,9 +137,6 @@ if(APPLE)
     list(APPEND SOURCES ${METAL_SOURCES})
 endif()
 
-set(ENTRY "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
-list(REMOVE_ITEM SOURCES ${ENTRY})
-
 add_library(runtime SHARED ${SOURCES} ${HEADERS} ${YOGA_SOURCES})
 add_dependencies(runtime liblua)
 

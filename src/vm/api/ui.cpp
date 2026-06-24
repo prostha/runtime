@@ -1,7 +1,7 @@
-#include "../include/vm/api/ui.hpp"
-#include "../include/ui/layout.hpp"
-#include "../include/ui/node.hpp"
-#include "../include/ui/motion.hpp"
+#include "vm/api/ui.hpp"
+#include "ui/layout.hpp"
+#include "ui/node.hpp"
+#include "ui/motion.hpp"
 #include <sol/sol.hpp>
 
 void ui(lua_State* state) {

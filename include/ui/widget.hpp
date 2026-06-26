@@ -1,10 +1,7 @@
 #pragma once
 #include "ui/defs/traits.hpp"
-#include "ui/defs/dimensions.hpp"
-#include "ui/defs/layout.hpp"
-#include "ui/defs/spacing.hpp"
-#include "defs/style.hpp"
 #include <vector>
+#include <cstdint>
 
 typedef struct YGNode* YGNodeRef;
 
@@ -13,17 +10,9 @@ namespace core::ui {
     using Id = std::uint32_t;
 
     struct Widget {
-        YGNodeRef yg_node = nullptr;
-
+        YGNodeRef node = nullptr;
         Display display = Display::Flex;
-        Dimensions dimensions;
-        Layout layout = Flexbox{};
-        Style style;
-
-        Surroundings padding = {0.0f, 0.0f, 0.0f, 0.0f};
-        Surroundings margin = {0.0f, 0.0f, 0.0f, 0.0f};
-        Axis gap = {0.0f, 0.0f};
-
+        Positioning policy = Positioning::Relative;
         Id parent = 0;
         std::vector<Id> children;
 
@@ -35,7 +24,7 @@ namespace core::ui {
         Widget(Widget&&) noexcept = default;
         Widget& operator=(Widget&&) noexcept = default;
 
-        void compute(float width, float height, const auto& lookup) const;
+        void compute(float width, float height, const auto& registry) const;
     };
 
 }

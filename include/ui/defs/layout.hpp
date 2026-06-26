@@ -17,13 +17,20 @@ namespace core::ui {
     };
 
     struct Grid {
-        float columns = {0.0f};
-        float rows = {0.0f};
+        float columns = 0.0f;
+        float rows = 0.0f;
         std::uint32_t spans[2] = {1, 1};
         std::uint32_t starts[2] = {0, 0};
         std::uint32_t counts[2] = {0, 0};
     };
 
     using Layout = std::variant<Flexbox, Grid>;
+
+    struct Inset {
+        float top = 0.0f;
+        float right = 0.0f;
+        float bottom = 0.0f;
+        float left = 0.0f;
+    };
 
 }

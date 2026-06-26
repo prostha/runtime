@@ -3,6 +3,11 @@
 
 namespace core::ui {
 
+    enum class Positioning : std::uint8_t {
+        Relative,
+        Absolute
+    };
+
     enum class Display : std::uint8_t {
         Flex,
         Grid,

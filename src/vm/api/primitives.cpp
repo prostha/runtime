@@ -11,7 +11,7 @@
 
 using namespace core::primitives;
 
-void types(lua_State* state) {
+void primitives(lua_State* state) {
 
     sol::state_view view(state);
 

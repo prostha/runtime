@@ -5,6 +5,7 @@
 #include "ui/defs/layout.hpp"
 #include "ui/defs/spacing.hpp"
 #include "ui/defs/style.hpp"
+#include "core/ecs/world.hpp"
 #include <sol/sol.hpp>
 
 void ui(lua_State* state) {
@@ -55,7 +56,7 @@ void ui(lua_State* state) {
         "display", &core::ui::Widget::display,
         "policy", &core::ui::Widget::policy,
         "parent", &core::ui::Widget::parent,
-        "compute", [](const core::ui::Widget& widget, const float width, const float height, const sol::object& registry) {
+        "compute", [](const core::ui::Widget& widget, const float width, const float height, const core::World& registry) {
             widget.compute(width, height, registry);
         }
     );
@@ -81,9 +82,9 @@ void ui(lua_State* state) {
                 instance.minimum[1] = bounds->get_or(2, instance.minimum[1]);
             }
 
-            if (sol::optional<sol::table> limits = (*configuration)["maximum"]) {
-                instance.maximum[0] = limits->get_or(1, instance.maximum[0]);
-                instance.maximum[1] = limits->get_or(2, instance.maximum[1]);
+            if (sol::optional<sol::table> constraints = (*configuration)["maximum"]) {
+                instance.maximum[0] = constraints->get_or(1, instance.maximum[0]);
+                instance.maximum[1] = constraints->get_or(2, instance.maximum[1]);
             }
         }
         return instance;

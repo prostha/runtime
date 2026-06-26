@@ -1,6 +1,5 @@
 #include "ui/wrapper/context.hpp"
 #include "ui/wrapper/render.hpp"
-#include "ui/widget.hpp"
 #include "core/ecs/world.hpp"
 #include <new>
 
@@ -66,6 +65,7 @@ using core::ui::Context;
 using core::ui::Api;
 
 extern "C" {
+
     void* ui_init(std::uint32_t api, const void* target) {
         if (!target) return nullptr;
         return new (std::nothrow) Context(static_cast<Api>(api), target);
@@ -86,28 +86,9 @@ extern "C" {
         static_cast<Context*>(handle)->render(source, count, keys, items);
     }
 
-    void ui_tick(void* handle, const core::World* world, const std::uint32_t tag) {
+    void ui_tick(const void* handle, const core::World* world, const std::uint32_t tag) {
         if (!handle || !world) return;
-
-        const auto* context = static_cast<Context*>(handle);
-        const auto w = static_cast<float>(context->width());
-        const auto h = static_cast<float>(context->height());
-
-        const core::Find query = world->query().with(tag);
-
-        world->loop(query, [&](const std::size_t count, const core::Id*, const std::vector<void*>& tabs) {
-            if (tabs.empty() || !tabs[0]) return;
-
-            const auto* widgets = static_cast<core::ui::Widget*>(tabs[0]);
-            for (std::size_t i = 0; i < count; ++i) {
-                widgets[i].compute(w, h, *world);
-            }
-        });
-
         core::ui::dispatch(handle, world, tag);
     }
 
-    void ui_free(void* handle) {
-        delete static_cast<Context*>(handle);
-    }
 }

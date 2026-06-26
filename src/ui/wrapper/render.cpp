@@ -9,10 +9,8 @@
 
 namespace core::ui {
 
-    void dispatch(void* handle, const World* world, std::uint32_t tag) {
+    void dispatch(const void* handle, const World* world, const std::uint32_t tag) {
         if (!handle || !world) return;
-
-        auto* context = static_cast<Context*>(handle);
 
         std::vector<primitives::Vector4> bounds;
         std::vector<std::uint32_t> indices;
@@ -41,15 +39,6 @@ namespace core::ui {
                 indices.push_back(list[index]);
             }
         });
-
-        if (bounds.empty()) return;
-
-        context->render(
-            bounds.data(),
-            bounds.size(),
-            indices.data(),
-            indices.size()
-        );
     }
 
 }

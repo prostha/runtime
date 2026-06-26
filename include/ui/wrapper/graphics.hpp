@@ -1,7 +1,6 @@
 #pragma once
 #include <variant>
 #include <cstdint>
-
 #include "drivers/vulkan.hpp"
 
 #ifdef _WIN32
@@ -43,7 +42,7 @@ namespace core::ui {
         #ifdef __APPLE__
             , drivers::Metal
         #endif
-        > storage;
+        > drivers;
     };
 
 }

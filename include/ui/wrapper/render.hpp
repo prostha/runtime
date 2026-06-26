@@ -7,6 +7,6 @@ namespace core {
 
 namespace core::ui {
 
-    void dispatch(void* handle, const World* world, std::uint32_t tag);
+    void dispatch(const void* handle, const World* world, std::uint32_t tag);
 
 }

@@ -5,6 +5,10 @@
 
 typedef struct YGNode* YGNodeRef;
 
+namespace core {
+    class World;
+}
+
 namespace core::ui {
 
     using Id = std::uint32_t;
@@ -24,7 +28,7 @@ namespace core::ui {
         Widget(Widget&&) noexcept = default;
         Widget& operator=(Widget&&) noexcept = default;
 
-        void compute(float width, float height, const auto& registry) const;
+        void compute(float width, float height, const World& registry) const;
     };
 
 }

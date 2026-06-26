@@ -49,6 +49,5 @@ extern "C" {
     EXPORT void ui_resize(void* handle, std::uint32_t width, std::uint32_t height);
     EXPORT void ui_event(void* handle, std::uint32_t state, float x, float y, float sx, float sy);
     EXPORT void ui_render(void* handle, const void* source, std::size_t count, const std::uint32_t* keys, std::size_t items);
-    EXPORT void ui_tick(void* handle, const core::World* world, std::uint32_t tag);
-    EXPORT void ui_free(void* handle);
+    EXPORT void ui_tick(const void* handle, const core::World* world, std::uint32_t tag);
 }

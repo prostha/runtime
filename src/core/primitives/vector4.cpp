@@ -1,4 +1,4 @@
-#include "../../../../include/core/types/primitives/vector4.hpp"
+#include "core/primitives/vector4.hpp"
 #include <cassert>
 #include <cmath>
 
@@ -8,24 +8,24 @@ namespace core::primitives {
     const Vector4 Vector4::ONE = {1.0f, 1.0f, 1.0f, 1.0f};
 
     Vector4::Vector4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {}
-    Vector4::Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
-    Vector4::Vector4(const Vector3& vector, float w) : x(vector.x), y(vector.y), z(vector.z), w(w) {}
+    Vector4::Vector4(const float x, const float y, const float z, const float w) : x(x), y(y), z(z), w(w) {}
+    Vector4::Vector4(const Vector3& vector, const float w) : x(vector.x), y(vector.y), z(vector.z), w(w) {}
 
     Vector4 Vector4::operator+(const Vector4& vector) const { return {x + vector.x, y + vector.y, z + vector.z, w + vector.w}; }
     Vector4& Vector4::operator+=(const Vector4& vector) { x += vector.x; y += vector.y; z += vector.z; w += vector.w; return *this; }
     Vector4 Vector4::operator-(const Vector4& vector) const { return {x - vector.x, y - vector.y, z - vector.z, w - vector.w}; }
     Vector4& Vector4::operator-=(const Vector4& vector) { x -= vector.x; y -= vector.y; z -= vector.z; w -= vector.w; return *this; }
-    Vector4 Vector4::operator*(float scalar) const { return {x * scalar, y * scalar, z * scalar, w * scalar}; }
-    Vector4& Vector4::operator*=(float scalar) { x *= scalar; y *= scalar; z *= scalar; w *= scalar; return *this; }
-    Vector4 operator*(float scalar, const Vector4& vector) { return vector * scalar; }
-    Vector4 Vector4::operator/(float scalar) const { assert(scalar != 0.0f); return {x / scalar, y / scalar, z / scalar, w / scalar}; }
-    Vector4& Vector4::operator/=(float scalar) { assert(scalar != 0.0f); x /= scalar; y /= scalar; z /= scalar; w /= scalar; return *this; }
+    Vector4 Vector4::operator*(const float scalar) const { return {x * scalar, y * scalar, z * scalar, w * scalar}; }
+    Vector4& Vector4::operator*=(const float scalar) { x *= scalar; y *= scalar; z *= scalar; w *= scalar; return *this; }
+    Vector4 operator*(const float scalar, const Vector4& vector) { return vector * scalar; }
+    Vector4 Vector4::operator/(const float scalar) const { assert(scalar != 0.0f); return {x / scalar, y / scalar, z / scalar, w / scalar}; }
+    Vector4& Vector4::operator/=(const float scalar) { assert(scalar != 0.0f); x /= scalar; y /= scalar; z /= scalar; w /= scalar; return *this; }
     Vector4 Vector4::operator-() const { return {-x, -y, -z, -w}; }
 
     float Vector4::dot(const Vector4& vector) const { return x * vector.x + y * vector.y + z * vector.z + w * vector.w; }
     float Vector4::length() const { return std::sqrt(x * x + y * y + z * z + w * w); }
     float Vector4::squared() const { return x * x + y * y + z * z + w * w; }
-    Vector4 Vector4::normalized() const { float len = length(); assert(len > 0.0f); return *this / len; }
+    Vector4 Vector4::normalized() const {const float len = length(); assert(len > 0.0f); return *this / len; }
     Vector4 Vector4::absolute() const { return {std::fabs(x), std::fabs(y), std::fabs(z), std::fabs(w)}; }
 
     Vector4 Vector4::clamped(const Vector4& minimum, const Vector4& maximum) const {
@@ -37,7 +37,7 @@ namespace core::primitives {
         };
     }
 
-    bool Vector4::approximately(const Vector4& vector, float epsilon) const {
+    bool Vector4::approximately(const Vector4& vector, const float epsilon) const {
         return std::fabs(x - vector.x) <= epsilon && std::fabs(y - vector.y) <= epsilon && std::fabs(z - vector.z) <= epsilon && std::fabs(w - vector.w) <= epsilon;
     }
 

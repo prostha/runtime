@@ -1,4 +1,4 @@
-#include "../../include/ui/input.hpp"
+#include "../../../include/ui/wrapper/input.hpp"
 
 static core::ui::Input input;
 

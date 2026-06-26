@@ -20,15 +20,15 @@ namespace core::ui {
         Metal = 2
     };
 
-    class Context final {
+    class Graphics final {
     public:
-        explicit Context(Api api, const void* target) noexcept;
-        ~Context() noexcept = default;
+        explicit Graphics(Api api, const void* target) noexcept;
+        ~Graphics() noexcept = default;
 
-        Context(const Context&) = delete;
-        Context& operator=(const Context&) = delete;
-        Context(Context&&) noexcept = default;
-        Context& operator=(Context&&) noexcept = default;
+        Graphics(const Graphics&) = delete;
+        Graphics& operator=(const Graphics&) = delete;
+        Graphics(Graphics&&) noexcept = default;
+        Graphics& operator=(Graphics&&) noexcept = default;
 
         void begin(std::uint32_t width, std::uint32_t height) noexcept;
         void draw(const void* source, std::size_t count, const std::uint32_t* keys, std::size_t items) noexcept;

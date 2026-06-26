@@ -40,7 +40,7 @@ namespace core::primitives {
 
         static const Transform IDENTITY;
 
-        friend std::ostream &operator<<(std::ostream &stream, const Transform &transform);
+        friend std::ostream &operator<<(std::ostream &os, const Transform &transform);
     };
 
 }

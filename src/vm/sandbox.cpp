@@ -1,4 +1,7 @@
 #include "vm/sandbox.hpp"
+#include "vm/api/ecs.hpp"
+#include "vm/api/primitives.hpp"
+#include "vm/api/ui.hpp"
 #include <cstdio>
 #include <cassert>
 #include <new>
@@ -10,9 +13,6 @@ extern "C" {
 }
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
-
-void ecs(lua_State* state);
-void types(lua_State* state);
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -68,7 +68,8 @@ Sandbox::Sandbox() {
         view.open_libraries(sol::lib::base, sol::lib::package, sol::lib::table, sol::lib::string, sol::lib::math);
 
         ecs(state);
-        types(state);
+        primitives(state);
+        ui(state);
     }
     catch (const std::exception& error) {
         std::fprintf(stderr, "sandbox initialization error: %s\n", error.what());

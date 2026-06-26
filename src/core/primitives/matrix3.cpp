@@ -1,4 +1,4 @@
-#include "../../../../include/core/types/primitives/matrix3.hpp"
+#include "core/primitives/matrix3.hpp"
 #include <cassert>
 #include <numbers>
 #include <cmath>
@@ -7,13 +7,13 @@ namespace core::primitives {
 
     const Matrix3 Matrix3::IDENTITY = Matrix3(1.0f);
 
-    float Matrix3::operator()(int row, int column) const {
+    float Matrix3::operator()(const int row, const int column) const {
         assert(row >= 0 && row < 3);
         assert(column >= 0 && column < 3);
         return this->matrix[row][column];
     }
 
-    float &Matrix3::operator()(int row, int column) {
+    float &Matrix3::operator()(const int row, const int column) {
         assert(row >= 0 && row < 3);
         assert(column >= 0 && column < 3);
         return this->matrix[row][column];
@@ -48,7 +48,7 @@ namespace core::primitives {
         return result;
     }
 
-    Matrix3 Matrix3::operator*(float scalar) const {
+    Matrix3 Matrix3::operator*(const float scalar) const {
         Matrix3 result;
         for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
@@ -72,7 +72,7 @@ namespace core::primitives {
     Matrix3 &Matrix3::operator*=(const Matrix3 &other) {
         *this = *this * other; return *this;
     }
-    Matrix3 &Matrix3::operator*=(float scalar) {
+    Matrix3 &Matrix3::operator*=(const float scalar) {
         *this = *this * scalar; return *this;
     }
 
@@ -96,16 +96,16 @@ namespace core::primitives {
     }
 
     Scalar Matrix3::determinant() const {
-        float value = matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) -
+        const float value = matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) -
                       matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0]) +
                       matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
         return Scalar(value);
     }
 
     Matrix3 Matrix3::inverted() const {
-        float value = static_cast<float>(this->determinant());
+        const float value = static_cast<float>(this->determinant());
         assert(value != 0.0f);
-        float inverse = 1.0f / value;
+        const float inverse = 1.0f / value;
         Matrix3 result;
         result.matrix[0][0] = (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1]) * inverse;
         result.matrix[0][1] = (matrix[0][2] * matrix[2][1] - matrix[0][1] * matrix[2][2]) * inverse;
@@ -119,7 +119,7 @@ namespace core::primitives {
         return result;
     }
 
-    bool Matrix3::approximately(const Matrix3 &other, float epsilon) const {
+    bool Matrix3::approximately(const Matrix3 &other, const float epsilon) const {
         for (int row = 0; row < 3; row++)
             for (int column = 0; column < 3; column++)
                 if (std::fabs(matrix[row][column] - other.matrix[row][column]) > epsilon) return false;
@@ -153,13 +153,13 @@ namespace core::primitives {
         result.matrix[1][2] = translation.y;
         return result;
     }
-    Matrix3 Matrix3::rotate(float angle) {
-        float radians = angle * (std::numbers::pi_v<float> / 180.0f);
-        float cosine = std::cos(radians);
-        float sine = std::sin(radians);
+    Matrix3 Matrix3::rotate(const float angle) {
+        const float radians = angle * (std::numbers::pi_v<float> / 180.0f);
+        const float cosine = std::cos(radians);
+        const float sine = std::sin(radians);
         Matrix3 result(1.0f);
         result.matrix[0][0] = cosine; result.matrix[0][1] = -sine;
-        result.matrix[1][0] = sine;   result.matrix[1][1] = cosine;
+        result.matrix[1][0] = sine; result.matrix[1][1] = cosine;
         return result;
     }
     Matrix3 Matrix3::scale(const Vector2 &scale) {
@@ -168,10 +168,10 @@ namespace core::primitives {
         result.matrix[1][1] = scale.y;
         return result;
     }
-    Matrix3 Matrix3::compose(const Vector2 &translation, float rotation, const Vector2 &scale) {
+    Matrix3 Matrix3::compose(const Vector2 &translation, const float rotation, const Vector2 &scale) {
         return translate(translation) * rotate(rotation) * Matrix3::scale(scale);
     }
-    Matrix3 Matrix3::orthographic(float left, float right, float bottom, float top) {
+    Matrix3 Matrix3::orthographic(const float left, const float right, const float bottom, const float top) {
         assert(right != left);
         assert(top != bottom);
         Matrix3 result(1.0f);
@@ -182,8 +182,8 @@ namespace core::primitives {
         return result;
     }
 
-    std::ostream &operator<<(std::ostream &stream, const Matrix3 &other) {
-        return stream << "[[" << other.matrix[0][0] << ", " << other.matrix[0][1] << ", " << other.matrix[0][2] << "], "
+    std::ostream &operator<<(std::ostream &os, const Matrix3 &other) {
+        return os << "[[" << other.matrix[0][0] << ", " << other.matrix[0][1] << ", " << other.matrix[0][2] << "], "
                       << "[" << other.matrix[1][0] << ", " << other.matrix[1][1] << ", " << other.matrix[1][2] << "], "
                       << "[" << other.matrix[2][0] << ", " << other.matrix[2][1] << ", " << other.matrix[2][2] << "]]";
     }

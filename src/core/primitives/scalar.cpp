@@ -1,4 +1,4 @@
-#include "../../../../include/core/types/primitives/scalar.hpp"
+#include "core/primitives/scalar.hpp"
 
 namespace core::primitives {
 

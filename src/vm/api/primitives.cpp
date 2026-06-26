@@ -1,4 +1,4 @@
-#include "vm/api/types.hpp"
+#include "vm/api/primitives.hpp"
 #include "core/primitives/vector2.hpp"
 #include "core/primitives/vector3.hpp"
 #include "core/primitives/vector4.hpp"

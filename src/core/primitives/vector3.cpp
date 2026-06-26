@@ -1,4 +1,4 @@
-#include "../../../../include/core/types/primitives/vector3.hpp"
+#include "core/primitives/vector3.hpp"
 #include <cassert>
 #include <cmath>
 
@@ -14,21 +14,21 @@ namespace core::primitives {
     const Vector3 Vector3::BACK = {0.0f, 0.0f, -1.0f};
 
     Vector3::Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
-    Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
-    Vector3::Vector3(const Vector2& vector, float z) : x(vector.x), y(vector.y), z(z) {}
+    Vector3::Vector3(const float x, const float y, const float z) : x(x), y(y), z(z) {}
+    Vector3::Vector3(const Vector2& vector, const float z) : x(vector.x), y(vector.y), z(z) {}
 
     Vector3 Vector3::operator+(const Vector3& vector) const { return {x + vector.x, y + vector.y, z + vector.z}; }
     Vector3& Vector3::operator+=(const Vector3& vector) { x += vector.x; y += vector.y; z += vector.z; return *this; }
     Vector3 Vector3::operator-(const Vector3& vector) const { return {x - vector.x, y - vector.y, z - vector.z}; }
     Vector3& Vector3::operator-=(const Vector3& vector) { x -= vector.x; y -= vector.y; z -= vector.z; return *this; }
 
-    Vector3 Vector3::operator*(float scalar) const { return {x * scalar, y * scalar, z * scalar}; }
-    Vector3& Vector3::operator*=(float scalar) { x *= scalar; y *= scalar; z *= scalar; return *this; }
+    Vector3 Vector3::operator*(const float scalar) const { return {x * scalar, y * scalar, z * scalar}; }
+    Vector3& Vector3::operator*=(const float scalar) { x *= scalar; y *= scalar; z *= scalar; return *this; }
     Vector3 Vector3::operator*(const Vector3& vector) const { return {x * vector.x, y * vector.y, z * vector.z}; }
     Vector3& Vector3::operator*=(const Vector3& vector) { x *= vector.x; y *= vector.y; z *= vector.z; return *this; }
 
-    Vector3 Vector3::operator/(float scalar) const { assert(scalar != 0.0f); return {x / scalar, y / scalar, z / scalar}; }
-    Vector3& Vector3::operator/=(float scalar) { assert(scalar != 0.0f); x /= scalar; y /= scalar; z /= scalar; return *this; }
+    Vector3 Vector3::operator/(const float scalar) const { assert(scalar != 0.0f); return {x / scalar, y / scalar, z / scalar}; }
+    Vector3& Vector3::operator/=(const float scalar) { assert(scalar != 0.0f); x /= scalar; y /= scalar; z /= scalar; return *this; }
     Vector3 Vector3::operator-() const { return {-x, -y, -z}; }
 
     float Vector3::dot(const Vector3& vector) const { return x * vector.x + y * vector.y + z * vector.z; }
@@ -41,10 +41,10 @@ namespace core::primitives {
     }
     float Vector3::length() const { return std::sqrt(x * x + y * y + z * z); }
     float Vector3::squared() const { return x * x + y * y + z * z; }
-    Vector3 Vector3::normalized() const { float len = length(); assert(len > 0.0f); return *this / len; }
+    Vector3 Vector3::normalized() const {const float len = length(); assert(len > 0.0f); return *this / len; }
     Vector3 Vector3::absolute() const { return {std::fabs(x), std::fabs(y), std::fabs(z)}; }
     Vector3 Vector3::reflect(const Vector3& normal) const { return *this - normal * (2.0f * this->dot(normal)); }
-    Vector3 Vector3::project(const Vector3& onto) const { float sq = onto.squared(); assert(sq > 0.0f); return onto * (this->dot(onto) / sq); }
+    Vector3 Vector3::project(const Vector3& onto) const {const float sq = onto.squared(); assert(sq > 0.0f); return onto * (this->dot(onto) / sq); }
 
     Vector3 Vector3::clamped(const Vector3& minimum, const Vector3& maximum) const {
         return {
@@ -54,7 +54,7 @@ namespace core::primitives {
         };
     }
 
-    Vector3 Vector3::interpolate(const Vector3& vector, float factor) const {
+    Vector3 Vector3::interpolate(const Vector3& vector, const float factor) const {
         return {
             (1.0f - factor) * x + factor * vector.x,
             (1.0f - factor) * y + factor * vector.y,
@@ -62,7 +62,7 @@ namespace core::primitives {
         };
     }
 
-    bool Vector3::approximately(const Vector3& vector, float epsilon) const {
+    bool Vector3::approximately(const Vector3& vector, const float epsilon) const {
         return std::fabs(x - vector.x) <= epsilon && std::fabs(y - vector.y) <= epsilon && std::fabs(z - vector.z) <= epsilon;
     }
 

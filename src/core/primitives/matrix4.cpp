@@ -1,4 +1,4 @@
-#include "../../../../include/core/types/primitives/matrix4.hpp"
+#include "core/primitives/matrix4.hpp"
 #include <cassert>
 #include <cmath>
 
@@ -14,20 +14,20 @@ namespace core::primitives {
         }
     }
 
-    Matrix4::Matrix4(float diagonal) : Matrix4() {
+    Matrix4::Matrix4(const float diagonal) : Matrix4() {
         matrix[0][0] = diagonal;
         matrix[1][1] = diagonal;
         matrix[2][2] = diagonal;
         matrix[3][3] = diagonal;
     }
 
-    float Matrix4::operator()(int row, int column) const {
+    float Matrix4::operator()(const int row, const int column) const {
         assert(row >= 0 && row < 4);
         assert(column >= 0 && column < 4);
         return this->matrix[row][column];
     }
 
-    float& Matrix4::operator()(int row, int column) {
+    float& Matrix4::operator()(const int row, const int column) {
         assert(row >= 0 && row < 4);
         assert(column >= 0 && column < 4);
         return this->matrix[row][column];
@@ -87,7 +87,7 @@ namespace core::primitives {
     }
 
     Matrix4 Matrix4::inverted() const {
-        float first[6] = {
+        const float first[6] = {
             matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0],
             matrix[0][0] * matrix[1][2] - matrix[0][2] * matrix[1][0],
             matrix[0][0] * matrix[1][3] - matrix[0][3] * matrix[1][0],
@@ -96,7 +96,7 @@ namespace core::primitives {
             matrix[0][2] * matrix[1][3] - matrix[0][3] * matrix[1][2]
         };
 
-        float second[6] = {
+        const float second[6] = {
             matrix[2][0] * matrix[3][1] - matrix[2][1] * matrix[3][0],
             matrix[2][0] * matrix[3][2] - matrix[2][2] * matrix[3][0],
             matrix[2][0] * matrix[3][3] - matrix[2][3] * matrix[3][0],
@@ -105,9 +105,9 @@ namespace core::primitives {
             matrix[2][2] * matrix[3][3] - matrix[2][3] * matrix[3][2]
         };
 
-        float determinant = first[0] * second[5] - first[1] * second[4] + first[2] * second[3] + first[3] * second[2] - first[4] * second[1] + first[5] * second[0];
+        const float determinant = first[0] * second[5] - first[1] * second[4] + first[2] * second[3] + first[3] * second[2] - first[4] * second[1] + first[5] * second[0];
         assert(determinant != 0.0f);
-        float inverse = 1.0f / determinant;
+        const float inverse = 1.0f / determinant;
 
         Matrix4 result;
         result.matrix[0][0] = (matrix[1][1] * second[5] - matrix[1][2] * second[4] + matrix[1][3] * second[3]) * inverse;
@@ -167,39 +167,39 @@ namespace core::primitives {
         return result;
     }
 
-    Matrix4 Matrix4::orthographic(float left, float right, float bottom, float top, float near, float far) {
+    Matrix4 Matrix4::orthographic(const float left, const float right, const float bottom, const float top, const float zNear, const float zFar) {
         assert(right != left);
         assert(top != bottom);
-        assert(far != near);
+        assert(zFar != zNear);
 
         Matrix4 result(1.0f);
         result.matrix[0][0] = 2.0f / (right - left);
         result.matrix[1][1] = -2.0f / (top - bottom);
-        result.matrix[2][2] = 1.0f / (far - near);
+        result.matrix[2][2] = 1.0f / (zFar - zNear);
         result.matrix[0][3] = -(right + left) / (right - left);
         result.matrix[1][3] = -(top + bottom) / (top - bottom);
-        result.matrix[2][3] = -near / (far - near);
+        result.matrix[2][3] = -zNear / (zFar - zNear);
         return result;
     }
 
-    Matrix4 Matrix4::perspective(float fov, float aspect, float near, float far) {
+    Matrix4 Matrix4::perspective(const float fov, const float aspect, const float zNear, const float zFar) {
         assert(aspect != 0.0f);
-        assert(far != near);
-        float tangent = std::tan(fov * 0.5f);
+        assert(zFar != zNear);
+        const float tangent = std::tan(fov * 0.5f);
 
         Matrix4 result;
         result.matrix[0][0] = 1.0f / (aspect * tangent);
         result.matrix[1][1] = -1.0f / tangent;
-        result.matrix[2][2] = far / (far - near);
-        result.matrix[2][3] = -(far * near) / (far - near);
+        result.matrix[2][2] = zFar / (zFar - zNear);
+        result.matrix[2][3] = -(zFar * zNear) / (zFar - zNear);
         result.matrix[3][2] = 1.0f;
         return result;
     }
 
     Matrix4 Matrix4::look(const Vector3& eye, const Vector3& target, const Vector3& up) {
-        Vector3 forward = (target - eye).normalized();
-        Vector3 right = forward.cross(up).normalized();
-        Vector3 upward = right.cross(forward);
+        const Vector3 forward = (target - eye).normalized();
+        const Vector3 right = forward.cross(up).normalized();
+        const Vector3 upward = right.cross(forward);
 
         Matrix4 result(1.0f);
         result.matrix[0][0] = right.x;   result.matrix[0][1] = right.y;   result.matrix[0][2] = right.z;
@@ -233,20 +233,20 @@ namespace core::primitives {
             rotation.x = (normalized.matrix[2][1] - normalized.matrix[1][2]) / root;
             rotation.y = (normalized.matrix[0][2] - normalized.matrix[2][0]) / root;
             rotation.z = (normalized.matrix[1][0] - normalized.matrix[0][1]) / root;
-        } else if ((normalized.matrix[0][0] > normalized.matrix[1][1]) && (normalized.matrix[0][0] > normalized.matrix[2][2])) {
-            float root = std::sqrt(1.0f + normalized.matrix[0][0] - normalized.matrix[1][1] - normalized.matrix[2][2]) * 2.0f;
+        } else if (normalized.matrix[0][0] > normalized.matrix[1][1] && (normalized.matrix[0][0] > normalized.matrix[2][2])) {
+            const float root = std::sqrt(1.0f + normalized.matrix[0][0] - normalized.matrix[1][1] - normalized.matrix[2][2]) * 2.0f;
             rotation.w = (normalized.matrix[2][1] - normalized.matrix[1][2]) / root;
             rotation.x = 0.25f * root;
             rotation.y = (normalized.matrix[0][1] + normalized.matrix[1][0]) / root;
             rotation.z = (normalized.matrix[0][2] + normalized.matrix[2][0]) / root;
         } else if (normalized.matrix[1][1] > normalized.matrix[2][2]) {
-            float root = std::sqrt(1.0f + normalized.matrix[1][1] - normalized.matrix[0][0] - normalized.matrix[2][2]) * 2.0f;
+            const float root = std::sqrt(1.0f + normalized.matrix[1][1] - normalized.matrix[0][0] - normalized.matrix[2][2]) * 2.0f;
             rotation.w = (normalized.matrix[0][2] - normalized.matrix[2][0]) / root;
             rotation.x = (normalized.matrix[0][1] + normalized.matrix[1][0]) / root;
             rotation.y = 0.25f * root;
             rotation.z = (normalized.matrix[1][2] + normalized.matrix[2][1]) / root;
         } else {
-            float root = std::sqrt(1.0f + normalized.matrix[2][2] - normalized.matrix[0][0] - normalized.matrix[1][1]) * 2.0f;
+            const float root = std::sqrt(1.0f + normalized.matrix[2][2] - normalized.matrix[0][0] - normalized.matrix[1][1]) * 2.0f;
             rotation.w = (normalized.matrix[1][0] - normalized.matrix[0][1]) / root;
             rotation.x = (normalized.matrix[0][2] + normalized.matrix[2][0]) / root;
             rotation.y = (normalized.matrix[1][2] + normalized.matrix[2][1]) / root;

@@ -1,4 +1,4 @@
-#include "../../../../include/core/types/primitives/transform.hpp"
+#include "core/primitives/transform.hpp"
 #include <cassert>
 #include <cmath>
 
@@ -35,8 +35,8 @@ namespace core::primitives {
 
     bool Transform::operator==(const Transform &transform) const {
         return this->translation == transform.translation &&
-               this->rotation    == transform.rotation &&
-               this->scale       == transform.scale;
+               this->rotation == transform.rotation &&
+               this->scale == transform.scale;
     }
 
     bool Transform::operator!=(const Transform &transform) const {
@@ -101,11 +101,11 @@ namespace core::primitives {
         return {translation, rotation, scale};
     }
 
-    std::ostream &operator<<(std::ostream &stream, const Transform &transform) {
-        stream << "Transform(translation=" << transform.translation
+    std::ostream &operator<<(std::ostream &os, const Transform &transform) {
+        os << "Transform(translation=" << transform.translation
                << ", rotation="            << transform.rotation
                << ", scale="               << transform.scale << ")";
-        return stream;
+        return os;
     }
 
 }

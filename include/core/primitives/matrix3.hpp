@@ -5,7 +5,7 @@
 #include <limits>
 #include <ostream>
 
-namespace core::primitives {
+namespace core::ecs::primitives {
 
     struct Matrix3 {
         float matrix[3][3]{};

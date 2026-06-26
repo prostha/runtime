@@ -9,7 +9,7 @@
 #include <sol/sol.hpp>
 #include <string>
 
-using namespace core::primitives;
+using namespace core::ecs::primitives;
 
 void primitives(lua_State* state) {
 

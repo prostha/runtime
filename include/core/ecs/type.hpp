@@ -2,7 +2,7 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace core {
+namespace core::ecs {
 
     class Kind;
 

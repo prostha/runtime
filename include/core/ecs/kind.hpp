@@ -7,7 +7,7 @@
 #include "mask.hpp"
 #include "type.hpp"
 
-namespace core {
+namespace core::ecs {
 
     class Kind {
     public:

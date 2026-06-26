@@ -7,7 +7,7 @@
 #include "kind.hpp"
 #include "find.hpp"
 
-namespace core {
+namespace core::ecs {
 
     class World {
     public:

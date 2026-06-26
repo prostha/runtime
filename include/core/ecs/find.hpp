@@ -5,7 +5,7 @@
 #include <vulkan/vulkan.h>
 #include "kind.hpp"
 
-namespace core {
+namespace core::ecs {
 
     class Find {
     public:

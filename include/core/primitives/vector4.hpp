@@ -3,7 +3,7 @@
 #include "vector3.hpp"
 #include <ostream>
 
-namespace core::primitives {
+namespace core::ecs::primitives {
 
     class alignas(16) Vector4 {
         public:

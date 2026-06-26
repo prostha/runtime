@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-namespace core::primitives {
+namespace core::ecs::primitives {
 
     class Vector2 {
     public:

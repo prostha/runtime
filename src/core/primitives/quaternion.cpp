@@ -3,7 +3,7 @@
 #include <numbers>
 #include <cmath>
 
-namespace core::primitives {
+namespace core::ecs::primitives {
 
     const Quaternion Quaternion::IDENTITY = {0.0f, 0.0f, 0.0f, 1.0f};
 

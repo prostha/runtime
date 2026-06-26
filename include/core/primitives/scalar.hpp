@@ -5,7 +5,7 @@
 #include <ostream>
 #include <cmath>
 
-namespace core::primitives {
+namespace core::ecs::primitives {
 
     struct Scalar {
         float value;

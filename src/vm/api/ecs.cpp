@@ -16,8 +16,8 @@
 #include <string>
 #include <memory>
 
-using namespace core;
-using namespace core::primitives;
+using namespace core::ecs;
+using namespace core::ecs::primitives;
 
 namespace {
     struct detail {

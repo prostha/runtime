@@ -5,7 +5,7 @@
 #include <numeric>
 #include <cstring>
 
-namespace core {
+namespace core::ecs {
 
     Find::Find(const std::vector<std::unique_ptr<Kind>>& pool) noexcept
         : pool(pool) {}

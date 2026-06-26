@@ -3,7 +3,7 @@
 #include <numbers>
 #include <cmath>
 
-namespace core::primitives {
+namespace core::ecs::primitives {
 
     const Matrix3 Matrix3::IDENTITY = Matrix3(1.0f);
 

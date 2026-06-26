@@ -2,7 +2,7 @@
 #include <cassert>
 #include <cmath>
 
-namespace core::primitives {
+namespace core::ecs::primitives {
 
     const Transform Transform::IDENTITY = {
         {0.0f, 0.0f, 0.0f},

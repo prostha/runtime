@@ -2,7 +2,7 @@
 #include <cassert>
 #include <cmath>
 
-namespace core::primitives {
+namespace core::ecs::primitives {
 
     const Matrix4 Matrix4::IDENTITY = Matrix4(1.0f);
 

@@ -2,7 +2,7 @@
 #include <bitset>
 #include <cstddef>
 
-namespace core {
+namespace core::ecs {
 
     constexpr std::size_t Cap = 256;
     using Mask = std::bitset<Cap>;

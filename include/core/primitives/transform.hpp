@@ -6,7 +6,7 @@
 #include <limits>
 #include <ostream>
 
-namespace core::primitives {
+namespace core::ecs::primitives {
 
     struct Transform {
         Vector3 translation;

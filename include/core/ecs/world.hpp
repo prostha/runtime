@@ -9,22 +9,22 @@
 
 namespace core {
 
-    class Zone {
+    class World {
     public:
-        Zone() = default;
-        ~Zone() = default;
+        World() = default;
+        ~World() = default;
 
-        Zone(const Zone&) = delete;
-        Zone& operator=(const Zone&) = delete;
-        Zone(Zone&&) noexcept = default;
-        Zone& operator=(Zone&&) noexcept = default;
+        World(const World&) = delete;
+        World& operator=(const World&) = delete;
+        World(World&&) noexcept = default;
+        World& operator=(World&&) noexcept = default;
 
-        std::uint32_t type(const std::string& name, std::size_t size = 0);
+        std::uint32_t component(const std::string& name, std::size_t size = 0);
 
         Id spawn();
         Id clone(Id id);
-        void kill(Id id);
-        void wipe();
+        void dispose(Id id);
+        void clear();
 
         void attach(Id entity, Id parent);
         [[nodiscard]] Id parent(Id id) const;
@@ -39,7 +39,7 @@ namespace core {
         [[nodiscard]] void* global(std::uint32_t type);
 
         using Task = std::function<void(Id id)>;
-        void watch(std::uint32_t type, const Task& action);
+        void wait(std::uint32_t type, const Task& action);
 
         void batch(const std::function<void()>& flow);
         [[nodiscard]] Find query() const;

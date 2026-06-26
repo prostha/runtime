@@ -1,11 +1,11 @@
-#include "../include/core/ecs/zone.hpp"
+#include "../include/core/ecs/world.hpp"
 #include <cstring>
 #include <mutex>
 #include <shared_mutex>
 
 namespace core {
 
-    std::uint32_t Zone::type(const std::string& name, std::size_t size) {
+    std::uint32_t World::component(const std::string& name, std::size_t size) {
         if (const auto find = names.find(name); find != names.end()) {
             return find->second;
         }
@@ -21,7 +21,7 @@ namespace core {
         return id;
     }
 
-    Id Zone::spawn() {
+    Id World::spawn() {
         Id id;
         if (!free.empty()) {
             id = free.back();
@@ -32,61 +32,59 @@ namespace core {
         if (id >= slots.size()) {
             slots.resize(id + 1);
         }
-        Mask blank;
+        const Mask blank;
         Kind* arch = view(blank);
         arch->push(id);
         slots[id] = {arch, arch->rows.size() - 1};
         return id;
     }
 
-    Id Zone::clone(Id id) {
+    Id World::clone(const Id id) {
         const Id duplicate = spawn();
-        Slot source = slots[id];
-        Kind* arch = source.type;
+        auto [arch, source_row] = slots[id];
         std::shared_lock lock_shared(arch->lock);
 
         const Mask mask = arch->mask;
         move(duplicate, mask);
 
-        Slot destination = slots[duplicate];
-        Kind* goal = destination.type;
+        auto [goal, dest_row] = slots[duplicate];
         std::unique_lock lock_unique(goal->lock);
 
         for (auto const& [tag, track] : arch->maps) {
             if (const std::size_t size = sizes[tag]; size > 0) {
                 const std::size_t offset = goal->maps[tag];
-                std::memcpy(goal->page[offset].data() + destination.row * size,
-                            arch->page[track].data() + source.row * size,
+                std::memcpy(goal->page[offset].data() + dest_row * size,
+                            arch->page[track].data() + source_row * size,
                             size);
             }
         }
         return duplicate;
     }
 
-    void Zone::kill(Id id) {
+    void World::dispose(Id id) {
         if (lock) {
-            steps.emplace_back([this, id]() { kill(id); });
+            steps.emplace_back([this, id]() { dispose(id); });
             return;
         }
-        Slot record = slots[id];
-        if (!record.type) return;
+        auto [arch, row] = slots[id];
+        if (!arch) return;
 
         if (tail != 0xFFFFFFFF && has(id, tail)) {
             if (const auto* list = static_cast<std::vector<Id>*>(get(id, tail))) {
                 for (const Id nested : *list) {
-                    kill(nested);
+                    dispose(nested);
                 }
             }
         }
 
-        if (const std::uint32_t moved = record.type->pull(record.row); moved != id) {
-            slots[moved].row = record.row;
+        if (const std::uint32_t moved = arch->pull(row); moved != id) {
+            slots[moved].row = row;
         }
         slots[id] = {nullptr, 0};
         free.push_back(id);
     }
 
-    void Zone::wipe() {
+    void World::clear() {
         kinds.clear();
         slots.clear();
         free.clear();
@@ -97,9 +95,9 @@ namespace core {
         lock = false;
     }
 
-    void Zone::attach(const Id entity, const Id parent) {
-        if (head == 0xFFFFFFFF) type("parent", sizeof(Id));
-        if (tail == 0xFFFFFFFF) type("children", sizeof(std::vector<Id>));
+    void World::attach(const Id entity, const Id parent) {
+        if (head == 0xFFFFFFFF) component("parent", sizeof(Id));
+        if (tail == 0xFFFFFFFF) component("children", sizeof(std::vector<Id>));
 
         set(entity, head, &parent);
 
@@ -113,23 +111,23 @@ namespace core {
         }
     }
 
-    Id Zone::parent(Id id) const {
+    Id World::parent(const Id id) const {
         if (head == 0xFFFFFFFF || !has(id, head)) return Null;
-        return *static_cast<const Id*>(const_cast<Zone*>(this)->get(id, head));
+        return *static_cast<const Id*>(this->get(id, head));
     }
 
-    const std::vector<Id>& Zone::children(Id id) const {
+    const std::vector<Id>& World::children(const Id id) const {
         static constexpr std::vector<Id> empty;
         if (tail == 0xFFFFFFFF || !has(id, tail)) return empty;
         return *static_cast<const std::vector<Id>*>(this->get(id, tail));
     }
 
-    void* Zone::set(Id id, std::uint32_t type, const void* data) {
+    void* World::set(Id id, std::uint32_t type, const void* data) {
         if (lock) {
             steps.emplace_back([this, id, type, data]() { set(id, type, data); });
             return nullptr;
         }
-        const Kind* arch = slots[id].type;
+        auto [arch, row] = slots[id];
         Mask mask = arch->mask;
         mask.set(type);
 
@@ -146,9 +144,8 @@ namespace core {
         return pointer;
     }
 
-    void* Zone::get(const Id id, const std::uint32_t type) const {
-        Slot record = slots[id];
-        Kind* arch = record.type;
+    void* World::get(const Id id, const std::uint32_t type) const {
+        auto [arch, row] = slots[id];
         if (!arch) return nullptr;
 
         const auto find = arch->maps.find(type);
@@ -156,28 +153,27 @@ namespace core {
 
         const std::size_t size = sizes[type];
         if (size == 0) return nullptr;
-        return arch->page[find->second].data() + record.row * size;
+        return arch->page[find->second].data() + row * size;
     }
 
-    bool Zone::has(const Id id, const std::uint32_t type) const {
-        Slot record = slots[id];
-        if (!record.type) return false;
-        return record.type->mask.test(type);
+    bool World::has(const Id id, const std::uint32_t type) const {
+        auto [arch, row] = slots[id];
+        if (!arch) return false;
+        return arch->mask.test(type);
     }
 
-    void Zone::remove(Id id, std::uint32_t type) {
+    void World::remove(Id id, std::uint32_t type) {
         if (lock) {
             steps.emplace_back([this, id, type]() { remove(id, type); });
             return;
         }
-        Slot record = slots[id];
-        const Kind* arch = record.type;
+        auto [arch, row] = slots[id];
         Mask mask = arch->mask;
         mask.reset(type);
         move(id, mask);
     }
 
-    void Zone::global(const std::uint32_t type, const void* data, const std::size_t size) {
+    void World::global(const std::uint32_t type, const void* data, const std::size_t size) {
         auto& resource = cache[type];
         resource.resize(size);
         if (data && size > 0) {
@@ -185,17 +181,17 @@ namespace core {
         }
     }
 
-    void* Zone::global(const std::uint32_t type) {
+    void* World::global(const std::uint32_t type) {
         const auto find = cache.find(type);
         if (find == cache.end()) return nullptr;
         return find->second.data();
     }
 
-    void Zone::watch(const std::uint32_t type, const Task& action) {
+    void World::wait(const std::uint32_t type, const Task& action) {
         events[type] = action;
     }
 
-    void Zone::batch(const std::function<void()>& flow) {
+    void World::batch(const std::function<void()>& flow) {
         lock = true;
         flow();
         lock = false;
@@ -205,15 +201,15 @@ namespace core {
         steps.clear();
     }
 
-    Find Zone::query() const {
+    Find World::query() const {
         return Find(kinds);
     }
 
-    void Zone::loop(const Find& query, const Find::Call& action) const {
+    void World::loop(const Find& query, const Find::Call& action) const {
         query.process(action, query.plan());
     }
 
-    Kind* Zone::view(const Mask& mask) {
+    Kind* World::view(const Mask& mask) {
         for (const auto& arch : kinds) {
             if (arch->mask == mask) return arch.get();
         }
@@ -231,31 +227,31 @@ namespace core {
         return kinds.back().get();
     }
 
-    void Zone::move(const Id id, const Mask& mask) {
-        Slot source = slots[id];
-        Kind* old = source.type;
+    void World::move(const Id id, const Mask& mask) {
+        auto [type, row] = slots[id];
+        Kind* old = type;
         if (old->mask == mask) return;
 
         Kind* goal = view(mask);
         goal->push(id);
 
-        const Slot destination = {goal, goal->rows.size() - 1};
+        auto [dest_type, dest_row] = Slot{goal, goal->rows.size() - 1};
 
         for (auto const& [tag, track] : old->maps) {
             if (mask.test(tag)) {
                 if (const std::size_t size = sizes[tag]; size > 0) {
                     const std::size_t offset = goal->maps[tag];
-                    std::memcpy(goal->page[offset].data() + destination.row * size,
-                                old->page[track].data() + source.row * size,
+                    std::memcpy(goal->page[offset].data() + dest_row * size,
+                                old->page[track].data() + row * size,
                                 size);
                 }
             }
         }
 
-        if (const std::uint32_t moved = old->pull(source.row); moved != id) {
-            slots[moved].row = source.row;
+        if (const std::uint32_t moved = old->pull(row); moved != id) {
+            slots[moved].row = row;
         }
-        slots[id] = destination;
+        slots[id] = {dest_type, dest_row};
     }
 
 }

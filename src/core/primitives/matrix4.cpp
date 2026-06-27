@@ -1,6 +1,7 @@
-#include "core/primitives/matrix4.hpp"
 #include <cassert>
 #include <cmath>
+
+#include "core/primitives/matrix4.hpp"
 
 namespace core::ecs::primitives {
 

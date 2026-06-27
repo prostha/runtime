@@ -1,7 +1,8 @@
-#include "core/primitives/matrix3.hpp"
 #include <cassert>
 #include <numbers>
 #include <cmath>
+
+#include "core/primitives/matrix3.hpp"
 
 namespace core::ecs::primitives {
 

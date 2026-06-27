@@ -23,6 +23,11 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/yoga/CMakeLists.txt")
     execute_process(COMMAND git clone --branch v3.1.0 https://github.com/facebook/yoga.git "${CMAKE_CURRENT_SOURCE_DIR}/vendor/yoga")
 endif()
 
+if(APPLE AND NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vendor/metal/README.md")
+    file(REMOVE_RECURSE "${CMAKE_CURRENT_SOURCE_DIR}/vendor/metal")
+    execute_process(COMMAND git clone https://github.com/bkaradzic/metal-cpp.git "${CMAKE_CURRENT_SOURCE_DIR}/vendor/metal")
+endif()
+
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/include/luajit-2.1")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/src")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vendor/luajit/lib")
@@ -166,6 +171,10 @@ target_include_directories(runtime PUBLIC
         vendor/yoga/yoga
         ${Vulkan_INCLUDE_DIRS}
 )
+
+if(APPLE)
+    target_include_directories(runtime PRIVATE vendor/metal)
+endif()
 
 if(MSVC)
     target_link_libraries(runtime PRIVATE sol3 liblua Vulkan::Vulkan d3d12 dxgi)

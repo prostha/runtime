@@ -69,7 +69,7 @@ Sandbox::Sandbox() {
 
         ecs(state);
         primitives(state);
-        ui(state);
+        // ui(state);
     }
     catch (const std::exception& error) {
         std::fprintf(stderr, "sandbox initialization error: %s\n", error.what());

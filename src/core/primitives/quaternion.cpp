@@ -1,7 +1,8 @@
-#include "core/primitives/quaternion.hpp"
 #include <cassert>
 #include <numbers>
 #include <cmath>
+
+#include "core/primitives/quaternion.hpp"
 
 namespace core::ecs::primitives {
 

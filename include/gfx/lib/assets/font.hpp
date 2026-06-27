@@ -1,48 +1,33 @@
 #pragma once
-#include "glyph.hpp"
-#include "texture.hpp"
 #include <string_view>
 #include <vector>
 #include <cstdint>
 
+#include "gfx/lib/assets/glyph.hpp"
+#include "gfx/lib/assets/texture.hpp"
+
 namespace core::gfx::lib::assets {
 
-    class Font {
+    class Font final {
     public:
         struct Block {
-            std::uint32_t atlas_id{0};
-            std::vector<Glyph> glyphs{};
+            std::uint32_t atlas_identifier{0};
+            std::vector<Glyph> glyphs;
         };
 
-        explicit Font(Texture& instance) noexcept : textures(instance) {}
-        ~Font() = default;
+        explicit Font(Texture& texture_registry) noexcept;
+        ~Font() noexcept = default;
 
         Font(const Font&) = delete;
         Font& operator=(const Font&) = delete;
         Font(Font&&) noexcept = default;
         Font& operator=(Font&&) noexcept = delete;
 
-        std::uint32_t load(std::string_view path, float size) noexcept;
-
-        [[nodiscard]] const Glyph* find(const std::uint32_t id, const char32_t code) const noexcept {
-            if (id >= storage.size()) return nullptr;
-            for (const auto& glyph : storage[id].glyphs) {
-                if (glyph.code == code) return &glyph;
-            }
-            return nullptr;
-        }
-
-        [[nodiscard]] std::uint32_t atlas(const std::uint32_t id) const noexcept {
-            return id < storage.size() ? storage[id].atlas_id : 0;
-        }
-
-        void dispose(const std::uint32_t id) noexcept {
-            if (id < storage.size()) storage[id] = {};
-        }
-
-        void clear() noexcept {
-            storage.clear();
-        }
+        std::uint32_t load(std::string_view path) noexcept;
+        [[nodiscard]] const Glyph* find(std::uint32_t id, char32_t code) const noexcept;
+        [[nodiscard]] std::uint32_t atlas(std::uint32_t id) const noexcept;
+        void dispose(std::uint32_t id) noexcept;
+        void clear() noexcept;
 
     private:
         Texture& textures;

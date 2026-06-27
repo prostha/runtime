@@ -1,9 +1,10 @@
-#include "../include/core/ecs/find.hpp"
 #include <shared_mutex>
 #include <mutex>
 #include <algorithm>
 #include <numeric>
 #include <cstring>
+
+#include "../include/core/ecs/find.hpp"
 
 namespace core::ecs {
 

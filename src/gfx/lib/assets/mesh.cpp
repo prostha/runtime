@@ -3,16 +3,28 @@
 namespace core::gfx::lib::assets {
 
     std::uint32_t Mesh::create(const float* vertices, const std::size_t size) noexcept {
-        const std::uint32_t id = static_cast<std::uint32_t>(storage.size());
-        storage.push_back(Block{const_cast<float*>(vertices), size});
-        return id;
+        this->storage.push_back({const_cast<float*>(vertices), size});
+        return static_cast<std::uint32_t>(this->storage.size());
     }
 
     void Mesh::update(const std::uint32_t id, const float* vertices, const std::size_t size) noexcept {
-        if (id < storage.size()) {
-            storage[id].allocation = const_cast<float*>(vertices);
-            storage[id].size = size;
+        if (id > 0 && id <= this->storage.size()) {
+            this->storage[id - 1] = {const_cast<float*>(vertices), size};
         }
+    }
+
+    const Mesh::Block* Mesh::get(const std::uint32_t id) const noexcept {
+        return (id > 0 && id <= this->storage.size()) ? &this->storage[id - 1] : nullptr;
+    }
+
+    void Mesh::dispose(const std::uint32_t id) noexcept {
+        if (id > 0 && id <= this->storage.size()) {
+            this->storage[id - 1] = {};
+        }
+    }
+
+    void Mesh::clear() noexcept {
+        this->storage.clear();
     }
 
 }

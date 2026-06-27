@@ -1,6 +1,7 @@
-#include "core/primitives/transform.hpp"
 #include <cassert>
 #include <cmath>
+
+#include "core/primitives/transform.hpp"
 
 namespace core::ecs::primitives {
 

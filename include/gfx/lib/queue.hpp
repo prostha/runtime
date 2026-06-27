@@ -1,38 +1,33 @@
 #pragma once
-#include "drivers/payload.hpp"
+
 #include <vector>
+
+#include "drivers/payload.hpp"
 
 namespace core::gfx::lib {
 
-    class Queue {
+    class Queue final {
     public:
-        void push(const drivers::Key key, const drivers::Command& command) {
-            keys.push_back(key);
-            commands.push_back(command);
-        }
+        Queue() noexcept = default;
+        ~Queue() noexcept = default;
 
-        drivers::Buffer flush() noexcept {
-            sort();
-            buffer.keys = keys.data();
-            buffer.commands = sorted.data();
-            buffer.count = keys.size();
-            return buffer;
-        }
+        Queue(const Queue&) = delete;
+        Queue& operator=(const Queue&) = delete;
+        Queue(Queue&&) noexcept = default;
+        Queue& operator=(Queue&&) noexcept = delete;
 
-        void clear() noexcept {
-            keys.clear();
-            commands.clear();
-            sorted.clear();
-            scratch.clear();
-        }
-
-    private:
+        void push(drivers::Key key, const drivers::Command& command) noexcept;
+        drivers::Buffer flush() noexcept;
+        void clear() noexcept;
         void sort() noexcept;
 
+    private:
         std::vector<drivers::Key> keys;
         std::vector<drivers::Command> commands;
-        std::vector<drivers::Command> sorted;
+
         std::vector<drivers::Key> scratch;
+        std::vector<drivers::Command> sorted;
+
         drivers::Buffer buffer{};
     };
 

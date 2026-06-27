@@ -1,6 +1,7 @@
-#include "core/primitives/vector3.hpp"
 #include <cassert>
 #include <cmath>
+
+#include "core/primitives/vector3.hpp"
 
 namespace core::ecs::primitives {
 

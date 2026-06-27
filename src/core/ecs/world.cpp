@@ -1,9 +1,10 @@
-#include "../include/core/ecs/world.hpp"
 #include <cstring>
 #include <mutex>
 #include <shared_mutex>
 
-namespace core {
+#include "../include/core/ecs/world.hpp"
+
+namespace core::ecs {
 
     std::uint32_t World::component(const std::string& name, std::size_t size) {
         if (const auto find = names.find(name); find != names.end()) {

@@ -1,8 +1,9 @@
-#include "../include/core/ecs/kind.hpp"
 #include <algorithm>
 #include <mutex>
 
-namespace core {
+#include "../include/core/ecs/kind.hpp"
+
+namespace core::ecs {
 
     void Kind::push(const Id id) {
         std::unique_lock guard(this->lock);

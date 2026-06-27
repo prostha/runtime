@@ -8,7 +8,7 @@ namespace core::gfx::lib::assets {
     class Mesh final {
     public:
         struct Block {
-            float* allocation{nullptr};
+            const float* allocation{nullptr};
             std::size_t size{0};
         };
 

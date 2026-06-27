@@ -4,7 +4,7 @@
 This agnostic simulation runtime is built in C++23 and strictly follows a simple, fast, and secure philosophy.
 These coherent rules transformed what started as a fun and exciting project into a daunting challenge, reminiscent of the Grayskull fortress.
 It is designed this way to eliminate dependencies and avoid sloppy code in the future.
-The engine utilizes an index-based data model, historically referred to as archetype architecture, which has proven to be one of the most efficient management algorithms, achieving `O(1)` complexity.
+The engine utilizes an index-based data model, historically referred to as archetype architecture, which has proven to be one of the most efficient management algorithms, achieving O(1) complexity.
 It offers a scripting sandbox arena that combines script execution with a dedicated allocator for specialized memory management.
 It natively supports Vulkan, DirectX 12, and Metal for graphics rendering. 
 This open-source engine is optimized and stripped down to the absolute minimum footprint, designed to seamlessly integrate into other projects. It delivers robust simulation capabilities without sacrificing performance.
@@ -20,8 +20,6 @@ To get started:
 1. Review our [Contributing Guidelines](https://github.com/prostha/CONTRIBUTIONS.md) for local development workflows and coding standards (C++23 style conventions).
 2. Look at the open issues or open a discussion thread to propose major changes before starting work.
 3. Submit a Pull Request targeting the development branch. Ensure your structural changes adhere to the strict design constraints.
-
----
 
 ## License
 

@@ -3,14 +3,13 @@
 #include <vector>
 #include <unordered_map>
 #include <cstdint>
+#include <cstddef>
 
 #include "queue.hpp"
 #include "assets/font.hpp"
 #include "assets/mesh.hpp"
+#include "assets/shader.hpp"
 #include "drivers/device.hpp"
-
-using namespace core::gfx::lib::drivers;
-using namespace core::gfx::lib::assets;
 
 namespace core::gfx::lib {
 
@@ -31,12 +30,12 @@ public:
     Context& operator=(Context&&) noexcept = delete;
 
     void resize(std::uint32_t width, std::uint32_t height) noexcept;
-    void push(Key key, const Command& command) noexcept;
+    void push(drivers::Key key, const drivers::Command& command) noexcept;
     void render() noexcept;
     void flush() noexcept;
 
     void camera(const float* view, const float* projection) noexcept;
-    void viewport(const Rect& bounds) noexcept;
+    void viewport(const drivers::Rect& bounds) noexcept;
 
     std::uint32_t target(std::uint32_t width, std::uint32_t height) const noexcept;
     void bind(std::uint32_t id) noexcept;
@@ -46,10 +45,11 @@ public:
     void program(std::uint32_t id) noexcept;
     void uniform(std::uint32_t binding, const void* data, std::size_t size) noexcept;
 
-    std::unique_ptr<Device> device;
-    Texture textures;
-    Mesh meshes;
-    Font fonts{textures};
+    std::unique_ptr<drivers::Device> device;
+    assets::Texture textures;
+    assets::Mesh meshes;
+    assets::Font fonts{textures};
+    assets::Shader shaders;
 
 private:
     Queue queue;
@@ -59,9 +59,9 @@ private:
 
     float view[16]{};
     float projection[16]{};
-    Rect region;
+    drivers::Rect region;
 
-    std::vector<Rect> frames;
+    std::vector<drivers::Rect> frames;
     std::uint32_t active{0};
 
     std::uint32_t state{0};
@@ -71,6 +71,53 @@ private:
 
 }
 
+struct Gfx {
+    struct Core {
+        void* (*init)(std::uint32_t api, const void* target);
+        void (*resize)(void* handle, std::uint32_t width, std::uint32_t height);
+        void (*push)(void* handle, std::uint64_t key, const void* command);
+        void (*render)(void* handle);
+        void (*clear)(void* handle);
+    } core;
+
+    struct State {
+        void (*camera)(void* handle, const float* view, const float* projection);
+        void (*viewport)(void* handle, float x, float y, float width, float height);
+        void (*flags)(void* handle, std::uint32_t state);
+        void (*program)(void* handle, std::uint32_t id);
+        void (*uniform)(void* handle, std::uint32_t binding, const void* data, std::size_t size);
+    } state;
+
+    struct Texture {
+        std::uint32_t (*load)(void* handle, const char* path);
+        std::uint32_t (*create)(void* handle, const std::uint8_t* pixels, std::uint32_t width, std::uint32_t height);
+        void (*update)(void* handle, std::uint32_t id, const std::uint8_t* pixels, std::uint32_t width, std::uint32_t height);
+        void (*dispose)(void* handle, std::uint32_t id);
+    } texture;
+
+    struct Mesh {
+        std::uint32_t (*create)(void* handle, const float* vertices, std::size_t size);
+        void (*update)(void* handle, std::uint32_t id, const float* vertices, std::size_t size);
+        void (*dispose)(void* handle, std::uint32_t id);
+    } mesh;
+
+    struct Font {
+        std::uint32_t (*load)(void* handle, const char* path);
+        void (*dispose)(void* handle, std::uint32_t id);
+    } font;
+
+    struct Shader {
+        std::uint32_t (*load)(void* handle, const char* vertex, const char* path);
+        void (*dispose)(void* handle, std::uint32_t id);
+    } shader;
+
+    struct Target {
+        std::uint32_t (*create)(void* handle, std::uint32_t width, std::uint32_t height);
+        void (*bind)(void* handle, std::uint32_t id);
+        void (*dispose)(void* handle, std::uint32_t id);
+    } target;
+};
+
 #if defined(_WIN32)
 #define EXPORT __declspec(dllexport)
 #else
@@ -78,31 +125,5 @@ private:
 #endif
 
 extern "C" {
-    EXPORT void* gfx_init(std::uint32_t api, const void* target);
-    EXPORT void gfx_resize(void* handle, std::uint32_t width, std::uint32_t height);
-    EXPORT void gfx_push(void* handle, std::uint64_t key, const Command* command);
-    EXPORT void gfx_render(void* handle);
-    EXPORT void gfx_clear(void* handle);
-
-    EXPORT void gfx_camera(void* handle, const float* view, const float* projection);
-    EXPORT void gfx_viewport(void* handle, float x, float y, float width, float height);
-
-    EXPORT std::uint32_t gfx_texture(void* handle, const char* path);
-    EXPORT std::uint32_t gfx_pixels(void* handle, const std::uint8_t* pixels, std::uint32_t width, std::uint32_t height);
-    EXPORT void gfx_unload(void* handle, std::uint32_t id);
-
-    EXPORT std::uint32_t gfx_mesh(void* handle, const float* vertices, std::size_t size);
-    EXPORT void gfx_update(void* handle, std::uint32_t id, const float* vertices, std::size_t size);
-    EXPORT void gfx_free(void* handle, std::uint32_t id);
-
-    EXPORT std::uint32_t gfx_font(void* handle, const char* path);
-    EXPORT void gfx_destroy(void* handle, std::uint32_t id);
-
-    EXPORT std::uint32_t gfx_target(void* handle, std::uint32_t width, std::uint32_t height);
-    EXPORT void gfx_bind(void* handle, std::uint32_t id);
-    EXPORT void gfx_delete(void* handle, std::uint32_t id);
-
-    EXPORT void gfx_flags(void* handle, std::uint32_t state);
-    EXPORT void gfx_program(void* handle, std::uint32_t id);
-    EXPORT void gfx_uniform(void* handle, std::uint32_t binding, const void* data, std::size_t size);
+    EXPORT const Gfx* gfx() noexcept;
 }

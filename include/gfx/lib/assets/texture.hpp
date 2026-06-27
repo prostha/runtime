@@ -1,5 +1,4 @@
 #pragma once
-
 #include <vector>
 #include <string>
 #include <string_view>
@@ -11,7 +10,7 @@ namespace core::gfx::lib::assets {
     class Texture final {
     public:
         struct Block {
-            void* allocation{nullptr};
+            const void* allocation{nullptr};
             std::uint32_t width{0};
             std::uint32_t height{0};
         };

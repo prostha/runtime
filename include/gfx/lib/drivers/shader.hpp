@@ -1,11 +1,29 @@
 #pragma once
-#include <cstddef>
 
-namespace core::gfx::lib::drivers {
+#include <string_view>
+#include <vector>
+#include <string>
+#include <cstdint>
 
-    struct Shader {
-        const void* code{nullptr};
-        std::size_t size{0};
+namespace core::gfx::lib::assets {
+
+    class Shader final {
+    public:
+        struct Block {
+            std::string vertex;
+            std::string path;
+        };
+
+        Shader() noexcept = default;
+        ~Shader() noexcept = default;
+
+        std::uint32_t load(std::string_view vertex, std::string_view path) noexcept;
+        [[nodiscard]] const Block* get(std::uint32_t id) const noexcept;
+        void dispose(std::uint32_t id) noexcept;
+        void clear() noexcept;
+
+    private:
+        std::vector<Block> storage;
     };
 
 }

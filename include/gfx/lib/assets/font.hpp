@@ -1,8 +1,10 @@
 #pragma once
+
 #include <string_view>
 #include <vector>
 #include <cstdint>
-#include "gfx/lib/assets/texture.hpp"
+
+#include "texture.hpp"
 
 namespace core::gfx::lib::assets {
 

@@ -3,8 +3,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "gfx/lib/drivers/payload.hpp"
-#include "shader.hpp"
+#include "payload.hpp"
+
+namespace core::gfx::lib::assets {
+    class Shader;
+}
 
 namespace core::gfx::lib::drivers {
 
@@ -27,7 +30,7 @@ namespace core::gfx::lib::drivers {
         virtual void end() noexcept = 0;
         virtual void dispose() noexcept = 0;
 
-        virtual void shader(std::uint32_t id, const Shader& vertex, const Shader& pixel) noexcept = 0;
+        virtual void shader(std::uint32_t id, const assets::Shader& vertex, const assets::Shader& pixel) noexcept = 0;
 
         virtual void mesh(std::uint32_t id, const float* vertices, std::size_t size) noexcept = 0;
         virtual void update(std::uint32_t id, const float* vertices, std::size_t size) noexcept = 0;

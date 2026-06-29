@@ -24,7 +24,7 @@ namespace core::gfx::lib::assets {
     }
 
     void Font::clear() noexcept {
-        for (auto&[atlas, glyphs] : storage) {
+        for (auto& [atlas, glyphs] : storage) {
             if (atlas != 0) {
                 textures.dispose(atlas);
             }

@@ -1,12 +1,15 @@
 #pragma once
 
+#include <cstdint>
+#include <cstddef>
+
 #include "device.hpp"
 
-namespace core::gfx::lib::drivers {
+namespace engine {
 
-    struct Context;
+    class Context;
 
-    class Metal : public Device {
+    class Metal final : public Device {
     public:
         explicit Metal(const void* target) noexcept;
         ~Metal() override;
@@ -21,22 +24,22 @@ namespace core::gfx::lib::drivers {
         void end() noexcept override;
         void dispose() noexcept override;
 
-        void shader(std::uint32_t id, const Shader& vertex, const Shader& pixel) noexcept override;
+        void shader(std::uint32_t handle, const Shader& vertex, const Shader& pixel) noexcept override;
 
-        void mesh(std::uint32_t id, const float* vertices, std::size_t size) noexcept override;
-        void update(std::uint32_t id, const float* vertices, std::size_t size) noexcept override;
-        void free(std::uint32_t id) noexcept override;
+        void mesh(std::uint32_t handle, const float* data, std::size_t size) noexcept override;
+        void update(std::uint32_t handle, const float* data, std::size_t size) noexcept override;
+        void free(std::uint32_t handle) noexcept override;
 
-        void texture(std::uint32_t id, const std::uint8_t* pixels, std::uint32_t width, std::uint32_t height) noexcept override;
-        void unload(std::uint32_t id) noexcept override;
+        void texture(std::uint32_t handle, const std::uint8_t* pixels, std::uint32_t width, std::uint32_t height) noexcept override;
+        void unload(std::uint32_t handle) noexcept override;
 
-        void surface(std::uint32_t id, std::uint32_t width, std::uint32_t height) noexcept override;
-        void remove(std::uint32_t id) noexcept override;
+        void surface(std::uint32_t handle, std::uint32_t width, std::uint32_t height) noexcept override;
+        void remove(std::uint32_t handle) noexcept override;
 
     private:
         void release() const noexcept;
 
-        Context* context{nullptr};
+        Context* context;
     };
 
 }

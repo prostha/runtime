@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <cstddef>
 
 namespace core::gfx::lib::drivers {
 
@@ -56,12 +55,39 @@ namespace core::gfx::lib::drivers {
             std::uint64_t pipeline : 8;
             std::uint64_t pass : 4;
         } bits;
+
+        Key() noexcept : value(0) {}
+
+        Key(const Key& other) noexcept : value(other.value) {}
+
+        Key& operator=(const Key& other) noexcept {
+            if (this != &other) {
+                this->value = other.value;
+            }
+            return *this;
+        }
     };
 
     struct Command {
         Type type;
-        std::uint8_t gap[3];
-        float box[4];
+        std::uint8_t gap[3]{};
+        float box[4]{};
+
+        Command() noexcept : type(Type::Rect), gap{0, 0, 0}, box{0.0f, 0.0f, 0.0f, 0.0f} {}
+
+        Command(const Command& other) noexcept : type(other.type) {
+            this->gap[0] = other.gap[0]; this->gap[1] = other.gap[1]; this->gap[2] = other.gap[2];
+            this->box[0] = other.box[0]; this->box[1] = other.box[1]; this->box[2] = other.box[2]; this->box[3] = other.box[3];
+        }
+
+        Command& operator=(const Command& other) noexcept {
+            if (this != &other) {
+                this->type = other.type;
+                this->gap[0] = other.gap[0]; this->gap[1] = other.gap[1]; this->gap[2] = other.gap[2];
+                this->box[0] = other.box[0]; this->box[1] = other.box[1]; this->box[2] = other.box[2]; this->box[3] = other.box[3];
+            }
+            return *this;
+        }
     };
 
     struct Buffer {

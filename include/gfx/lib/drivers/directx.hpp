@@ -8,7 +8,7 @@ namespace core::gfx::lib::drivers {
 
     struct Context;
 
-    class DirectX : public Device {
+    class DirectX final : public Device {
     public:
         explicit DirectX(const void* target) noexcept;
         ~DirectX() override;
@@ -23,7 +23,7 @@ namespace core::gfx::lib::drivers {
         void end() noexcept override;
         void dispose() noexcept override;
 
-        void shader(std::uint32_t id, const Shader& vertex, const Shader& pixel) noexcept override;
+        void shader(std::uint32_t id, const assets::Shader& vertex, const assets::Shader& pixel) noexcept override;
 
         void mesh(std::uint32_t id, const float* vertices, std::size_t size) noexcept override;
         void update(std::uint32_t id, const float* vertices, std::size_t size) noexcept override;
@@ -39,7 +39,7 @@ namespace core::gfx::lib::drivers {
         void release() noexcept;
         void sync() const noexcept;
 
-        Context* context{nullptr};
+        Context* context;
     };
 
 }

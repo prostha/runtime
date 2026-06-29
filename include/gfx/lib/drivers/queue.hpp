@@ -1,10 +1,9 @@
 #pragma once
 
 #include <vector>
+#include "payload.hpp"
 
-#include "drivers/payload.hpp"
-
-namespace core::gfx::lib {
+namespace core::gfx::lib::drivers {
 
     class Queue final {
     public:
@@ -16,19 +15,19 @@ namespace core::gfx::lib {
         Queue(Queue&&) noexcept = default;
         Queue& operator=(Queue&&) noexcept = delete;
 
-        void push(drivers::Key key, const drivers::Command& command) noexcept;
-        drivers::Buffer flush() noexcept;
+        void push(const Key& key, const Command& command) noexcept;
+        Buffer flush() noexcept;
         void clear() noexcept;
         void sort() noexcept;
 
     private:
-        std::vector<drivers::Key> keys;
-        std::vector<drivers::Command> commands;
+        std::vector<Key> keys;
+        std::vector<Command> commands;
 
-        std::vector<drivers::Key> scratch;
-        std::vector<drivers::Command> sorted;
+        std::vector<Key> scratch;
+        std::vector<Command> sorted;
 
-        drivers::Buffer buffer{};
+        Buffer buffer{};
     };
 
 }

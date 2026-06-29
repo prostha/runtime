@@ -1,5 +1,7 @@
 #include "gfx/lib/context.hpp"
 #include "gfx/lib/drivers/vulkan.hpp"
+#include <algorithm>
+#include <cstring>
 
 #if defined(__APPLE__)
 #include "drivers/metal.hpp"
@@ -9,9 +11,31 @@
 #include "gfx/lib/drivers/directx.hpp"
 #endif
 
+template <typename T, typename T::type M>
+struct Accessor {
+    friend T::type get(T) { return M; }
+};
+
+struct Img { typedef core::gfx::lib::assets::Texture core::gfx::lib::Context::*type; };
+template struct Accessor<Img, &core::gfx::lib::Context::images>;
+core::gfx::lib::assets::Texture core::gfx::lib::Context::*get(Img);
+
+struct Geo { typedef core::gfx::lib::assets::Mesh core::gfx::lib::Context::*type; };
+template struct Accessor<Geo, &core::gfx::lib::Context::geometry>;
+core::gfx::lib::assets::Mesh core::gfx::lib::Context::*get(Geo);
+
+struct Fnt { typedef core::gfx::lib::assets::Font core::gfx::lib::Context::*type; };
+template struct Accessor<Fnt, &core::gfx::lib::Context::letters>;
+core::gfx::lib::assets::Font core::gfx::lib::Context::*get(Fnt);
+
+struct Sdr { typedef core::gfx::lib::assets::Shader core::gfx::lib::Context::*type; };
+template struct Accessor<Sdr, &core::gfx::lib::Context::programs>;
+core::gfx::lib::assets::Shader core::gfx::lib::Context::*get(Sdr);
+
 namespace core::gfx::lib {
 
-    Context::Context(const Api api, const void* target) noexcept {
+    Context::Context(const Api api, const void* target) noexcept
+        : letters(images) {
         if (api == Api::Vulkan) {
             this->device = std::make_unique<drivers::Vulkan>(target);
         }
@@ -32,22 +56,22 @@ namespace core::gfx::lib {
         this->height = height;
     }
 
-    void Context::push(const drivers::Key key, const drivers::Command& command) noexcept {
+    void Context::push(const drivers::Key& key, const drivers::Command& command) noexcept {
         this->queue.push(key, command);
     }
 
     void Context::render() noexcept {
         if (this->device) {
-            drivers::State layout{};
-            layout.view = this->view;
-            layout.projection = this->projection;
-            layout.region = this->region;
-            layout.active = this->active;
-            layout.flags = this->state;
-            layout.pipeline = this->pipeline;
-            layout.uniforms = &this->uniforms;
+            drivers::State state_struct{};
+            state_struct.view = this->matrices.empty() ? nullptr : &this->matrices[0];
+            state_struct.projection = this->matrices.size() < 32 ? nullptr : &this->matrices[16];
+            state_struct.region = this->area;
+            state_struct.active = this->active;
+            state_struct.flags = this->settings;
+            state_struct.pipeline = this->pipeline;
+            state_struct.uniforms = &this->uniforms;
 
-            this->device->begin(this->width, this->height, layout);
+            this->device->begin(this->width, this->height, state_struct);
             this->device->submit(this->queue.flush());
             this->device->end();
         }
@@ -58,21 +82,18 @@ namespace core::gfx::lib {
     }
 
     void Context::camera(const float* view, const float* projection) noexcept {
-        if (view) {
-            for (int index = 0; index < 16; ++index) this->view[index] = view[index];
-        }
-        if (projection) {
-            for (int index = 0; index < 16; ++index) this->projection[index] = projection[index];
-        }
+        this->matrices.resize(32);
+        if (view) std::copy_n(view, 16, this->matrices.begin());
+        if (projection) std::copy_n(projection, 16, this->matrices.begin() + 16);
     }
 
     void Context::viewport(const drivers::Rect& bounds) noexcept {
-        this->region = bounds;
+        this->area = bounds;
     }
 
-    std::uint32_t Context::target(const std::uint32_t width, const std::uint32_t height) const noexcept {
-        static std::uint32_t generator = 1;
-        const std::uint32_t id = generator++;
+    std::uint32_t Context::target(const std::uint32_t width, const std::uint32_t height) noexcept {
+        this->targets.push_back({0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height)});
+        const auto id = static_cast<std::uint32_t>(this->targets.size());
         if (this->device) {
             this->device->surface(id, width, height);
         }
@@ -84,249 +105,148 @@ namespace core::gfx::lib {
     }
 
     void Context::dispose(const std::uint32_t id) noexcept {
+        if (id > 0 && id <= this->targets.size()) {
+            this->targets[id - 1] = {};
+            if (this->device) {
+                this->device->unload(id);
+            }
+        }
+    }
+
+    void Context::flags(const std::uint32_t setup) noexcept {
+        this->settings = setup;
+    }
+
+    void Context::program(const std::uint32_t asset) noexcept {
+        this->pipeline = asset;
         if (this->device) {
-            this->device->unload(id);
+            if (this->programs.get(asset)) {
+                this->device->shader(asset, this->programs, this->programs);
+            }
         }
-        if (this->active == id) {
-            this->active = 0;
-        }
     }
 
-    void Context::flags(const std::uint32_t state) noexcept {
-        this->state = state;
-    }
-
-    void Context::program(const std::uint32_t id) noexcept {
-        this->pipeline = id;
-    }
-
-    void Context::uniform(const std::uint32_t binding, const void* data, const std::size_t size) noexcept {
+    void Context::uniform(const std::uint32_t slot, const void* data, const std::size_t size) noexcept {
         if (data && size > 0) {
-            auto& bytes = this->uniforms[binding];
-            bytes.assign(
-                static_cast<const std::uint8_t*>(data),
-                static_cast<const std::uint8_t*>(data) + size
-            );
+            auto& buffer = this->uniforms[slot];
+            buffer.resize(size);
+            std::memcpy(buffer.data(), data, size);
         }
+    }
+
+    static void* binding_core_init(std::uint32_t api, const void* target) {
+        return new Context(static_cast<Api>(api), target);
+    }
+
+    static void binding_core_resize(void* handle, std::uint32_t width, std::uint32_t height) {
+        if (handle) static_cast<Context*>(handle)->resize(width, height);
+    }
+
+    static void binding_core_push(void* handle, std::uint64_t key, const void* command) {
+        if (handle && command) {
+            drivers::Key k;
+            k.value = key;
+            static_cast<Context*>(handle)->push(k, *static_cast<const drivers::Command*>(command));
+        }
+    }
+
+    static void binding_core_render(void* handle) {
+        if (handle) static_cast<Context*>(handle)->render();
+    }
+
+    static void binding_core_clear(void* handle) {
+        if (handle) static_cast<Context*>(handle)->flush();
+    }
+
+    static void binding_state_camera(void* handle, const float* view, const float* projection) {
+        if (handle) static_cast<Context*>(handle)->camera(view, projection);
+    }
+
+    static void binding_state_viewport(void* handle, float x, float y, float width, float height) {
+        if (handle) static_cast<Context*>(handle)->viewport({x, y, width, height});
+    }
+
+    static void binding_state_flags(void* handle, std::uint32_t setup) {
+        if (handle) static_cast<Context*>(handle)->flags(setup);
+    }
+
+    static void binding_state_program(void* handle, std::uint32_t asset) {
+        if (handle) static_cast<Context*>(handle)->program(asset);
+    }
+
+    static void binding_state_uniform(void* handle, std::uint32_t slot, const void* data, std::size_t size) {
+        if (handle) static_cast<Context*>(handle)->uniform(slot, data, size);
+    }
+
+    static std::uint32_t binding_texture_load(void* handle, const char* path) {
+        return handle && path ? (static_cast<Context*>(handle)->*get(Img())).load(path) : 0;
+    }
+
+    static std::uint32_t binding_texture_create(void* handle, const std::uint8_t* pixels, std::uint32_t width, std::uint32_t height) {
+        return handle ? (static_cast<Context*>(handle)->*get(Img())).create(pixels, width, height) : 0;
+    }
+
+    static void binding_texture_update(void* handle, std::uint32_t id, const std::uint8_t* pixels, std::uint32_t width, std::uint32_t height) {
+        if (handle) (static_cast<Context*>(handle)->*get(Img())).update(id, pixels, width, height);
+    }
+
+    static void binding_texture_dispose(void* handle, std::uint32_t id) {
+        if (handle) (static_cast<Context*>(handle)->*get(Img())).dispose(id);
+    }
+
+    static std::uint32_t binding_mesh_create(void* handle, const float* vertices, std::size_t size) {
+        return handle ? (static_cast<Context*>(handle)->*get(Geo())).create(vertices, size) : 0;
+    }
+
+    static void binding_mesh_update(void* handle, std::uint32_t id, const float* vertices, std::size_t size) {
+        if (handle) (static_cast<Context*>(handle)->*get(Geo())).update(id, vertices, size);
+    }
+
+    static void binding_mesh_dispose(void* handle, std::uint32_t id) {
+        if (handle) (static_cast<Context*>(handle)->*get(Geo())).dispose(id);
+    }
+
+    static std::uint32_t binding_font_load(void* handle, const char* path) {
+        return handle && path ? (static_cast<Context*>(handle)->*get(Fnt())).load(path) : 0;
+    }
+
+    static void binding_font_dispose(void* handle, std::uint32_t id) {
+        if (handle) (static_cast<Context*>(handle)->*get(Fnt())).dispose(id);
+    }
+
+    static std::uint32_t binding_shader_load(void* handle, const char* vertex, const char* path) {
+        return handle && vertex && path ? (static_cast<Context*>(handle)->*get(Sdr())).load(vertex, path) : 0;
+    }
+
+    static void binding_shader_dispose(void* handle, std::uint32_t id) {
+        if (handle) (static_cast<Context*>(handle)->*get(Sdr())).dispose(id);
+    }
+
+    static std::uint32_t binding_target_create(void* handle, std::uint32_t width, std::uint32_t height) {
+        return handle ? static_cast<Context*>(handle)->target(width, height) : 0;
+    }
+
+    static void binding_target_bind(void* handle, std::uint32_t id) {
+        if (handle) static_cast<Context*>(handle)->bind(id);
+    }
+
+    static void binding_target_dispose(void* handle, std::uint32_t id) {
+        if (handle) static_cast<Context*>(handle)->dispose(id);
     }
 
 }
 
 extern "C" {
-
-    void* gfx_init(const std::uint32_t api, const void* target) {
-        return new core::gfx::lib::Context(static_cast<core::gfx::lib::Api>(api), target);
-    }
-
-    void gfx_resize(void* handle, const std::uint32_t width, const std::uint32_t height) {
-        if (handle) {
-            static_cast<core::gfx::lib::Context*>(handle)->resize(width, height);
-        }
-    }
-
-    void gfx_push(void* handle, const std::uint64_t key, const void* command) {
-        if (handle && command) {
-            core::gfx::lib::drivers::Key signature{};
-            signature.value = key;
-            static_cast<core::gfx::lib::Context*>(handle)->push(signature, *static_cast<const core::gfx::lib::drivers::Command*>(command));
-        }
-    }
-
-    void gfx_render(void* handle) {
-        if (handle) {
-            static_cast<core::gfx::lib::Context*>(handle)->render();
-        }
-    }
-
-    void gfx_flush(void* handle) {
-        if (handle) {
-            static_cast<core::gfx::lib::Context*>(handle)->flush();
-        }
-    }
-
-    void gfx_camera(void* handle, const float* view, const float* projection) {
-        if (handle) {
-            static_cast<core::gfx::lib::Context*>(handle)->camera(view, projection);
-        }
-    }
-
-    void gfx_viewport(void* handle, const float x, const float y, const float width, const float height) {
-        if (handle) {
-            const core::gfx::lib::drivers::Rect bounds{x, y, width, height};
-            static_cast<core::gfx::lib::Context*>(handle)->viewport(bounds);
-        }
-    }
-
-    void gfx_flags(void* handle, const std::uint32_t state) {
-        if (handle) {
-            static_cast<core::gfx::lib::Context*>(handle)->flags(state);
-        }
-    }
-
-    void gfx_program(void* handle, const std::uint32_t id) {
-        if (handle) {
-            static_cast<core::gfx::lib::Context*>(handle)->program(id);
-        }
-    }
-
-    void gfx_uniform(void* handle, const std::uint32_t binding, const void* data, const std::size_t size) {
-        if (handle) {
-            static_cast<core::gfx::lib::Context*>(handle)->uniform(binding, data, size);
-        }
-    }
-
-    std::uint32_t gfx_texture_load(void* handle, const char* path) {
-        if (handle && path) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            const auto id = context->textures.load(path);
-            if (context->device) {
-                if (const auto* block = context->textures.get(id)) {
-                    context->device->texture(id, static_cast<const std::uint8_t*>(block->allocation), block->width, block->height);
-                }
-            }
-            return id;
-        }
-        return 0;
-    }
-
-    std::uint32_t gfx_texture_create(void* handle, const std::uint8_t* pixels, std::uint32_t width, std::uint32_t height) {
-        if (handle) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            const auto id = context->textures.create(pixels, width, height);
-            if (context->device) {
-                context->device->texture(id, pixels, width, height);
-            }
-            return id;
-        }
-        return 0;
-    }
-
-    void gfx_texture_update(void* handle, const std::uint32_t id, const std::uint8_t* pixels, const std::uint32_t width, const std::uint32_t height) {
-        if (handle) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            context->textures.update(id, pixels, width, height);
-            if (context->device) {
-                context->device->texture(id, pixels, width, height);
-            }
-        }
-    }
-
-    void gfx_texture_dispose(void* handle, std::uint32_t id) {
-        if (handle) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            context->textures.dispose(id);
-            if (context->device) {
-                context->device->unload(id);
-            }
-        }
-    }
-
-    std::uint32_t gfx_mesh_create(void* handle, const float* vertices, std::size_t size) {
-        if (handle) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            const auto id = context->meshes.create(vertices, size);
-            if (context->device) {
-                context->device->mesh(id, vertices, size);
-            }
-            return id;
-        }
-        return 0;
-    }
-
-    void gfx_mesh_update(void* handle, const std::uint32_t id, const float* vertices, const std::size_t size) {
-        if (handle) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            context->meshes.update(id, vertices, size);
-            if (context->device) {
-                context->device->update(id, vertices, size);
-            }
-        }
-    }
-
-    void gfx_mesh_dispose(void* handle, const std::uint32_t id) {
-        if (handle) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            context->meshes.dispose(id);
-            if (context->device) {
-                context->device->free(id);
-            }
-        }
-    }
-
-    std::uint32_t gfx_font_load(void* handle, const char* path) {
-        if (handle && path) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            const auto id = context->fonts.load(path);
-            if (context->device) {
-                if (const auto* block = context->fonts.get(id)) {
-                    if (const auto* texture = context->textures.get(block->atlas)) {
-                        context->device->texture(block->atlas, static_cast<const std::uint8_t*>(texture->allocation), texture->width, texture->height);
-                    }
-                }
-            }
-            return id;
-        }
-        return 0;
-    }
-
-    void gfx_font_dispose(void* handle, const std::uint32_t id) {
-        if (handle) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            context->fonts.dispose(id);
-        }
-    }
-
-    std::uint32_t gfx_shader_load(void* handle, const char* vertex, const char* path) {
-        if (handle && vertex && path) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            const auto id = context->shaders.load(vertex, path);
-            if (context->device) {
-                if (const auto* block = context->shaders.get(id)) {
-                    context->device->shader(id, {block->vertex.code, block->vertex.size}, {block->pixel.code, block->pixel.size});
-                }
-            }
-            return id;
-        }
-        return 0;
-    }
-
-    void gfx_shader_dispose(void* handle, std::uint32_t id) {
-        if (handle) {
-            auto* context = static_cast<core::gfx::lib::Context*>(handle);
-            context->shaders.dispose(id);
-        }
-    }
-
-    std::uint32_t gfx_target_create(void* handle, const std::uint32_t width, const std::uint32_t height) {
-        if (handle) {
-            return static_cast<core::gfx::lib::Context*>(handle)->target(width, height);
-        }
-        return 0;
-    }
-
-    void gfx_target_bind(void* handle, const std::uint32_t id) {
-        if (handle) {
-            static_cast<core::gfx::lib::Context*>(handle)->bind(id);
-        }
-    }
-
-    void gfx_target_dispose(void* handle, const std::uint32_t id) {
-        if (handle) {
-            static_cast<core::gfx::lib::Context*>(handle)->dispose(id);
-        }
-    }
-
-    const Gfx* gfx() noexcept {
-        static const Gfx instance = {
-            { gfx_init, gfx_resize, gfx_push, gfx_render, gfx_flush },
-            { gfx_camera, gfx_viewport, gfx_flags, gfx_program, gfx_uniform },
-            { gfx_texture_load, gfx_texture_create, gfx_texture_update, gfx_texture_dispose },
-            { gfx_mesh_create, gfx_mesh_update, gfx_mesh_dispose },
-            { gfx_font_load, gfx_font_dispose },
-            { gfx_shader_load, gfx_shader_dispose },
-            { gfx_target_create, gfx_target_bind, gfx_target_dispose }
+    EXPORT const core::gfx::lib::Bindings* bindings() noexcept {
+        static const core::gfx::lib::Bindings layout = {
+            { core::gfx::lib::binding_core_init, core::gfx::lib::binding_core_resize, core::gfx::lib::binding_core_push, core::gfx::lib::binding_core_render, core::gfx::lib::binding_core_clear },
+            { core::gfx::lib::binding_state_camera, core::gfx::lib::binding_state_viewport, core::gfx::lib::binding_state_flags, core::gfx::lib::binding_state_program, core::gfx::lib::binding_state_uniform },
+            { core::gfx::lib::binding_texture_load, core::gfx::lib::binding_texture_create, core::gfx::lib::binding_texture_update, core::gfx::lib::binding_texture_dispose },
+            { core::gfx::lib::binding_mesh_create, core::gfx::lib::binding_mesh_update, core::gfx::lib::binding_mesh_dispose },
+            { core::gfx::lib::binding_font_load, core::gfx::lib::binding_font_dispose },
+            { core::gfx::lib::binding_shader_load, core::gfx::lib::binding_shader_dispose },
+            { core::gfx::lib::binding_target_create, core::gfx::lib::binding_target_bind, core::gfx::lib::binding_target_dispose }
         };
-        return &instance;
+        return &layout;
     }
-
 }
